@@ -1,27 +1,18 @@
 #include "forrst.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <GLFW/glfw3.h>
 
-void* fst_init(void) {
+void* fst_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    if (!glfwInit()) {
-        printf("failed to init opengl!\n");
-        exit(1);
-    }
+    ERROR_IF(!glfwInit(), "failed to init opengl!\n");
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "title", NULL,NULL);
-    if (!window) {
-        printf("failed to make glfw window!\n");
-        exit(1);
-    }
+    GLFWwindow* window = glfwCreateWindow(width, height, title, NULL,NULL);
+    ERROR_IF(!window, "failed to make glfw window!\n");
 
     glfwMakeContextCurrent(window);
 
@@ -34,7 +25,7 @@ char fst_shouldClose(void* state) {
 }
 
 void fst_poll(void* state) {
-    (void)state;
+    UNUSED(state);
 
     glfwPollEvents();
 }
@@ -51,4 +42,18 @@ void fst_end(void* state) {
 
     glfwDestroyWindow(window);
     glfwTerminate();
+}
+
+int EXPLICIT_fst_windowDoShit(const char* title, s32 width, s32 height, FSTwindowDoShitOPS ops) {
+    UNUSED(ops);
+
+    void* state = fst_init(title, width, height);
+
+    while (!fst_shouldClose(state)) {
+        fst_poll(state);
+        fst_swapBuffer(state);
+    }
+
+    fst_end(state);
+    return 0;
 }
