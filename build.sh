@@ -36,9 +36,9 @@ else
 fi
 
 if $BUILD_WINDOWS; then
-    CFLAGS+=" -target x86_64-windows-gnu -lopengl32 -lgdi32"
+    CFLAGS+=" -target x86_64-windows-gnu -lopengl32"
 else
-    CFLAGS+=" -lX11 -lEGL -lGL -lXrandr"
+    CFLAGS+=" -lGL -lglfw"
 fi
 
 if [ -n "$EXAMPLE" ]; then
