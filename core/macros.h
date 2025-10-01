@@ -22,6 +22,10 @@ typedef u16 b16;
 typedef u32 b32;
 typedef u64 b64;
 
+typedef struct { f32 x; f32 y; } v2;
+typedef struct { f32 x; f32 y; f32 z; } v3;
+typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
+
 #define UNUSED(param) \
     (void)(param)
 
@@ -31,5 +35,8 @@ typedef u64 b64;
         exit(1); \
     } \
 } while(0)
+
+#define MAYBE_CALL(func, ...) \
+    if ((func)) func(__VA_ARGS__)
 
 #endif

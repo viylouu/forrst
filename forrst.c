@@ -44,15 +44,23 @@ void fst_end(void* state) {
     glfwTerminate();
 }
 
-int EXPLICIT_fst_windowDoShit(const char* title, s32 width, s32 height, FSTwindowDoShitOPS ops) {
+s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops) {
     UNUSED(ops);
 
-    void* state = fst_init(title, width, height);
+    void* state = fst_init(title, dims.x,dims.y);
+
+    MAYBE_CALL(ops.init);
 
     while (!fst_shouldClose(state)) {
         fst_poll(state);
+        
+        MAYBE_CALL(ops.update);
+        MAYBE_CALL(ops.render);
+
         fst_swapBuffer(state);
     }
+
+    MAYBE_CALL(ops.end);
 
     fst_end(state);
     return 0;

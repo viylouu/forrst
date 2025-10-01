@@ -43,11 +43,14 @@ void fst_end(void* state);
  **** OPS
  */
 typedef struct {
-    // empty (for now, muahahah)
+    void (*init)(void);
+    void (*update)(void);
+    void (*render)(void);
+    void (*end)(void);
 } FSTwindowDoShitOPS;
-#define fst_windowDoShit(title, width, height, ...) \
-    EXPLICIT_fst_windowDoShit((title), (width), (height), (FSTwindowDoShitOPS){ __VA_ARGS__ })
-int EXPLICIT_fst_windowDoShit(const char* title, s32 width, s32 height, FSTwindowDoShitOPS ops);
+#define fst_windowDoShit(title, dims, ...) \
+    EXPLICIT_fst_windowDoShit((title), (dims), (FSTwindowDoShitOPS){ __VA_ARGS__ })
+s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops);
 
 /*
  * Main Loop OPS
