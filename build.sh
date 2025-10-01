@@ -54,6 +54,39 @@ for dir in "${SRC_DIRS[@]}"; do
     done < <(find "$dir" -name "*.c" ! -path "*/examples/*")
 done
 
+
+
+OUT="compile_commands.json"
+echo "[" > "$OUT"
+
+FIRST=1
+for file in "${FILES[@]}"; do 
+    if [[ $file == *.c ]]; then
+        COMP="gcc" # not really
+        STD="-std=c99"
+    else
+        COMP="g++"
+        STD="-std=c++98"
+    fi
+
+    CMD="$COMP $STD -Iforrst -I. -Ideps -Iforrst/deps -c $file"
+
+    if [ $FIRST -eq 1 ]; then
+        FIRST=0
+    else
+        echo "," >> "$OUT"
+    fi
+
+    echo -ne "\t{
+        \"directory\": \"$(pwd)\",
+        \"command\": \"$CMD\",
+        \"file\": \"$(pwd)/${file#./}\"
+    }" >> "$OUT"
+done
+
+echo -e "\n]" >> "$OUT"
+
+
 echo -e "COMPILING: ${FILES[@]}\n"
 
 if $BUILD_WINDOWS; then
