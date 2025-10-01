@@ -52,9 +52,4 @@ typedef struct {
     EXPLICIT_fst_windowDoShit((title), (dims), (FSTwindowDoShitOPS){ __VA_ARGS__ })
 s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops);
 
-/*
- * Main Loop OPS
- */
-
-
 #endif
