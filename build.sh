@@ -84,7 +84,7 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
         STD="-std=c++98"
     fi
 
-    CMD="$COMP $STD -Iforrst -I. -Ideps -Iforrst/deps -c $file"
+    CMD="$COMP $STD -Iforrst -I. -Ideps -Iforrst/deps -c \\\"$file\\\""
 
     if [ $FIRST -eq 1 ]; then
         FIRST=0
