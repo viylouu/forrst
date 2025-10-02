@@ -2,6 +2,8 @@
 
 #include <GLFW/glfw3.h>
 
+#include <core/load_gl.h>
+
 void* fst_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
@@ -15,6 +17,8 @@ void* fst_init(const char* title, s32 width, s32 height) {
     ERROR_IF(!window, "failed to make glfw window!\n");
 
     glfwMakeContextCurrent(window);
+
+    fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
 
     return window;
 }
@@ -48,6 +52,8 @@ s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops
     UNUSED(ops);
 
     void* state = fst_init(title, dims.x,dims.y);
+
+    fst_gl_load();
 
     MAYBE_CALL(ops.init);
 
