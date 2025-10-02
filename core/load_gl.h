@@ -7,6 +7,10 @@
 
 #include <core/macros.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <GL/gl.h>
 #include <stdlib.h>
 
@@ -62,5 +66,9 @@ FUNC(glBindRenderbuffer, void, GLenum target, GLuint renderbuffer);
 FUNC(glRenderbufferStorage, void, GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
 FUNC(glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
 FUNC(glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

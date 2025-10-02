@@ -1,6 +1,10 @@
 #ifndef FST_MACROS_H
 #define FST_MACROS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -38,5 +42,9 @@ typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
 
 #define MAYBE_CALL(func, ...) \
     if ((func)) func(__VA_ARGS__)
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

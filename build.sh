@@ -3,7 +3,11 @@ mkdir -p build
 ./forrst/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
 
 COMPILER=("zig" "cc")
-CFLAGS="-std=c99 -Wall -Wextra -Iforrst -I. -Ideps -Iforrst/deps -isystem"
+COMPILER_CC=("clang++")
+CFLAGS="-std=c99"
+CCFLAGS="-std=c++98"
+FLAGS_COMP="-Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
+FLAGS_LINK=""
 
 BUILD_TEST=false
 EXAMPLE=""
@@ -30,15 +34,18 @@ fi
 
 if $BUILD_TEST; then
     COMPILER=("tcc")
-    CFLAGS+=" -O0 -g -fno-lto"
+    COMPILER_CC=("g++") # todo: find fast c++ compiler
+    FLAGS_COMP+=" -O0 -g"
+    FLAGS_LINK+=" -g -fno-lto"
 else
-    CFLAGS+=" -O3 -flto"
+    FLAGS_LINK+=" -O3 -flto"
 fi
 
 if $BUILD_WINDOWS; then
-    CFLAGS+=" -target x86_64-windows-gnu -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32"
+    FLAGS_COMP+=" -target x86_64-windows-gnu"
+    FLAGS_LINK+=" -target x86_64-windows-gnu -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32"
 else
-    CFLAGS+=" -lGL -lglfw -lEGL -lX11"
+    FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11"
 fi
 
 if [ -n "$EXAMPLE" ]; then
@@ -47,20 +54,24 @@ else
     SRC_DIRS=("forrst" "src")
 fi
 
-FILES=()
+FILES_C=()
+FILES_CC=()
 for dir in "${SRC_DIRS[@]}"; do
     while IFS= read -r file; do
-        FILES+=("$file")
-    done < <(find "$dir" -name "*.c" ! -path "*/examples/*")
+        [[ -f "$file" ]] || continue
+        case "${file##*.}" in
+            c) FILES_C+=("$file") ;;
+            cpp|cc) FILES_CC+=("$file") ;;
+        esac
+    done < <(find "$dir" -type f ! -path "*/examples/*")
 done
-
 
 
 OUT="compile_commands.json"
 echo "[" > "$OUT"
 
 FIRST=1
-for file in "${FILES[@]}"; do 
+for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do 
     if [[ $file == *.c ]]; then
         COMP="gcc" # not really
         STD="-std=c99"
@@ -87,15 +98,33 @@ done
 echo -e "\n]" >> "$OUT"
 
 
-echo -e "COMPILING: ${FILES[@]}\n"
+echo -e "COMPILING: ${FILES_C[@]} ${FILES_CC[@]}\n"
+
+OBJ_DIR="build/obj"
+mkdir -p "$OBJ_DIR"
+OBJS=()
+
+for file in "${FILES_C[@]}"; do
+    obj="$OBJ_DIR/$(basename "$file" .c).o"
+    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP -c "$file" -o "$obj"
+    OBJS+=("$obj")
+done
+
+for file in "${FILES_CC[@]}"; do
+    obj="$OBJ_DIR/$(basename "$file" .cc).o"
+    "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -c "$file" -o "$obj"
+    OBJS+=("$obj")
+done
 
 if $BUILD_WINDOWS; then
-    "${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.exe
-    if [[ "$OSTYPE" == "linux-gnu" ]]; then
-        wine ./build/out.exe
-    else
-        ./build/out.exe
-    fi
+    #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.exe
+    #if [[ "$OSTYPE" == "linux-gnu" ]]; then
+    #    wine ./build/out.exe
+    #else
+    #    ./build/out.exe
+    #fi
+    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe
 else
-    "${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.game && ./build/out.game
+    #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.game && ./build/out.game
+    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.game && ./build/out.game
 fi

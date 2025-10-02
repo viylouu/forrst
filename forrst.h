@@ -3,6 +3,10 @@
 
 #include <core/macros.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /*
  * Initialize the platform
  * Returns the state
@@ -48,8 +52,17 @@ typedef struct {
     void (*render)(void);
     void (*end)(void);
 } FSTwindowDoShitOPS;
+#ifdef __cplusplus
+#define fst_windowDoShit(title, dims, args) \
+    EXPLICIT_fst_windowDoShit((title), (dims), (args))
+#else
 #define fst_windowDoShit(title, dims, ...) \
     EXPLICIT_fst_windowDoShit((title), (dims), (FSTwindowDoShitOPS){ __VA_ARGS__ })
+#endif
 s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -13,6 +13,10 @@ echo "
 
 #include <core/macros.h>
 
+#ifdef __cplusplus
+extern \"C\" {
+#endif
+
 #include <GL/gl.h>
 #include <stdlib.h>
 
@@ -29,6 +33,10 @@ void fst_gl_load(void);
 sed -E 's/^(.*\S.*)$/FUNC(\1);/' "$CURF" >> "$CUR"
 
 echo "
+#ifdef __cplusplus
+}
+#endif
+
 #endif" >> "$CUR"
 
 
