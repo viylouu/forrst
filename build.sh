@@ -3,11 +3,12 @@ mkdir -p build
 ./forrst/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
 
 COMPILER=("zig" "cc")
-COMPILER_CC=("clang++")
+COMPILER_CC=("g++") # todo: find better optimized compiler
 CFLAGS="-std=c99"
 CCFLAGS="-std=c++98"
 FLAGS_COMP="-Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
 FLAGS_LINK=""
+CFLAGS_COMP=""
 
 BUILD_TEST=false
 EXAMPLE=""
@@ -34,16 +35,19 @@ fi
 
 if $BUILD_TEST; then
     COMPILER=("tcc")
-    COMPILER_CC=("g++") # todo: find fast c++ compiler
+    COMPILER_CC=("g++") # todo: find faster c++ compiler
     FLAGS_COMP+=" -O0 -g"
     FLAGS_LINK+=" -g -fno-lto"
 else
-    FLAGS_LINK+=" -O3 -flto"
+    FLAGS_COMP+=" -O3"
+    FLAGS_LINK+=" -flto"
 fi
 
 if $BUILD_WINDOWS; then
-    FLAGS_COMP+=" -target x86_64-windows-gnu"
-    FLAGS_LINK+=" -target x86_64-windows-gnu -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32"
+    COMPILER_CC=("x86_64-w64-mingw32-g++")
+    FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32 -D_WIN32"
+    CFLAGS_COMP="-target x86_64-windows-gnu"
+    FLAGS_COMP+=" -D_WIN32"
 else
     FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11"
 fi
@@ -106,7 +110,7 @@ OBJS=()
 
 for file in "${FILES_C[@]}"; do
     obj="$OBJ_DIR/$(basename "$file" .c).o"
-    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP -c "$file" -o "$obj"
+    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -c "$file" -o "$obj"
     OBJS+=("$obj")
 done
 
@@ -123,7 +127,7 @@ if $BUILD_WINDOWS; then
     #else
     #    ./build/out.exe
     #fi
-    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe
+    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
 else
     #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.game && ./build/out.game
     "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.game && ./build/out.game

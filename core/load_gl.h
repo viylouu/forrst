@@ -12,7 +12,6 @@ extern "C" {
 #endif
 
 #include <GL/gl.h>
-#include <stdlib.h>
 
 #define FUNC(name, ret_type, ...) \
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \
