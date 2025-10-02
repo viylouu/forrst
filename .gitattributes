@@ -1,0 +1,4 @@
+*.c linguist-language=C
+*.h linguist-language=C
+*.cc linguist-language=C++
+*.hh linguist-languaeg=C++
