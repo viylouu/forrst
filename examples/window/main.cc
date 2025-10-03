@@ -8,8 +8,5 @@ void render(void) {
 }
 
 int main(void) {
-    FSTwindowDoShitOPS ops = {};
-    ops.render = render;
-    v2 dims = {800,600};
-    return fst_windowDoShit("title", dims, ops);
+    return fst_windowDoShit("title", ((v2){800,600}), .render = render);
 }

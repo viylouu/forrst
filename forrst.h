@@ -53,8 +53,11 @@ typedef struct {
     void (*end)(void);
 } FSTwindowDoShitOPS;
 #ifdef __cplusplus
-#define fst_windowDoShit(title, dims, args) \
-    EXPLICIT_fst_windowDoShit((title), (dims), (args))
+#define fst_windowDoShit(title, dims, ...) ({ \
+    FSTwindowDoShitOPS ops = {}; \
+    FST_OPS_HELPER(__VA_ARGS__); \
+    EXPLICIT_fst_windowDoShit((title), (dims), ops); \
+    })
 #else
 #define fst_windowDoShit(title, dims, ...) \
     EXPLICIT_fst_windowDoShit((title), (dims), (FSTwindowDoShitOPS){ __VA_ARGS__ })
