@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <core/load_gl.h>
+#include <core/render.h>
 
 void* fst_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -52,6 +53,7 @@ s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops
     UNUSED(ops);
 
     void* state = fst_init(title, dims.x,dims.y);
+    void* rstate = fst_render_init();
 
     fst_gl_load();
 
@@ -59,7 +61,7 @@ s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops
 
     while (!fst_shouldClose(state)) {
         fst_poll(state);
-        
+
         MAYBE_CALL(ops.update);
         MAYBE_CALL(ops.render);
 
@@ -68,6 +70,7 @@ s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops
 
     MAYBE_CALL(ops.end);
 
+    fst_render_end(rstate);
     fst_end(state);
     return 0;
 }
