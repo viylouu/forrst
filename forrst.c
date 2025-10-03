@@ -53,9 +53,8 @@ s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops
     UNUSED(ops);
 
     void* state = fst_init(title, dims.x,dims.y);
-    void* rstate = fst_render_init();
-
     fst_gl_load();
+    void* rstate = fst_render_init();
 
     MAYBE_CALL(ops.init);
 
