@@ -179,6 +179,12 @@ void* fst_render_init(void) {
 void fst_render_end(void* data) {
     FSTrenderState* state = data;
 
+    fst_r2dRect_end(&state->rect);
+    fst_r2dTex_end(&state->tex);
+
+    fst_rSsCube_end(&state->ssCube);
+    fst_rSsModel_end(&state->ssModel);
+
     glDeleteVertexArrays(1, &state->vao);
 
     free(state);
