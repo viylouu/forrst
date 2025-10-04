@@ -3,7 +3,7 @@ mkdir -p build
 ./forrst/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
 
 COMPILER=("zig" "cc")
-COMPILER_CC=("g++") # todo: find better optimized compiler
+COMPILER_CC=("g++")
 CFLAGS="-std=c99"
 CCFLAGS="-std=c++98"
 FLAGS_COMP="-Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
@@ -26,16 +26,36 @@ for arg in "$@"; do
 done
 
 if ! $BUILD_TEST && ! zig cc --version &> /dev/null; then
-    echo "zig cc not installed / not in path!"
+    COMPILER=("gcc")
+    if ! gcc --version &> /dev/null; then
+        COMPILER=("clang")
+        if ! clang --version &> /dev/null; then
+            COMPILER=("cc")
+            if ! cc --version &> /dev/null; then
+                echo "WHAT FUCKING COMPILER DO YOU HAVE?!?!"
+            fi
+        fi
+    fi
     exit 1
 elif $BUILD_TEST && ! tcc --version &> /dev/null; then
-    echo "tcc not installed / not in path!"
-    exit
+    COMPILER=("zig" "cc")
+    if ! zig cc --version &> /dev/null; then
+        COMPILER=("gcc")
+        if ! gcc --version &> /dev/null; then
+            COMPILER=("clang")
+            if ! clang --version &> /dev/null; then
+                COMPILER=("cc")
+                if ! cc --version &> /dev/null; then
+                    echo "WHAT FUCKING COMPILER DO YOU HAVE?!?!"
+                fi
+            fi
+        fi
+    exit 1
 fi
 
 if $BUILD_TEST; then
     COMPILER=("tcc")
-    COMPILER_CC=("g++") # todo: find faster c++ compiler
+    COMPILER_CC=("g++")
     FLAGS_COMP+=" -O0 -g"
     FLAGS_LINK+=" -g -fno-lto"
 else
