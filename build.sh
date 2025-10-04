@@ -50,6 +50,7 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
                 fi
             fi
         fi
+    fi
     exit 1
 fi
 
