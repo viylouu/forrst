@@ -1,5 +1,4 @@
 #include <forrst.hh>
-#include <core/macros.h>
 
 #include <GL/gl.h>
 
@@ -14,3 +13,4 @@ public:
 int main(void) {
     return fst_windowDoShit<game>("title", ((v2){800,600}));
 }
+

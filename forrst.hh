@@ -1,9 +1,10 @@
-#ifndef FRST_FORRST_H
-#define FRST_FORRST_H
+#ifndef FRST_FORRST_HH
+#define FRST_FORRST_HH
 
 #include <core/macros.h>
 #include <core/render.h>
 #include <core/load_gl.h>
+#include <core/node.hh>
 
 void* fst_init(const char* title, s32 width, s32 height);
 char fst_shouldClose(void* state);
@@ -13,6 +14,12 @@ void fst_end(void* state);
 
 class FSTgame {
 public:
+    FSTnode* scene;
+
+    void constr()   { 
+        scene = new FSTnode(); 
+    }
+
     virtual void init()   {}
     virtual void update() {}
     virtual void render() {}
@@ -29,6 +36,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     Tgame game;
 
+    game.FSTgame::constr();
     game.init();
 
     while (!fst_shouldClose(state)) {
