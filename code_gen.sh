@@ -2,7 +2,7 @@
 # you got a problem with that?
 
 CUR="core/load_gl.h"
-CURF="core/load_gl."
+DEF="core/defs/load_gl."
 
 echo "
 
@@ -29,7 +29,7 @@ void fst_gl_load(void);
 
 " > "$CUR"
 
-sed -E 's/^(.*\S.*)$/FUNC(\1);/' "$CURF" >> "$CUR"
+sed -E 's/^(.*\S.*)$/FUNC(\1);/' "$DEF" >> "$CUR"
 
 echo "
 #ifdef __cplusplus
@@ -77,13 +77,13 @@ b8 fst_use_wayland;
 
 " > "$CUR"
 
-sed -E 's/^(.*\S.*)$/FUNC_C(\1);/' "$CURF" >> "$CUR"
+sed -E 's/^(.*\S.*)$/FUNC_C(\1);/' "$DEF" >> "$CUR"
 
 echo "
 void fst_gl_load(void) {
 " >> "$CUR"
 
-sed -E 's/^([^,]+),.*$/LOAD(\1);/' "$CURF" >> "$CUR"
+sed -E 's/^([^,]+),.*$/LOAD(\1);/' "$DEF" >> "$CUR"
 
 echo "}" >> "$CUR"
 

@@ -2,6 +2,7 @@
 #include "render.h"
 #include <core/load_gl.h>
 #include <GL/gl.h>
+#include <core/shader.h>
 
 /* table of contents:
  **** you can search for any of these points to hop to it in the code!
@@ -39,7 +40,7 @@
 
 /* [gl struct 2d] */
 #define FST_r2dGeneric() \
-    u32 prog; u32 bo, tbo;
+    FSTshader* shader; u32 bo, tbo;
 #define FST_r2dGenericLoc() \
     s32 inst_size; s32 insts; s32 proj;
 
@@ -111,15 +112,22 @@ typedef struct {
 
 /* [gl struct 2d funcs] */
 
-#define FST_r2dInitGeneric() \
+#define FST_r2dInitGeneric(vert,frag) \
+    state->shader = fst_shader_load(vert,frag);\
+\
     glGenBuffers(1, &state->bo); \
     glBindBuffer(GL_TEXTURE_BUFFER, state->bo); \
     glBufferData(GL_TEXTURE_BUFFER, FST_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW); \
 \
     glGenTextures(1, &state->tbo); \
     glBindTexture(GL_TEXTURE_BUFFER, state->bo); \
-    glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state->bo)
+    glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state->bo); \
+\
+    state->loc.insts     = glGetUniformLocation(state->shader->shader, "insts"); \
+    state->loc.inst_size = glGetUniformLocation(state->shader->shader, "inst_size"); \
+    state->loc.proj      = glGetUniformLocation(state->shader->shader, "proj")
 #define FST_r2dEndGeneric() \
+    fst_shader_unload(state->shader); \
     glDeleteTextures(1, &state->tbo); \
     glDeleteBuffers(1, &state->bo)
 
@@ -127,7 +135,7 @@ typedef struct {
 void fst_r2dRect_init(void* rect) {
     struct FST_r2dRect* state = rect;
     
-    FST_r2dInitGeneric();
+    FST_r2dInitGeneric("data/eng/rect.vert", "data/eng/rect.frag");
 } void fst_r2dRect_end(void* rect) {
     struct FST_r2dRect* state = rect;
 

@@ -36,9 +36,9 @@ typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
 #define UNUSED(param) \
     (void)(param)
 
-#define ERROR_IF(check, print) do { \
+#define ERROR_IF(check, ...) do { \
     if((check)) { \
-        printf(print); \
+        printf(__VA_ARGS__); \
         exit(1); \
     } \
 } while(0)
