@@ -37,9 +37,9 @@ typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
     (void)(param)
 
 #define ERROR_IF(check, ...) do { \
-    if((check)) { \
-        printf(__VA_ARGS__); \
-        exit(1); \
+    if((check)) {                 \
+        printf(__VA_ARGS__);      \
+        exit(1);                  \
     } \
 } while(0)
 

@@ -13,7 +13,7 @@ extern "C" {
 
 #include <GL/gl.h>
 
-#define FUNC(name, ret_type, ...) \
+#define FUNC(name, ret_type, ...)                       \
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \
     extern name##_t name
 

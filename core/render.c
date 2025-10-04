@@ -34,7 +34,7 @@
  * very silly
  */
 
-#define FST_genericInitEnd(name) \
+#define FST_genericInitEnd(name)        \
     void fst_##name##_init(void* data); \
     void fst_##name##_end(void* data)
 
@@ -112,21 +112,21 @@ typedef struct {
 
 /* [gl struct 2d funcs] */
 
-#define FST_r2dInitGeneric(vert,frag) \
-    state->shader = fst_shader_load(vert,frag);\
-\
-    glGenBuffers(1, &state->bo); \
-    glBindBuffer(GL_TEXTURE_BUFFER, state->bo); \
-    glBufferData(GL_TEXTURE_BUFFER, FST_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW); \
-\
-    glGenTextures(1, &state->tbo); \
-    glBindTexture(GL_TEXTURE_BUFFER, state->bo); \
-    glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state->bo); \
-\
-    state->loc.insts     = glGetUniformLocation(state->shader->shader, "insts"); \
+#define FST_r2dInitGeneric(vert,frag)                                                \
+    state->shader = fst_shader_load(vert,frag);                                      \
+                                                                                     \
+    glGenBuffers(1, &state->bo);                                                     \
+    glBindBuffer(GL_TEXTURE_BUFFER, state->bo);                                      \
+    glBufferData(GL_TEXTURE_BUFFER, FST_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);     \
+                                                                                     \
+    glGenTextures(1, &state->tbo);                                                   \
+    glBindTexture(GL_TEXTURE_BUFFER, state->bo);                                     \
+    glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state->bo);                           \
+                                                                                     \
+    state->loc.insts     = glGetUniformLocation(state->shader->shader, "insts");     \
     state->loc.inst_size = glGetUniformLocation(state->shader->shader, "inst_size"); \
     state->loc.proj      = glGetUniformLocation(state->shader->shader, "proj")
-#define FST_r2dEndGeneric() \
+#define FST_r2dEndGeneric()           \
     fst_shader_unload(state->shader); \
     glDeleteTextures(1, &state->tbo); \
     glDeleteBuffers(1, &state->bo)

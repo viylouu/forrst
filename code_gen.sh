@@ -19,7 +19,7 @@ extern \"C\" {
 
 #include <GL/gl.h>
 
-#define FUNC(name, ret_type, ...) \\
+#define FUNC(name, ret_type, ...)                       \\
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \\
     extern name##_t name
 
@@ -53,19 +53,19 @@ echo "
 #ifdef _WIN32
     #include <windows.h>
 
-    #define LOAD(name) \\
-                do { \\
-                    name = (name##_t)wglGetProcAddress(#name); \\
-                    if (!name) { printf(\"failed to load %s!\n\", #name); return } \\
+    #define LOAD(name)                                                              \\
+                do {                                                                \\
+                    name = (name##_t)wglGetProcAddress(#name);                      \\
+                    if (!name) { printf(\"failed to load %s!\n\", #name); return; } \\
                 } while (0)
 #else
     #include <EGL/egl.h>
     #include <GL/glx.h>
 
-    #define LOAD(name) \\
-                do { \\
+    #define LOAD(name)                                                              \\
+                do {                                                                \\
                     if (fst_use_wayland) name = (name##_t)eglGetProcAddress(#name); \\
-                    else name = (name##_t)glXGetProcAddress((const GLubyte*)name); \\
+                    else name = (name##_t)glXGetProcAddress((const GLubyte*)name);  \\
                     if (!name) { printf(\"failed to load %s!\n\", #name); return; } \\
                 } while(0)
 #endif
