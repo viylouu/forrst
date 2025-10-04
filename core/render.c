@@ -131,4 +131,3 @@ void fst_render_resize(void* data, s32 width, s32 height) {
     FSTrenderState* state = data;
 }
 
-

@@ -1,4 +1,4 @@
-#include "forrst.h"
+#include "forrst.hh"
 
 #include <GLFW/glfw3.h>
 
@@ -25,7 +25,7 @@ void* fst_init(const char* title, s32 width, s32 height) {
 }
 
 char fst_shouldClose(void* state) {
-    GLFWwindow* window = state;
+    GLFWwindow* window = (GLFWwindow*)state;
     return glfwWindowShouldClose(window);
 }
 
@@ -36,12 +36,12 @@ void fst_poll(void* state) {
 }
 
 void fst_swapBuffer(void* state) {
-    GLFWwindow* window = state;
+    GLFWwindow* window = (GLFWwindow*)state;
     glfwSwapBuffers(window);
 }
 
 void fst_end(void* state) {
-    GLFWwindow* window = state;
+    GLFWwindow* window = (GLFWwindow*)state;
 
     glfwPollEvents(); // fix for segfault on crash for some reason? idk, glfw is weird
 
@@ -49,27 +49,3 @@ void fst_end(void* state) {
     glfwTerminate();
 }
 
-s32 EXPLICIT_fst_windowDoShit(const char* title, v2 dims, FSTwindowDoShitOPS ops) {
-    UNUSED(ops);
-
-    void* state = fst_init(title, dims.x,dims.y);
-    fst_gl_load();
-    void* rstate = fst_render_init();
-
-    MAYBE_CALL(ops.init);
-
-    while (!fst_shouldClose(state)) {
-        fst_poll(state);
-
-        MAYBE_CALL(ops.update);
-        MAYBE_CALL(ops.render);
-
-        fst_swapBuffer(state);
-    }
-
-    MAYBE_CALL(ops.end);
-
-    fst_render_end(rstate);
-    fst_end(state);
-    return 0;
-}
