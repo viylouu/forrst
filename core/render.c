@@ -5,7 +5,6 @@
 #include <core/shader.h>
 
 /* table of contents:
- **** you can search for any of these points to hop to it in the code!
  **** [CONSTS]
  **** [GL STRUCTS]
  **** **** [gl struct 2d]

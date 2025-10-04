@@ -4,9 +4,9 @@
 #include <core/load_gl.h>
 #include <GL/gl.h>
 
-/* paths
- * [PART]
- * [SHADER]
+/* table of contents:
+ **** [PART]
+ **** [SHADER]
  */
 
 /*
