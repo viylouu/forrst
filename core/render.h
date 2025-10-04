@@ -18,6 +18,7 @@ extern "C" {
  * [END]
  * [UPDATE]
  **** [resize]
+ * [FUNCS]
  */
 
 /* [CONSTS] */
@@ -61,7 +62,7 @@ FST_genericInitEnd(r2dTex);
 
 /* [gl struct spritestack] */
 #define FST_rSsGeneric() \
-    u32 prog; u32 bo, tbo;
+    FSTshader* shad; u32 bo, tbo;
 // if this is too big... idgaf no it isnt
 #define FST_rSsGenericLoc() \
     s32 inst_size, insts, proj, cam_rot, cam_pos, cam_z, cam_tilt, cam_scale;
@@ -116,6 +117,12 @@ void fst_render_end(void* data);
 
 /* [resize] */
 void fst_render_resize(void* data, s32 width, s32 height);
+
+/*
+ * [FUNCS]
+ */
+void fst_render_flush(void* data, void* batch);
+ // todo : what?
 
 #ifdef __cplusplus
 }

@@ -12,6 +12,8 @@ void fst_poll(void* state);
 void fst_swapBuffer(void* state);
 void fst_end(void* state);
 
+static void* rstate;
+
 class FSTgame {
 public:
     FSTnode* scene;
@@ -32,7 +34,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     void* state = fst_init(title, dims.x,dims.y);
     fst_gl_load();
-    void* rstate = fst_render_init();
+    rstate = fst_render_init();
 
     Tgame game;
 
@@ -41,6 +43,9 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     while (!fst_shouldClose(state)) {
         fst_poll(state);
+
+        game.scene->update();
+        game.scene->render();
 
         game.update();
         game.render();
