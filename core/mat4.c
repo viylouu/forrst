@@ -16,7 +16,8 @@ void fst_mat4_make(
         m20, m21, m22, m23,
         m30, m31, m32, m33
     };
-    memcpy(*mat, tmp, sizeof(tmp));
+    //memcpy(mat, tmp, sizeof(*mat));
+    for (int i = 0; i < 16; i++) (*mat)[i] = tmp[i];
 }
 
 void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
@@ -31,7 +32,8 @@ void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
                 a[row*4 + 3] * b[3*4 + col];
         }
 
-    memcpy(*out, result, sizeof(f32)*16);
+    for (int i = 0; i < 16; i++) (*out)[i] = result[i];
+    //memcpy(*out, result, sizeof(f32)*16);
 }
 
 void fst_mat4_ortho(
@@ -45,9 +47,9 @@ void fst_mat4_ortho(
     f32 fn = far - near;
 
     fst_mat4_make(mat, 
-        2/rl, 0, 0, 0,
-        0, 2/tb, 0, 0,
-        0, 0,-2/fn, 0,
+        2.f/rl, 0, 0, 0,
+        0, 2.f/tb, 0, 0,
+        0, 0,-2.f/fn, 0,
         -(right+left) / rl, -(top+bottom) / tb, -(far+near) / fn, 1
         );
 }
@@ -73,7 +75,7 @@ void fst_mat4_translate(
         );
 }
 
-void fts_mat4_scale(
+void fst_mat4_scale(
     mat4* mat,
     f32 x, f32 y, f32 z
 ) {

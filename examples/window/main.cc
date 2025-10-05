@@ -3,6 +3,7 @@
 
 #include <core/render.hh>
 #include <cstdlib>
+#include <core/mat4.h>
 
 class FSTrenderer : public FSTcomponent {
 public:
@@ -14,7 +15,9 @@ public:
     }
 
     void render() {
-        fst_render_rect(rstate, 
+        mat4 ident;
+        fst_mat4_identity(&ident);
+        fst_render_rect(rstate, ident,
             (rand()%16384)/8192.f-1,(rand()%16384)/8192.f-1,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f);
     }
 };

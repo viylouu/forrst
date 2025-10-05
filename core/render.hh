@@ -4,6 +4,7 @@
 #include <core/macros.h>
 #include <core/shader.h>
 #include <vector>
+#include <core/mat4.h>
 
 /* table of contents:
  * [CONSTS]
@@ -149,6 +150,6 @@ void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a);
 /**** [funcs generic - transform] */
 
 /* [funcs 2d] */
-void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
+void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
 
 #endif

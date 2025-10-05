@@ -3,6 +3,7 @@
 #include <core/auto/load_gl.h>
 #include <GL/gl.h>
 #include <core/shader.h>
+#include <core/mat4.h>
 
 /* table of contents:
  **** [GL STRUCTS]
@@ -135,14 +136,6 @@ void* fst_render_init(void) {
     fst_rSsCube_init(&state->ssCube);
     fst_rSsModel_init(&state->ssModel);
 
-    float tmp[16] = {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
-    std::copy(tmp,tmp+16,state->proj2d);
-
     return state;
 }
 
@@ -170,7 +163,9 @@ void fst_render_end(void* data) {
 
 /* [resize] */
 void fst_render_resize(void* data, s32 width, s32 height) {
-    UNUSED(data);
+    FSTrenderState* state = (FSTrenderState*)data;
+
+    fst_mat4_ortho(&state->proj2d, 0,width,height,0,-1,1);
 }
 
 /*
@@ -202,7 +197,7 @@ void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a) {
 }
 
 /* [funcs 2d] */
-void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
+void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
     FSTrenderState* state = (FSTrenderState*)data;
 
     if (state->batch_type != FST_BATCH_2D_RECT) fst_render_flush(data);
@@ -211,13 +206,6 @@ void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b
     state->batch_type = FST_BATCH_2D_RECT;
 
     FSTinstanceData inst;
-    
-    float transf[16] = {
-        1,0,0,0,
-        0,1,0,0,
-        0,0,1,0,
-        0,0,0,1
-    };
 
     std::copy(transf,transf+16,inst.transf);
 

@@ -71,7 +71,9 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
         prevKey = curKey;
 
         if(editor) {
-            fst_render_rect(rstate, 0,0,1,1,1,1,1,1);
+            mat4 ident;
+            fst_mat4_identity(&ident);
+            fst_render_rect(rstate, ident, 0,0,1,1,1,1,1,1);
         }
         #endif
 

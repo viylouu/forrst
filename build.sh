@@ -55,10 +55,11 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
 fi
 
 if $BUILD_TEST; then
-    COMPILER=("tcc")
+    #COMPILER=("tcc")
     COMPILER_CC=("g++")
     FLAGS_COMP+=" -O0 -g"
     FLAGS_LINK+=" -g -fno-lto"
+    CFLAGS_COMP+=" -fno-sanitize=undefined"
 else
     FLAGS_COMP+=" -O3"
     FLAGS_LINK+=" -flto"
@@ -70,7 +71,7 @@ if $BUILD_WINDOWS; then
     CFLAGS_COMP="-target x86_64-windows -fno-sanitize=undefined"
     FLAGS_COMP+=" -D_WIN32"
 else
-    FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11"
+    FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11 -lm"
 fi
 
 if [ -n "$EXAMPLE" ]; then

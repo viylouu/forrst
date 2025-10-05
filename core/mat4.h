@@ -3,6 +3,10 @@
 #ifndef FST_MAT4_H
 #define FST_MAT4_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <core/macros.h>
 
 typedef f32 mat4[16];
@@ -32,5 +36,9 @@ void fst_mat4_scale(mat4* mat, f32 x, f32 y, f32 z);
 void fst_mat4_rotateX(mat4* mat, f32 ang);
 void fst_mat4_rotateY(mat4* mat, f32 ang);
 void fst_mat4_rotateZ(mat4* mat, f32 ang);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
