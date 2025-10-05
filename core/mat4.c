@@ -16,7 +16,7 @@ void fst_mat4_make(
         m20, m21, m22, m23,
         m30, m31, m32, m33
     };
-    memcpy(mat, tmp, sizeof(*mat));
+    memcpy(*mat, tmp, sizeof(f32)*16);
 }
 
 void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
