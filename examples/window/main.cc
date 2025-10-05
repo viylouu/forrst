@@ -7,18 +7,14 @@
 
 class FSTrenderer : public FSTcomponent {
 public:
-    char* t_name;
+    v4 col;
 
     void init() {
-        FSTvarInfo info = { &t_name, "test name", FST_TYPEOF_STRING };
-        publics.push_back(info); 
+        publics.push_back((FSTvarInfo){ &col, "color (float)", FST_TYPEOF_VEC4 }); 
     }
 
     void render() {
-        mat4 ident;
-        fst_mat4_identity(&ident);
-        fst_render_rect(rstate, ident,
-            (rand()%16384)/4.f,(rand()%16384)/4.f,(rand()%16384)/4.f,(rand()%16384)/4.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f);
+        fst_render_rect(rstate, parent->transf, 0,0,1,1, col.x,col.y,col.z,col.w);
     }
 };
 
@@ -27,11 +23,16 @@ public:
     s32 tick;
 
     void init() {
-        for (s32 i = 0; i < 16384; ++i) {
+        //for (s32 i = 0; i < 16384; ++i) {
             FSTnode* node = new FSTnode();
-            node->addComponent(new FSTrenderer());
+            FSTrenderer* comp = new FSTrenderer();
+            comp->col = (v4){1,0,0,1};
+            node->addComponent(comp);
             scene->addChild(node);
-        }
+            node->scale = (v3){64,64,1};
+            node->pos = (v3){512,512,0};
+            node->rot.z = 45;
+        //}
         tick = 0;
     }
 

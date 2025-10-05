@@ -4,6 +4,7 @@
 #include <core/macros.h>
 #include <vector>
 #include <stdio.h>
+#include <core/mat4.h>
 
 class FSTnode;
 
@@ -12,7 +13,10 @@ typedef enum {
     FST_TYPEOF_REF,
     FST_TYPEOF_VECTOR,
     FST_TYPEOF_INT,
-    FST_TYPEOF_FLOAT
+    FST_TYPEOF_FLOAT,
+    FST_TYPEOF_VEC2,
+    FST_TYPEOF_VEC3,
+    FST_TYPEOF_VEC4
 } FSTtype;
 
 typedef struct {
@@ -39,6 +43,9 @@ public:
     FSTnode* parent;
     std::vector<FSTnode*> children;
     std::vector<FSTcomponent*> components;
+
+    v3 pos, scale, rot;
+    mat4 transf;
 
     FSTnode() : parent(NULL) {}
     virtual ~FSTnode() {
@@ -67,6 +74,17 @@ public:
     }
 
     void recrender() {
+        fst_mat4_scale(&transf, scale.x,scale.y,scale.z);
+        mat4 a;
+        fst_mat4_rotateX(&a, rot.x);
+        fst_mat4_multiply(&transf, transf, a);
+        fst_mat4_rotateY(&a, rot.y);
+        fst_mat4_multiply(&transf, transf, a);
+        fst_mat4_rotateZ(&a, rot.z);
+        fst_mat4_multiply(&transf, transf, a);
+        fst_mat4_translate(&a, pos.x,pos.y,pos.z);
+        fst_mat4_multiply(&transf, transf, a);
+
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->render();
         for (s32 i = 0; i < (s32)children.size(); ++i)
