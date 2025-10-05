@@ -7,9 +7,9 @@
 
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
     glViewport(0,0,width,height);
-
-    if (rstate)
-        fst_render_resize(rstate,width,height);
+    void* state = glfwGetWindowUserPointer(window);
+    if (state)
+        fst_render_resize(state,width,height);
 }
 
 void* fst_init(const char* title, s32 width, s32 height) {

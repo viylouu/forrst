@@ -39,6 +39,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     fst_gl_load();
     rstate = fst_render_init();
 
+    glfwSetWindowUserPointer((GLFWwindow*)state, rstate);
     glfwSetFramebufferSizeCallback((GLFWwindow*)state, fst_cb_size);
 
     glViewport(0,0,dims.x,dims.y);
