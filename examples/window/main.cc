@@ -1,4 +1,6 @@
+#define FST_EDITOR
 #include <forrst.hh>
+
 #include <core/render.hh>
 #include <cstdlib>
 

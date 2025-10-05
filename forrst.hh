@@ -40,6 +40,11 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     glViewport(0,0,dims.x,dims.y);
 
+    #ifdef FST_EDITOR
+    b8 editor = 0;
+    b8 prevKey = 0;
+    #endif
+
     Tgame game;
 
     game.constr();
@@ -59,6 +64,17 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
         game.scene->recupdate(delta);
         game.scene->recrender();
 
+        #ifdef FST_EDITOR
+        b8 curKey = glfwGetKey((GLFWwindow*)state, GLFW_KEY_F1);
+        if (curKey == GLFW_PRESS && prevKey == GLFW_RELEASE)
+            editor = !editor;
+        prevKey = curKey;
+
+        if(editor) {
+            fst_render_rect(rstate, 0,0,1,1,1,1,1,1);
+        }
+        #endif
+
         fst_render_flush(rstate);
 
         fst_swapBuffer(state);
@@ -67,6 +83,9 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     game.end();
 
     delete game.scene;
+
+    #ifdef FST_EDITOR
+    #endif
 
     fst_render_end(rstate);
     fst_end(state);
