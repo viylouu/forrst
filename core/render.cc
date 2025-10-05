@@ -121,6 +121,12 @@ void fst_rSsModel_init(void* data) {
 void* fst_render_init(void) {
     FSTrenderState* state = new FSTrenderState();
 
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LEQUAL);
+
     glGenVertexArrays(1, &state->vao);
 
     fst_r2dRect_init(&state->rect);
@@ -192,7 +198,7 @@ void fst_render_flush(void* data) {
 void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a) {
     UNUSED(data);
     glClearColor(r,g,b,a);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 /* [funcs 2d] */

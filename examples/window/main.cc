@@ -5,9 +5,8 @@
 class square : public FSTnode {
 public:
     void render() {
-        
         fst_render_rect(rstate, 
-            (rand()%64)/32.f-1,(rand()%64)/32.f-1,(rand()%64)/64.f,(rand()%64)/64.f,(rand()%64)/64.f,(rand()%64)/64.f,(rand()%64)/64.f,1);
+            (rand()%16384)/8192.f-1,(rand()%16384)/8192.f-1,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f,(rand()%16384)/16384.f);
     }
 };
 
