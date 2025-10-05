@@ -64,4 +64,9 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     return 0;
 }
 
+#define FST_MAIN(class)                                                \
+int main(void) {                                                       \
+    return fst_windowDoShit<class>("title", ((v2){800,600})); \
+}
+
 #endif

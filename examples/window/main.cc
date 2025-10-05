@@ -19,9 +19,4 @@ public:
     }
 };
 
-
-
-int main(void) {
-    return fst_windowDoShit<game>("title", ((v2){800,600}));
-}
-
+FST_MAIN(game);
