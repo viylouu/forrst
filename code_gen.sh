@@ -1,8 +1,8 @@
 # fuck yeah its bash
 # you got a problem with that?
 
-CUR="core/load_gl.h"
-DEF="core/defs/load_gl."
+CUR="core/auto/load_gl.h"
+DEF="core/auto/load_gl."
 
 echo "
 
@@ -39,7 +39,7 @@ echo "
 #endif" >> "$CUR"
 
 
-CUR="core/load_gl.c"
+CUR="core/auto/load_gl.c"
 
 echo "
 

@@ -3,7 +3,7 @@
 
 #include <core/macros.h>
 #include <core/render.hh>
-#include <core/load_gl.h>
+#include <core/auto/load_gl.h>
 #include <core/node.hh>
 #include <GLFW/glfw3.h>
 

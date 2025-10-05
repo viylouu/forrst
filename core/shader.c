@@ -1,7 +1,7 @@
 #include "shader.h"
 
 #include <core/macros.h>
-#include <core/load_gl.h>
+#include <core/auto/load_gl.h>
 #include <GL/gl.h>
 
 /* table of contents:

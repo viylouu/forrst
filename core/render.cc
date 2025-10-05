@@ -1,6 +1,6 @@
 #include <core/macros.h>
 #include "render.hh"
-#include <core/load_gl.h>
+#include <core/auto/load_gl.h>
 #include <GL/gl.h>
 #include <core/shader.h>
 

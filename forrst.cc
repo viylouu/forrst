@@ -2,7 +2,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include <core/load_gl.h>
+#include <core/auto/load_gl.h>
 #include <core/render.hh>
 
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
