@@ -19,6 +19,12 @@ extern \"C\" {
 
 #include <GL/gl.h>
 
+#ifdef _WIN32
+#include <windows.h>
+#define APIENTRYP APIENTRY *
+#include <GL/glext.h>
+#endif
+
 #define FUNC(name, ret_type, ...)                       \\
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \\
     extern name##_t name
@@ -26,6 +32,10 @@ extern \"C\" {
 extern b8 fst_use_wayland;
 
 void fst_gl_load(void);  
+
+#ifdef _WIN32
+FUNC(glActiveTexture, void, GLenum texture);
+#endif
 
 " > "$CUR"
 
@@ -75,12 +85,21 @@ echo "
 
 b8 fst_use_wayland;
 
+#ifdef _WIN32
+FUNC_C(glActiveTexture, void, GLenum texture);
+#endif
+
 " > "$CUR"
 
 sed -E 's/^(.*\S.*)$/FUNC_C(\1);/' "$DEF" >> "$CUR"
 
 echo "
 void fst_gl_load(void) {
+
+#ifdef _WIN32
+LOAD(glActiveTexture);
+#endif
+
 " >> "$CUR"
 
 sed -E 's/^([^,]+),.*$/LOAD(\1);/' "$DEF" >> "$CUR"

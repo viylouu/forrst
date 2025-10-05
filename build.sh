@@ -60,14 +60,14 @@ if $BUILD_TEST; then
     FLAGS_COMP+=" -O0 -g"
     FLAGS_LINK+=" -g -fno-lto"
 else
-    FLAGS_COMP+=" -O3 -fsanitize=undefined"
-    FLAGS_LINK+=" -flto -fsanitize=undefined"
+    FLAGS_COMP+=" -O3"
+    FLAGS_LINK+=" -flto"
 fi
 
 if $BUILD_WINDOWS; then
     COMPILER_CC=("x86_64-w64-mingw32-g++")
     FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32 -D_WIN32"
-    CFLAGS_COMP="-target x86_64-windows-gnu"
+    CFLAGS_COMP="-target x86_64-windows -fno-sanitize=undefined"
     FLAGS_COMP+=" -D_WIN32"
 else
     FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11"

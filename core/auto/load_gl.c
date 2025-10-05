@@ -32,6 +32,10 @@
 
 b8 fst_use_wayland;
 
+#ifdef _WIN32
+FUNC_C(glActiveTexture, void, GLenum texture);
+#endif
+
 
 FUNC_C(glCreateShader, GLuint, GLenum type);
 FUNC_C(glShaderSource, void, GLuint shader, GLsizei count, const GLchar* const* string, const GLint* length);
@@ -78,6 +82,11 @@ FUNC_C(glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum
 FUNC_C(glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers);
 
 void fst_gl_load(void) {
+
+#ifdef _WIN32
+LOAD(glActiveTexture);
+#endif
+
 
 LOAD(glCreateShader);
 LOAD(glShaderSource);
