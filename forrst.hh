@@ -7,6 +7,7 @@
 #include <core/node.hh>
 #include <GLFW/glfw3.h>
 
+void fst_cb_size(GLFWwindow* window, s32 width, s32 height);
 void* fst_init(const char* title, s32 width, s32 height);
 char fst_shouldClose(void* state);
 void fst_poll(void* state);
@@ -37,6 +38,8 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     void* state = fst_init(title, dims.x,dims.y);
     fst_gl_load();
     rstate = fst_render_init();
+
+    glfwSetFramebufferSizeCallback((GLFWwindow*)state, fst_cb_size);
 
     glViewport(0,0,dims.x,dims.y);
 

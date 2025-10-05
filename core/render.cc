@@ -136,6 +136,8 @@ void* fst_render_init(void) {
     fst_rSsCube_init(&state->ssCube);
     fst_rSsModel_init(&state->ssModel);
 
+    fst_mat4_ortho(&state->proj2d, 0,800,600,0,-1,1);
+
     return state;
 }
 

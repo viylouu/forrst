@@ -7,6 +7,7 @@
 
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
     glViewport(0,0,width,height);
+    fst_render_resize(rstate,width,height);
 }
 
 void* fst_init(const char* title, s32 width, s32 height) {
@@ -23,9 +24,7 @@ void* fst_init(const char* title, s32 width, s32 height) {
 
     glfwMakeContextCurrent(window);
 
-    fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
-
-    glfwSetFramebufferSizeCallback(window, fst_cb_size);
+    fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;   
 
     return window;
 }
