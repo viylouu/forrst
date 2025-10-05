@@ -4,7 +4,6 @@
 #include <GL/gl.h>
 #include <core/load_gl.h>
 #include <stdlib.h>
-#include <algorithm>
 
 class square : public FSTnode {
 public:

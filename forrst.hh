@@ -38,17 +38,17 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     Tgame game;
 
-    game.FSTgame::constr();
+    game.constr();
     game.init();
 
     while (!fst_shouldClose(state)) {
         fst_poll(state);
 
-        game.scene->update();
-        game.scene->render();
-
         game.update();
         game.render();
+
+        game.scene->recupdate();
+        game.scene->recrender();
 
         fst_render_flush(rstate);
 

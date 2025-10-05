@@ -3,6 +3,7 @@
 
 #include <core/macros.h>
 #include <vector>
+#include <stdio.h>
 
 class FSTcomponent {
 public:
@@ -35,14 +36,19 @@ public:
         components.push_back(component);
     }
 
-    void update() {
+    virtual void update() {}
+    virtual void render() {}
+
+    void recupdate() {
+        update();
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->update();
         for (s32 i = 0; i < (s32)children.size(); ++i)
             children[i]->update();
     }
 
-    void render() {
+    void recrender() {
+        render();
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->render();
         for (s32 i = 0; i < (s32)children.size(); ++i)
