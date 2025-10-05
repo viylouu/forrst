@@ -189,6 +189,12 @@ void fst_render_flush(void* data) {
     state->batch.clear();
 }
 
+void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a) {
+    UNUSED(data);
+    glClearColor(r,g,b,a);
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
 /* [funcs 2d] */
 void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
     FSTrenderState* state = (FSTrenderState*)data;

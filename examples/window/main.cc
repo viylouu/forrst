@@ -1,6 +1,5 @@
 #include <forrst.hh>
 #include <core/render.hh>
-#include <GL/gl.h>
 
 class square : public FSTnode {
 public:
@@ -16,8 +15,7 @@ public:
     }
 
     void render() {
-        glClearColor(.2,.4,.3,1);
-        glClear(GL_COLOR_BUFFER_BIT);
+        fst_render_clear(rstate, .2,.4,.3,1);
     }
 };
 
