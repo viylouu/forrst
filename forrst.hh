@@ -25,7 +25,7 @@ public:
     }
 
     virtual void init()   {}
-    virtual void update() {}
+    virtual void update(f32 delta) {}
     virtual void render() {}
     virtual void end()    {}
 };
@@ -45,15 +45,18 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     game.constr();
     game.init();
 
+    f32 lasttime = glfwGetTime();
+
     while (!fst_shouldClose(state)) {
         fst_poll(state);
 
         time = glfwGetTime();
+        f32 delta = time - lasttime;
 
-        game.update();
+        game.update(delta);
         game.render();
 
-        game.scene->recupdate();
+        game.scene->recupdate(delta);
         game.scene->recrender();
 
         fst_render_flush(rstate);

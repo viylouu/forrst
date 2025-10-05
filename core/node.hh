@@ -5,11 +5,33 @@
 #include <vector>
 #include <stdio.h>
 
+class FSTnode;
+
+typedef enum {
+    FST_TYPEOF_STRING,
+    FST_TYPEOF_REF,
+    FST_TYPEOF_VECTOR,
+    FST_TYPEOF_INT,
+    FST_TYPEOF_FLOAT
+} FSTtype;
+
+typedef struct {
+    void* var;
+    const char* name;
+    FSTtype type;
+} FSTvarInfo;
+
 class FSTcomponent {
 public:
-    virtual void update()   {}
-    virtual void render()   {}
-    virtual ~FSTcomponent() {}
+    const char* title;
+    std::vector<FSTvarInfo> publics;
+
+    virtual void init() { title = "untitled"; }
+
+    FSTnode* parent;
+    virtual void update(f32 delta) {}
+    virtual void render()          {}
+    virtual ~FSTcomponent()        {}
 };
 
 class FSTnode {
@@ -33,29 +55,23 @@ public:
     }
 
     void addComponent(FSTcomponent* component) {
+        component->parent = this;
         components.push_back(component);
     }
 
-    virtual void update() {}
-    virtual void render() {}
-
-    void recupdate() {
-        update();
+    void recupdate(f32 delta) {
         for (s32 i = 0; i < (s32)components.size(); ++i)
-            components[i]->update();
+            components[i]->update(delta);
         for (s32 i = 0; i < (s32)children.size(); ++i)
-            children[i]->recupdate();
+            children[i]->recupdate(delta);
     }
 
     void recrender() {
-        render();
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->render();
         for (s32 i = 0; i < (s32)children.size(); ++i)
             children[i]->recrender();
     }
 };
-
-
 
 #endif
