@@ -17,6 +17,7 @@
  **** [resize]
  * [FUNCS]
  **** [funcs generic]
+ **** **** [funcs generic - transform]
  **** [funcs 2d]
  */
 
@@ -144,6 +145,8 @@ void fst_render_resize(void* data, s32 width, s32 height);
 /* [funcs generic] */
 void fst_render_flush(void* data);
 void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a);
+
+/**** [funcs generic - transform] */
 
 /* [funcs 2d] */
 void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);

@@ -5,6 +5,7 @@
 #include <core/render.hh>
 #include <core/load_gl.h>
 #include <core/node.hh>
+#include <GLFW/glfw3.h>
 
 void* fst_init(const char* title, s32 width, s32 height);
 char fst_shouldClose(void* state);
@@ -13,6 +14,7 @@ void fst_swapBuffer(void* state);
 void fst_end(void* state);
 
 static void* rstate;
+static f64 time;
 
 class FSTgame {
 public:
@@ -36,6 +38,8 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     fst_gl_load();
     rstate = fst_render_init();
 
+    glViewport(0,0,dims.x,dims.y);
+
     Tgame game;
 
     game.constr();
@@ -43,6 +47,8 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     while (!fst_shouldClose(state)) {
         fst_poll(state);
+
+        time = glfwGetTime();
 
         game.update();
         game.render();

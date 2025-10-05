@@ -5,6 +5,10 @@
 #include <core/load_gl.h>
 #include <core/render.hh>
 
+void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
+    glViewport(0,0,width,height);
+}
+
 void* fst_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
@@ -20,6 +24,8 @@ void* fst_init(const char* title, s32 width, s32 height) {
     glfwMakeContextCurrent(window);
 
     fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;
+
+    glfwSetFramebufferSizeCallback(window, fst_cb_size);
 
     return window;
 }
