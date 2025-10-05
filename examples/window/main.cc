@@ -14,12 +14,8 @@ public:
 
 class game : public FSTgame {
 public:
-    square* sqr;
-
     void init() {
-        sqr = new square();
-
-        scene->addChild(sqr);
+        scene->addChild(new square());
     }
 
     void render() {
