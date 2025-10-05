@@ -1,9 +1,6 @@
 #include <forrst.hh>
 #include <core/render.hh>
-
 #include <GL/gl.h>
-#include <core/load_gl.h>
-#include <stdlib.h>
 
 class square : public FSTnode {
 public:
