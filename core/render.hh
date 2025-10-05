@@ -38,9 +38,9 @@
 
 /* [gl struct 2d] */
 #define FST_r2dGeneric() \
-    FSTshader* shader; u32 bo, tbo;
+    FSTshader* shader; u32 bo, tbo
 #define FST_r2dGenericLoc() \
-    s32 inst_size; s32 insts; s32 proj;
+    s32 inst_size; s32 insts; s32 proj
 
 
 struct FST_r2dRect {
@@ -62,10 +62,10 @@ FST_genericInitEnd(r2dTex);
 
 /* [gl struct spritestack] */
 #define FST_rSsGeneric() \
-    FSTshader* shad; u32 bo, tbo;
+    FSTshader* shad; u32 bo, tbo
 // if this is too big... idgaf no it isnt
 #define FST_rSsGenericLoc() \
-    s32 inst_size, insts, proj, cam_rot, cam_pos, cam_z, cam_tilt, cam_scale;
+    s32 inst_size, insts, proj, cam_rot, cam_pos, cam_z, cam_tilt, cam_scale
 
 
 struct FST_rSsCube {
