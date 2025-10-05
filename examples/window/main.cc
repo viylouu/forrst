@@ -8,23 +8,8 @@
 
 class square : public FSTnode {
 public:
-    FSTrenderState* state;
-    float transf[16];
-
-    void init() {
-        float tmp[16] = {
-            1,0,0,0,
-            0,1,0,0,
-            0,0,1,0,
-            0,0,0,1
-        };
-        std::copy(tmp,tmp+16,transf);
-    }
-
-    void update() { state = (FSTrenderState*)rstate; }
-
     void render() {
-        fst_render_rect(state, 0,0,1,1,1,0,0,1);
+        fst_render_rect(rstate, 0,0,1,1,1,0,0,1);
     }
 };
 
