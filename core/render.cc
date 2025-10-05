@@ -165,7 +165,6 @@ void fst_render_end(void* data) {
 void fst_render_resize(void* data, s32 width, s32 height) {
     FSTrenderState* state = (FSTrenderState*)data;
 
-    printf("%p\n", state);
     fst_mat4_ortho(&state->proj2d, 0,width,height,0,-2147483647.f,2147483647.f);
 }
 
