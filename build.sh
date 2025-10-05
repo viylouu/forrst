@@ -60,8 +60,8 @@ if $BUILD_TEST; then
     FLAGS_COMP+=" -O0 -g"
     FLAGS_LINK+=" -g -fno-lto"
 else
-    FLAGS_COMP+=" -O3"
-    FLAGS_LINK+=" -flto"
+    FLAGS_COMP+=" -O3 -fsanitize=undefined"
+    FLAGS_LINK+=" -flto -fsanitize=undefined"
 fi
 
 if $BUILD_WINDOWS; then
