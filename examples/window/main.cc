@@ -2,7 +2,7 @@
 #include <core/render.hh>
 #include <cstdlib>
 
-class square : public FSTnode {
+class square : public FSTcomponent {
 public:
     void render() {
         fst_render_rect(rstate, 
@@ -15,8 +15,11 @@ public:
     s32 tick;
 
     void init() {
-        for (s32 i = 0; i < 16384; ++i)
-            scene->addChild(new square());
+        for (s32 i = 0; i < 16384; ++i) {
+            FSTnode* node = new FSTnode();
+            node->addComponent(new square());
+            scene->addChild(node);
+        }
         tick = 0;
     }
 

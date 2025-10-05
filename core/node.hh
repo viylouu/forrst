@@ -44,7 +44,7 @@ public:
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->update();
         for (s32 i = 0; i < (s32)children.size(); ++i)
-            children[i]->update();
+            children[i]->recupdate();
     }
 
     void recrender() {
@@ -52,7 +52,7 @@ public:
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->render();
         for (s32 i = 0; i < (s32)children.size(); ++i)
-            children[i]->render();
+            children[i]->recrender();
     }
 };
 
