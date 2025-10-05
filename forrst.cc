@@ -7,7 +7,9 @@
 
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
     glViewport(0,0,width,height);
-    fst_render_resize(rstate,width,height);
+
+    if (rstate)
+        fst_render_resize(rstate,width,height);
 }
 
 void* fst_init(const char* title, s32 width, s32 height) {

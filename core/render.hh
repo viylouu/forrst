@@ -110,8 +110,7 @@ typedef struct {
     std::vector<FSTinstanceData> batch;
     FSTbatchType batch_type;
 
-    // i NEED a matrix type
-    float proj2d[16];
+    mat4 proj2d;
 
     struct FST_r2dRect rect;
     struct FST_r2dTex tex;

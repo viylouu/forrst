@@ -43,8 +43,13 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     glViewport(0,0,dims.x,dims.y);
 
+#ifdef _WIN32
+    glfwSetWindowSize((GLFWwindow*)state, dims.x+1,dims.y+1);
+    glfwSetWindowSize((GLFWwindow*)state, dims.x,dims.y);
+#endif
+
     #ifdef FST_EDITOR
-    b8 editor = 0;
+    b8 editor = 1;
     b8 prevKey = 0;
     #endif
 
@@ -76,7 +81,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
         if(editor) {
             mat4 ident;
             fst_mat4_identity(&ident);
-            fst_render_rect(rstate, ident, 0,0,1,1,1,1,1,1);
+            fst_render_rect(rstate, ident, 0,0,256,256,1,1,1,1);
         }
         #endif
 

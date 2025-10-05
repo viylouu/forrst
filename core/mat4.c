@@ -16,12 +16,12 @@ void fst_mat4_make(
         m20, m21, m22, m23,
         m30, m31, m32, m33
     };
-    memcpy(*mat, tmp, sizeof(f32)*16);
+    memcpy(*mat, tmp, sizeof(tmp));
+    //for(s32 i = 0; i < 16; ++i) (*mat)[i] = tmp[i];
 }
 
 void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
-    f32 result[16];
-
+    mat4 result;
     for (s32 row = 0; row < 4; row++)
         for (s32 col = 0; col < 4; col++) {
             result[row*4 + col] =
@@ -31,7 +31,8 @@ void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
                 a[row*4 + 3] * b[3*4 + col];
         }
 
-    memcpy(*out, result, sizeof(f32)*16);
+    memcpy(*out, result, sizeof(result));
+    //for(s32 i = 0; i < 16; ++i) (*out)[i] = result[i];
 }
 
 void fst_mat4_ortho(

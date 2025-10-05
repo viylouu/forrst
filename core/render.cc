@@ -136,8 +136,6 @@ void* fst_render_init(void) {
     fst_rSsCube_init(&state->ssCube);
     fst_rSsModel_init(&state->ssModel);
 
-    fst_mat4_ortho(&state->proj2d, 0,800,600,0,-1,1);
-
     return state;
 }
 
@@ -167,7 +165,8 @@ void fst_render_end(void* data) {
 void fst_render_resize(void* data, s32 width, s32 height) {
     FSTrenderState* state = (FSTrenderState*)data;
 
-    fst_mat4_ortho(&state->proj2d, 0,width,height,0,-1,1);
+    printf("%p\n", state);
+    fst_mat4_ortho(&state->proj2d, 0,width,height,0,-2147483647.f,2147483647.f);
 }
 
 /*
