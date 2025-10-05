@@ -2,7 +2,7 @@
 #define FRST_FORRST_HH
 
 #include <core/macros.h>
-#include <core/render.h>
+#include <core/render.hh>
 #include <core/load_gl.h>
 #include <core/node.hh>
 
@@ -50,10 +50,14 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
         game.update();
         game.render();
 
+        fst_render_flush(rstate);
+
         fst_swapBuffer(state);
     }
 
     game.end();
+
+    delete game.scene;
 
     fst_render_end(rstate);
     fst_end(state);

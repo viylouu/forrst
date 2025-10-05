@@ -1,12 +1,9 @@
-#ifndef FST_RENDER_H
-#define FST_RENDER_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef FST_RENDER_HH
+#define FST_RENDER_HH
 
 #include <core/macros.h>
 #include <core/shader.h>
+#include <vector>
 
 /* table of contents:
  * [CONSTS]
@@ -19,11 +16,13 @@ extern "C" {
  * [UPDATE]
  **** [resize]
  * [FUNCS]
+ **** [funcs generic]
+ **** [funcs 2d]
  */
 
 /* [CONSTS] */
 #define FST_MAX_BATCH_SIZE 8192
-#define FST_MAX_BUFFER_SIZE FST_MAX_BATCH_SIZE*1 // sizeof(GLinstanceData)
+#define FST_MAX_BUFFER_SIZE FST_MAX_BATCH_SIZE * sizeof(FSTinstanceData)
 
 /*
  * [GL STRUCTS]
@@ -85,12 +84,32 @@ struct FST_rSsModel {
 };
 
 typedef struct {
+    f32 x,y,w,h;
+    f32 r,g,b,a;
+    f32 sx,sy,sw,sh;
+    float transf[16];
+} FSTinstanceData;
+
+typedef enum {
+    FST_BATCH_2D_RECT,
+    FST_BATCH_2D_TEX,
+    FST_BATCH_SS_CUBE,
+    FST_BATCH_SS_MODEL
+} FSTbatchType;
+
+typedef struct {
     /*
      * [STATE]
      */
 
     // shit ass garbage vao
     u32 vao;
+
+    std::vector<FSTinstanceData> batch;
+    FSTbatchType batch_type;
+
+    // i NEED a matrix type
+    float proj2d[16];
 
     struct FST_r2dRect rect;
     struct FST_r2dTex tex;
@@ -121,11 +140,11 @@ void fst_render_resize(void* data, s32 width, s32 height);
 /*
  * [FUNCS]
  */
-void fst_render_flush(void* data, void* batch);
- // todo : what?
 
-#ifdef __cplusplus
-}
-#endif
+/* [funcs generic] */
+void fst_render_flush(void* data);
+
+/* [funcs 2d] */
+void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
 
 #endif

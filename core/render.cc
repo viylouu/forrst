@@ -1,5 +1,5 @@
 #include <core/macros.h>
-#include "render.h"
+#include "render.hh"
 #include <core/load_gl.h>
 #include <GL/gl.h>
 #include <core/shader.h>
@@ -16,6 +16,9 @@
  **** [END]
  **** [UPDATE]
  **** **** [resize]
+ **** [FUNCS]
+ **** **** [funcs generic]
+ **** **** [funcs 2d]
  */
 
 /*
@@ -61,29 +64,54 @@ FST_genericInitEnd(rSsModel);
     fst_shader_unload(state->shader); \
     glDeleteTextures(1, &state->tbo); \
     glDeleteBuffers(1, &state->bo)
+#define FST_r2dDrawGeneric(rect) do { \
+    glUseProgram(rect->shader->shader); \
+    glBindVertexArray(state->vao); \
+\
+    glUniformMatrix4fv(rect->loc.proj, 1,0, state->proj2d); \
+\
+    glBindBuffer(GL_TEXTURE_BUFFER, rect->bo); \
+    glBufferSubData(GL_TEXTURE_BUFFER, 0, state->batch.size() * sizeof(FSTinstanceData), state->batch.data()); \
+\
+    glActiveTexture(GL_TEXTURE0); \
+    glBindTexture(GL_TEXTURE_BUFFER, rect->tbo); \
+    glUniform1i(rect->loc.insts, 0); \
+\
+    glUniform1i(rect->loc.inst_size, sizeof(FSTinstanceData) / 16); \
+} while(0)
 
 
 void fst_r2dRect_init(void* rect) {
-    struct FST_r2dRect* state = rect;
-    
+    FST_r2dRect* state = (FST_r2dRect*)rect;
+
     FST_r2dInitGeneric("data/eng/rect.vert", "data/eng/rect.frag");
 } void fst_r2dRect_end(void* rect) {
-    struct FST_r2dRect* state = rect;
+    FST_r2dRect* state = (FST_r2dRect*)rect;
 
     FST_r2dEndGeneric();
+} void fst_r2dRect_draw(void* data, void* obj) {
+    FSTrenderState* state = (FSTrenderState*)data;
+    FST_r2dRect* rect = (FST_r2dRect*)obj;
+
+    FST_r2dDrawGeneric(rect);
+    
+    glDrawArraysInstanced(GL_TRIANGLES, 0,6, state->batch.size());
 }
 
 void fst_r2dTex_init(void* data) {
 } void fst_r2dTex_end(void* data) {
+} void fst_r2dTex_draw(void* data, void* obj) {
 }
 
 /* [gl struct spritestack funcs] */
 void fst_rSsCube_init(void* data) {
 } void fst_rSsCube_end(void* data) {
+} void fst_rSsCube_draw(void* data, void* obj) {
 }
 
 void fst_rSsModel_init(void* data) {
 } void fst_rSsModel_end(void* data) {
+} void fst_rSsModel_draw(void* data, void* obj) {
 }
 
 /*
@@ -91,7 +119,7 @@ void fst_rSsModel_init(void* data) {
  */
 
 void* fst_render_init(void) {
-    FSTrenderState* state = malloc(sizeof(FSTrenderState));
+    FSTrenderState* state = new FSTrenderState();
 
     glGenVertexArrays(1, &state->vao);
 
@@ -101,6 +129,14 @@ void* fst_render_init(void) {
     fst_rSsCube_init(&state->ssCube);
     fst_rSsModel_init(&state->ssModel);
 
+    float tmp[16] = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+    };
+    std::copy(tmp,tmp+16,state->proj2d);
+
     return state;
 }
 
@@ -109,7 +145,7 @@ void* fst_render_init(void) {
  */
 
 void fst_render_end(void* data) {
-    FSTrenderState* state = data;
+    FSTrenderState* state = (FSTrenderState*)data;
 
     fst_r2dRect_end(&state->rect);
     fst_r2dTex_end(&state->tex);
@@ -128,6 +164,59 @@ void fst_render_end(void* data) {
 
 /* [resize] */
 void fst_render_resize(void* data, s32 width, s32 height) {
-    FSTrenderState* state = data;
+    UNUSED(data);
 }
 
+/*
+ * [FUNCS]
+ */
+
+/* [funcs generic] */
+void fst_render_flush(void* data) {
+    FSTrenderState* state = (FSTrenderState*)data;
+
+    switch(state->batch_type) {
+        case FST_BATCH_2D_RECT:
+            fst_r2dRect_draw(data, &state->rect); break;
+        case FST_BATCH_2D_TEX:
+            fst_r2dTex_draw(data, &state->tex); break;
+        case FST_BATCH_SS_CUBE:
+            fst_rSsCube_draw(data, &state->ssCube); break;
+        case FST_BATCH_SS_MODEL:
+            fst_rSsModel_draw(data, &state->ssModel); break;
+    }
+
+    state->batch.clear();
+}
+
+/* [funcs 2d] */
+void fst_render_rect(void* data, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
+    FSTrenderState* state = (FSTrenderState*)data;
+
+    if (state->batch_type != FST_BATCH_2D_RECT) fst_render_flush(data);
+    if (state->batch.size() >= FST_MAX_BATCH_SIZE) fst_render_flush(data);
+
+    state->batch_type = FST_BATCH_2D_RECT;
+
+    FSTinstanceData inst;
+    
+    float transf[16] = {
+        1,0,0,0,
+        0,1,0,0,
+        0,0,1,0,
+        0,0,0,1
+    };
+
+    std::copy(transf,transf+16,inst.transf);
+
+    inst.x = x;
+    inst.y = y;
+    inst.w = w;
+    inst.h = h;
+    inst.r = r;
+    inst.g = g;
+    inst.b = b;
+    inst.a = a;
+
+    state->batch.push_back(inst);
+}

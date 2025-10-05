@@ -129,6 +129,9 @@ OBJ_DIR="build/obj"
 mkdir -p "$OBJ_DIR"
 OBJS=()
 
+rm -rf build/obj/
+mkdir build/obj
+
 for file in "${FILES_C[@]}"; do
     obj="$OBJ_DIR/$(basename "$file" .c).o"
     "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -c "$file" -o "$obj"

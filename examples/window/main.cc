@@ -1,5 +1,5 @@
 #include <forrst.hh>
-#include <core/render.h>
+#include <core/render.hh>
 
 #include <GL/gl.h>
 #include <core/load_gl.h>
@@ -24,23 +24,18 @@ public:
     void update() { state = (FSTrenderState*)rstate; }
 
     void render() {
-        glUseProgram(state->rect.shader->shader);
-        glBindVertexArray(state->vao);
-
-        glUniformMatrix4fv(state->rect.loc.proj, 1,0, transf);
-
-        glBindBuffer(GL_TEXTURE_BUFFER, state->rect.bo);
-        glBufferSubData(GL_TEXTURE_BUFFER, 0, sizeof());
-        
+        fst_render_rect(state, 0,0,1,1,1,0,0,1);
     }
 };
 
 class game : public FSTgame {
 public:
-    square sqr;
+    square* sqr;
 
     void init() {
-        scene->addChild(&sqr);
+        sqr = new square();
+
+        scene->addChild(sqr);
     }
 
     void render() {

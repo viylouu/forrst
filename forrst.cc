@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 
 #include <core/load_gl.h>
-#include <core/render.h>
+#include <core/render.hh>
 
 void* fst_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
