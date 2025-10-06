@@ -28,15 +28,10 @@ class FURgame {
 public:
     FURnode* scene;
 
-    void constr()   { 
-        scene = new FURnode(); 
-        scene->name = "scene";
-    }
-
-    virtual void init()   {}
+    virtual void init()            {}
     virtual void update(f32 delta) {}
-    virtual void render() {}
-    virtual void end()    {}
+    virtual void render()          {}
+    virtual void end()             {}
 };
 
 template<typename Tgame>
@@ -65,7 +60,9 @@ s32 fur_windowDoShit(const char* title, v2 dims) {
 
     Tgame game;
 
-    game.constr();
+    game.scene = new FURnode();
+    game.scene->name = "scene";
+
     game.init();
 
     f32 lasttime = glfwGetTime();

@@ -15,13 +15,12 @@ public:
     v4 sample;
     FURrenderTarget* targ;
 
-    FURrenderer2d() {
-        targ = NULL;
-    }
+    FURrenderer2d() : targ(NULL) {}
 
     void init() {
         publics.push_back((FURvarInfo){ &tex, "texture", FUR_TYPEOF_REF });
         publics.push_back((FURvarInfo){ &col, "tint (float)", FUR_TYPEOF_VEC4 }); 
+        publics.push_back((FURvarInfo){ &targ, "render target", FUR_TYPEOF_REF });
     }
 
     void render() {
@@ -43,9 +42,10 @@ public:
 
         for (s32 i = 0; i < 1024; ++i) {
             FURnode* node = new FURnode();
-            node->addComponent(new FURrenderer2d());
-            ((FURrenderer2d*)node->components[0])->targ = targ;
-            
+            FURrenderer2d* comp = new FURrenderer2d();
+            comp->targ = targ;
+            node->addComponent(comp);
+
             sprintf(buf, "cone #%d", i);
             node->name = (char*)malloc(strlen(buf) + 1);
             std::strcpy(node->name, buf);
