@@ -259,6 +259,8 @@ void fur_render_flush(void* data) {
             fur_rSsModel_draw(data, &state->ssModel); break;
     }
 
+    state->batch_targ = NULL;
+    //state->batch_tex = NULL;
     state->batch.clear();
 }
 
@@ -280,6 +282,8 @@ void fur_render_rect(void* data, FURrenderTarget* targ, mat4 transf, f32 x, f32 
     if (state->batch_targ != targ) fur_render_flush(data);
 
     state->batch_type = FUR_BATCH_2D_RECT;
+    state->batch_targ = targ;
+    state->batch_tex = NULL;
 
     FURinstanceData inst;
 
