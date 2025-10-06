@@ -309,8 +309,6 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
     state->batch_tex = tex;
     state->batch_targ = targ;
 
-    //printf("%p (targ: %p)\n", state->batch_targ, targ);
-
     FURinstanceData inst;
 
     std::copy(transf,transf+16,inst.transf);
@@ -324,23 +322,23 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
     inst.b = b;
     inst.a = a;
 
-    if(targ) {
-        if (tex) {
-            inst.sx = sx / (f32)tex->width;
-            inst.sy = sy / (f32)tex->height;
-            inst.sw = sw / (f32)tex->width;
-            inst.sh = sh / (f32)tex->height;
-        } else {
+    if (tex) {
+        inst.sx = sx / (f32)tex->width;
+        inst.sy = sy / (f32)tex->height;
+        inst.sw = sw / (f32)tex->width;
+        inst.sh = sh / (f32)tex->height;
+    } else {
+        if(targ) {
             inst.sx = sx / (f32)targ->tex->width;
             inst.sy = sy / (f32)targ->tex->height;
             inst.sw = sw / (f32)targ->tex->width;
             inst.sh = sh / (f32)targ->tex->height;
+        } else {
+            inst.sx = sx / state->width;
+            inst.sy = sy / state->height;
+            inst.sw = sw / state->width;
+            inst.sh = sh / state->height;
         }
-    } else {
-        inst.sx = sx / state->width;
-        inst.sy = sy / state->height;
-        inst.sw = sw / state->width;
-        inst.sh = sh / state->height;
     }
 
     state->batch.push_back(inst);
