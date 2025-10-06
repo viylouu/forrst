@@ -313,6 +313,8 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
 
     FURinstanceData inst;
 
+    std::copy(transf,transf+16,inst.transf);
+
     inst.x = x;
     inst.y = y;
     inst.w = w;
