@@ -1,0 +1,58 @@
+#include "editor.hh"
+
+#include <core/render.hh>
+#include <GLFW/glfw3.h>
+#include <core/node.hh>
+#include <core/text.hh>
+#include <cstdio>
+
+typedef struct {
+    FSTfont* font;
+} FSTeditorState;
+
+void* fst_editor_init() {
+    FSTeditorState* state = new FSTeditorState();
+
+    state->font = fst_text_loadFont("data/eng/font.png");
+
+    return state;
+}
+
+void fst_editor_end(void* mstate) {
+    FSTeditorState* state = (FSTeditorState*)mstate;
+    
+    fst_text_unloadFont(state->font);
+
+    free(mstate);
+}
+
+s32 fst_editor_hierarchy(void* mstate, void* rstate, FSTnode* node, mat4 ident, s32 y, s32 indent);
+s32 fst_editor_hierarchy(void* mstate, void* rstate, FSTnode* node, mat4 ident, s32 y, s32 indent) {
+    FSTeditorState* state = (FSTeditorState*)mstate;
+    
+    char buf[1024];
+    sprintf(buf, "%*s%s", indent*2,"", node->name);
+
+    const char* cbuf = buf;
+
+    fst_text_draw(rstate, state->font, ident, cbuf, 2, 2,y+2, 0,0,0,1);
+
+    for (s32 i = 0; i < (s32)node->children.size(); ++i)
+        y = fst_editor_hierarchy(mstate, rstate, node->children[i], ident, y + state->font->charH*2, indent+1);
+
+    return y;
+}
+
+void fst_editor(void* mstate, void* gstate, void* rstate, FSTnode* scene) {
+    FSTeditorState* state = (FSTeditorState*)mstate;
+
+    mat4 ident;
+    fst_mat4_identity(&ident);
+
+    s32 width,height;
+    glfwGetWindowSize((GLFWwindow*)gstate, &width,&height);
+
+    fst_render_rect(rstate, ident, 0,0,256,height, 1,1,1,1);
+
+    fst_editor_hierarchy(state, rstate, scene, ident, 0,0);
+}

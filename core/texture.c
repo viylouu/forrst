@@ -6,6 +6,11 @@
 #include <core/macros.h>
 #include <core/auto/load_gl.h>
 
+void fst_texture_unload(FSTtexture* tex) {
+    glDeleteTextures(1, &tex->glid);
+    free(tex);
+}
+
 FSTtexture* fst_texture_loadFromData(u8* data, s64 size) {
     s32 w,h,c;
     u8* texdata = stbi_load_from_memory(data, size, &w,&h,&c, 4);

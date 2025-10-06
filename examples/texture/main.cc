@@ -5,6 +5,8 @@
 #include <cstdlib>
 #include <core/mat4.h>
 #include <core/texture.h>
+#include <cstring>
+#include <cstdlib>
 
 class FSTrenderer2d : public FSTcomponent {
 public:
@@ -25,18 +27,34 @@ public:
 class game : public FSTgame {
 public:
     FSTtexture* tex;
+    char buf[256];
+    b8 firt;
 
     void init() {
         tex = fst_texture_load("examples/texture/youresosilly.jpg");
+        firt = 1;
+    }
+
+    void end() {
+        fst_texture_unload(tex);
+    }
+
+    void update(float delta) {
+        printf("%d\n", (s32)(1.f/delta));
     }
 
     void render() {
         fst_render_clear(rstate, .2,.4,.3,1); 
 
-        scene->children.clear();
+        if (!firt)
+            for (s32 i = 0; i < scene->children.size(); ++i)
+                delete[] scene->children[i]->name;
+        firt = 0;
 
+        scene->children.clear();
+        
         srand(glfwGetTime()*10000000);
-        for (s32 i = 0; i < 2048; ++i) {
+        for (s32 i = 0; i < 500; ++i) {
             FSTnode* node = new FSTnode();
             FSTrenderer2d* comp = new FSTrenderer2d();
             comp->col = (v4){
@@ -69,6 +87,10 @@ public:
                 (rand()%256)/256.f*3.14159265f,
                 (rand()%256)/256.f*3.14159265f
                 };
+
+            sprintf(buf, "cone #%d", i);
+            node->name = (char*)malloc(strlen(buf) + 1);
+            std::strcpy(node->name, buf);
         }
     }
 };

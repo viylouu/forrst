@@ -13,6 +13,7 @@ typedef struct {
     s32 height;
 } FSTtexture;
 
+void fst_texture_unload(FSTtexture* tex);
 FSTtexture* fst_texture_loadFromData(u8* data, s64 size);
 char* fst_texture_loadData(const char* path, s64* outsize);
 FSTtexture* fst_texture_load(const char* path);

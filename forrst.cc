@@ -28,6 +28,8 @@ void* fst_init(const char* title, s32 width, s32 height) {
 
     fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;   
 
+    glfwSwapInterval(0);
+
     return window;
 }
 

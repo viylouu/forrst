@@ -30,8 +30,9 @@ public:
     const char* title;
     std::vector<FSTvarInfo> publics;
 
-    virtual void init() { title = "untitled"; }
+    FSTcomponent() { title = "untitled"; }
 
+    virtual void init()            {}
     FSTnode* parent;
     virtual void update(f32 delta) {}
     virtual void render()          {}
@@ -40,6 +41,8 @@ public:
 
 class FSTnode {
 public:
+    char* name;
+
     FSTnode* parent;
     std::vector<FSTnode*> children;
     std::vector<FSTcomponent*> components;
@@ -47,7 +50,7 @@ public:
     v3 pos, scale, rot;
     mat4 transf;
 
-    FSTnode() : parent(NULL) {}
+    FSTnode() : parent(NULL) { name = "untitled"; }
     virtual ~FSTnode() {
         for (s32 i = 0; i < (s32)children.size(); ++i)
             delete children[i];
@@ -64,6 +67,7 @@ public:
     void addComponent(FSTcomponent* component) {
         component->parent = this;
         components.push_back(component);
+        component->init();
     }
 
     void recupdate(f32 delta) {

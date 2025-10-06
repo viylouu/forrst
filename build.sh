@@ -135,13 +135,13 @@ mkdir build/obj
 
 for file in "${FILES_C[@]}"; do
     obj="$OBJ_DIR/$(basename "$file" .c).o"
-    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -c "$file" -o "$obj"
+    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
     OBJS+=("$obj")
 done
 
 for file in "${FILES_CC[@]}"; do
     obj="$OBJ_DIR/$(basename "$file" .cc).o"
-    "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -c "$file" -o "$obj"
+    "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
     OBJS+=("$obj")
 done
 
@@ -155,5 +155,5 @@ if $BUILD_WINDOWS; then
     "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
 else
     #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.game && ./build/out.game
-    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.game && ./build/out.game
+    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
 fi

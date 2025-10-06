@@ -6,6 +6,7 @@
 #include <core/auto/load_gl.h>
 #include <core/node.hh>
 #include <GLFW/glfw3.h>
+#include <core/editor/editor.hh>
 
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height);
 void* fst_init(const char* title, s32 width, s32 height);
@@ -23,6 +24,7 @@ public:
 
     void constr()   { 
         scene = new FSTnode(); 
+        scene->name = "scene";
     }
 
     virtual void init()   {}
@@ -52,6 +54,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     #ifdef FST_EDITOR
     b8 editor = 1;
     b8 prevKey = 0;
+    void* estate = fst_editor_init();
     #endif
 
     Tgame game;
@@ -66,6 +69,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
         time = glfwGetTime();
         f32 delta = time - lasttime;
+        lasttime = glfwGetTime();
 
         game.update(delta);
         game.render();
@@ -79,11 +83,8 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
             editor = !editor;
         prevKey = curKey;
 
-        if(editor) {
-            mat4 ident;
-            fst_mat4_identity(&ident);
-            fst_render_rect(rstate, ident, 0,0,256,256,1,1,1,1);
-        }
+        if(editor)
+            fst_editor(estate, state, rstate, game.scene);
         #endif
 
         fst_render_flush(rstate);
@@ -96,6 +97,7 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     delete game.scene;
 
     #ifdef FST_EDITOR
+    fst_editor_end(estate);
     #endif
 
     fst_render_end(rstate);
