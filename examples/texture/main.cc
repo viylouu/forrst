@@ -28,15 +28,27 @@ class game : public FSTgame {
 public:
     FSTtexture* tex;
     char buf[256];
-    b8 firt;
 
     void init() {
         tex = fst_texture_load("examples/texture/youresosilly.jpg");
-        firt = 1;
+
+        for (s32 i = 0; i < 1024; ++i) {
+            FSTnode* node = new FSTnode();
+            node->addComponent(new FSTrenderer2d());
+            
+            sprintf(buf, "cone #%d", i);
+            node->name = (char*)malloc(strlen(buf) + 1);
+            std::strcpy(node->name, buf);
+
+            scene->addChild(node);
+        }
     }
 
     void end() {
         fst_texture_unload(tex);
+
+        for (s32 i = 0; i < scene->children.size(); ++i)
+            delete[] scene->children[i]->name;
     }
 
     void update(float delta) {
@@ -45,18 +57,12 @@ public:
 
     void render() {
         fst_render_clear(rstate, .2,.4,.3,1); 
-
-        if (!firt)
-            for (s32 i = 0; i < scene->children.size(); ++i)
-                delete[] scene->children[i]->name;
-        firt = 0;
-
-        scene->children.clear();
         
         srand(glfwGetTime()*10000000);
-        for (s32 i = 0; i < 500; ++i) {
-            FSTnode* node = new FSTnode();
-            FSTrenderer2d* comp = new FSTrenderer2d();
+        for (s32 i = 0; i < scene->children.size(); ++i) {
+            FSTnode* node = scene->children[i];
+            FSTrenderer2d* comp = (FSTrenderer2d*)scene->children[i]->components[0];
+
             comp->col = (v4){
                 (rand()%256)/256.f,
                 (rand()%256)/256.f,
@@ -70,8 +76,6 @@ public:
                 (f32)tex->width * (rand()%256)/256.f,
                 (f32)tex->height * (rand()%256)/256.f};
 
-            node->addComponent(comp);
-            scene->addChild(node);
             node->scale = (v3){
                 (rand()%256)+64,
                 (rand()%256)+64,
@@ -87,10 +91,6 @@ public:
                 (rand()%256)/256.f*3.14159265f,
                 (rand()%256)/256.f*3.14159265f
                 };
-
-            sprintf(buf, "cone #%d", i);
-            node->name = (char*)malloc(strlen(buf) + 1);
-            std::strcpy(node->name, buf);
         }
     }
 };
