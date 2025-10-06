@@ -2,3 +2,6 @@
 *.h linguist-language=C
 *.cc linguist-language=C++
 *.hh linguist-languaeg=C++
+*.glsl linguist-language=GLSL
+*.vert linguist-language=GLSL
+*.frag linguist-language=GLSL
