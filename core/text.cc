@@ -16,7 +16,7 @@ void fst_text_unloadFont(FSTfont* font) {
     free(font);
 }
 
-void fst_text_draw(void* data, FSTfont* font, mat4 transf, const char* text, f32 size, f32 x, f32 y, f32 r, f32 g, f32 b, f32 a) {
+void fst_text_draw(void* data, FSTrenderTarget* targ, FSTfont* font, mat4 transf, const char* text, f32 size, f32 x, f32 y, f32 r, f32 g, f32 b, f32 a) {
     s32 charX = 0, charY = 0;
     for (s32 i = 0; text[i] != '\0'; ++i) {
         char cur = text[i];
@@ -25,6 +25,7 @@ void fst_text_draw(void* data, FSTfont* font, mat4 transf, const char* text, f32
 
         fst_render_tex(
             data,
+            targ,
             font->atlas,
             transf,
             x + charX * font->charW * size,

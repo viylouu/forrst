@@ -12,6 +12,7 @@
  * [GL STRUCTS]
  **** [gl struct 2d]
  **** [gl struct spritestack]
+ * [DATATYPES]
  * [STATE]
  * [INIT]
  * [END]
@@ -97,6 +98,19 @@ typedef enum {
     FST_BATCH_SS_MODEL
 } FSTbatchType;
 
+/*
+ * [DATATYPES]
+ */
+
+typedef struct {
+    u32 fbo;
+    u32 depth;
+    FSTtexture* tex;
+} FSTrenderTarget;
+
+void fst_renderTarget_unload(FSTrenderTarget* targ);
+FSTrenderTarget* fst_renderTarget_make(s32 width, s32 height);
+
 typedef struct {
     /*
      * [STATE]
@@ -105,9 +119,12 @@ typedef struct {
     // shit ass garbage vao
     u32 vao;
 
+    s32 width, height;
+
     std::vector<FSTinstanceData> batch;
     FSTbatchType batch_type;
     FSTtexture* batch_tex;
+    FSTrenderTarget* batch_targ;
 
     mat4 proj2d;
 
@@ -143,12 +160,12 @@ void fst_render_resize(void* data, s32 width, s32 height);
 
 /* [funcs generic] */
 void fst_render_flush(void* data);
-void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a);
+void fst_render_clear(void* data, FSTrenderTarget* targ, f32 r, f32 g, f32 b, f32 a);
 
 /**** [funcs generic - transform] */
 
 /* [funcs 2d] */
-void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
-void fst_render_tex(void* data, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
+void fst_render_rect(void* data, FSTrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
+void fst_render_tex(void* data, FSTrenderTarget* targ, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
 
 #endif

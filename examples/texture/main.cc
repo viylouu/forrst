@@ -20,7 +20,7 @@ public:
     }
 
     void render() {
-        fst_render_tex(rstate, tex, parent->transf, 0,0,1,1, sample.x,sample.y,sample.z,sample.w, col.x,col.y,col.z,col.w);
+        fst_render_tex(rstate, NULL, tex, parent->transf, 0,0,1,1, sample.x,sample.y,sample.z,sample.w, col.x,col.y,col.z,col.w);
     }
 };
 
@@ -56,7 +56,7 @@ public:
     }
 
     void render() {
-        fst_render_clear(rstate, .2,.4,.3,1); 
+        fst_render_clear(rstate, NULL, .2,.4,.3,1); 
         
         srand(glfwGetTime()*10000000);
         for (s32 i = 0; i < (s32)scene->children.size(); ++i) {

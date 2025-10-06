@@ -14,6 +14,7 @@ typedef struct {
 } FSTtexture;
 
 void fst_texture_unload(FSTtexture* tex);
+FSTtexture* fst_texture_make(s32 width, s32 height);
 FSTtexture* fst_texture_loadFromData(u8* data, s64 size);
 char* fst_texture_loadData(const char* path, s64* outsize);
 FSTtexture* fst_texture_load(const char* path);

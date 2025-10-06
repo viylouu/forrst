@@ -10,7 +10,7 @@
  **** [GL STRUCTS]
  **** **** [gl struct 2d]
  **** **** [gl struct spritestack]
- **** [STATE]
+ **** [DATATYPES]
  **** [GL STRUCT FUNCS]
  **** **** [gl struct 2d funcs]
  **** **** [gl struct spritestack funcs]
@@ -22,6 +22,16 @@
  **** **** [funcs generic]
  **** **** [funcs 2d]
  */
+
+#define FST_useTarget(targ) do {                            \
+    if (targ) {                                             \
+        glBindFramebuffer(GL_FRAMEBUFFER, targ->fbo);       \
+        glViewport(0,0,targ->tex->width,targ->tex->height); \
+    } else {                                                \
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);               \
+        glViewport(0,0,state->width,state->height);         \
+    }                                                       \
+} while(0)
 
 /*
  * [GL STRUCTS]
@@ -66,20 +76,22 @@ FST_genericInitEnd(rSsModel);
     fst_shader_unload(state->shader); \
     glDeleteTextures(1, &state->tbo); \
     glDeleteBuffers(1, &state->bo)
-#define FST_r2dDrawGeneric(obj) do { \
-    glUseProgram(obj->shader->shader); \
-    glBindVertexArray(state->vao); \
-\
-    glUniformMatrix4fv(obj->loc.proj, 1,0, state->proj2d); \
-\
-    glBindBuffer(GL_TEXTURE_BUFFER, obj->bo); \
-    glBufferSubData(GL_TEXTURE_BUFFER, 0, state->batch.size() * sizeof(FSTinstanceData), state->batch.data()); \
-\
-    glActiveTexture(GL_TEXTURE0); \
-    glBindTexture(GL_TEXTURE_BUFFER, obj->tbo); \
-    glUniform1i(obj->loc.insts, 0); \
-\
-    glUniform1i(obj->loc.inst_size, sizeof(FSTinstanceData) / 16); \
+#define FST_r2dDrawGeneric(obj) do {                                                                            \
+    FST_useTarget(state->batch_targ);                                                                           \
+                                                                                                                \
+    glUseProgram(obj->shader->shader);                                                                          \
+    glBindVertexArray(state->vao);                                                                              \
+                                                                                                                \
+    glUniformMatrix4fv(obj->loc.proj, 1,0, state->proj2d);                                                      \
+                                                                                                                \
+    glBindBuffer(GL_TEXTURE_BUFFER, obj->bo);                                                                   \
+    glBufferSubData(GL_TEXTURE_BUFFER, 0, state->batch.size() * sizeof(FSTinstanceData), state->batch.data());  \
+                                                                                                                \
+    glActiveTexture(GL_TEXTURE0);                                                                               \
+    glBindTexture(GL_TEXTURE_BUFFER, obj->tbo);                                                                 \
+    glUniform1i(obj->loc.insts, 0);                                                                             \
+                                                                                                                \
+    glUniform1i(obj->loc.inst_size, sizeof(FSTinstanceData) / 16);                                              \
 } while(0)
 
 
@@ -135,6 +147,42 @@ void fst_rSsModel_init(void* data) {
 }
 
 /*
+ * [DATATYPES]
+ */
+
+void fst_renderTarget_unload(FSTrenderTarget* targ) {
+    glDeleteFramebuffers(1, &targ->fbo);
+    glDeleteRenderbuffers(1, &targ->depth);
+    fst_texture_unload(targ->tex);
+    free(targ);
+}
+
+FSTrenderTarget* fst_renderTarget_make(s32 width, s32 height) {
+    u32 fbo;
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    FSTtexture* tex = fst_texture_make(width, height);
+
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex->glid, 0);
+
+    u32 depth;
+    glGenRenderbuffers(1, &depth);
+    glBindRenderbuffer(GL_RENDERBUFFER, depth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth);
+
+    ERROR_IF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, "framebuffer is not complete!\n");
+
+    FSTrenderTarget* targ = new FSTrenderTarget();
+    targ->tex = tex;
+    targ->fbo = fbo;
+    targ->depth = depth;
+
+    return targ;
+}
+
+/*
  * [INIT]
  */
 
@@ -185,6 +233,9 @@ void fst_render_resize(void* data, s32 width, s32 height) {
     FSTrenderState* state = (FSTrenderState*)data;
 
     fst_mat4_ortho(&state->proj2d, 0,width,height,0,-2147483647.f,2147483647.f);
+
+    state->width = width;
+    state->height = height;
 }
 
 /*
@@ -209,18 +260,22 @@ void fst_render_flush(void* data) {
     state->batch.clear();
 }
 
-void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a) {
-    UNUSED(data);
+void fst_render_clear(void* data, FSTrenderTarget* targ, f32 r, f32 g, f32 b, f32 a) {
+    FSTrenderState* state = (FSTrenderState*)data;
+
+    FST_useTarget(targ);
+
     glClearColor(r,g,b,a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 /* [funcs 2d] */
-void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
+void fst_render_rect(void* data, FSTrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a) {
     FSTrenderState* state = (FSTrenderState*)data;
 
     if (state->batch_type != FST_BATCH_2D_RECT) fst_render_flush(data);
     if (state->batch.size() >= FST_MAX_BATCH_SIZE) fst_render_flush(data);
+    if (state->batch_targ != targ) fst_render_flush(data);
 
     state->batch_type = FST_BATCH_2D_RECT;
 
@@ -240,15 +295,17 @@ void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r,
     state->batch.push_back(inst);
 }
 
-void fst_render_tex(void* data, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a) {
+void fst_render_tex(void* data, FSTrenderTarget* targ, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a) {
     FSTrenderState* state = (FSTrenderState*)data;
 
     if (state->batch_type != FST_BATCH_2D_TEX) fst_render_flush(data);
     if (state->batch.size() >= FST_MAX_BATCH_SIZE) fst_render_flush(data);
     if (state->batch_tex != tex) fst_render_flush(data);
+    if (state->batch_targ != targ) fst_render_flush(data);
 
     state->batch_type = FST_BATCH_2D_TEX;
     state->batch_tex = tex;
+    state->batch_targ = targ;
 
     FSTinstanceData inst;
 

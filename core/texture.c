@@ -11,6 +11,28 @@ void fst_texture_unload(FSTtexture* tex) {
     free(tex);
 }
 
+FSTtexture* fst_texture_make(s32 width, s32 height) {
+    u32 id;
+    glGenTextures(1, &id);
+    glBindTexture(GL_TEXTURE_2D, id);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    FSTtexture* tex = malloc(sizeof(FSTtexture));
+    tex->glid = id;
+    tex->width = width;
+    tex->height = height;
+
+    return tex;
+}
+
 FSTtexture* fst_texture_loadFromData(u8* data, s64 size) {
     s32 w,h,c;
     u8* texdata = stbi_load_from_memory(data, size, &w,&h,&c, 4);

@@ -14,7 +14,7 @@ public:
     }
 
     void render() {
-        fst_render_rect(rstate, parent->transf, 0,0,1,1, col.x,col.y,col.z,col.w);
+        fst_render_rect(rstate, NULL, parent->transf, 0,0,1,1, col.x,col.y,col.z,col.w);
     }
 };
 
@@ -38,7 +38,7 @@ public:
 
     void render() {
         srand(++tick);
-        fst_render_clear(rstate, .2,.4,.3,1);       
+        fst_render_clear(rstate, NULL, .2,.4,.3,1);       
     }
 };
 
