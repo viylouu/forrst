@@ -106,6 +106,7 @@ typedef struct {
     u32 fbo;
     u32 depth;
     FSTtexture* tex;
+    s32 width, height;
 } FSTrenderTarget;
 
 void fst_renderTarget_unload(FSTrenderTarget* targ);
@@ -167,5 +168,6 @@ void fst_render_clear(void* data, FSTrenderTarget* targ, f32 r, f32 g, f32 b, f3
 /* [funcs 2d] */
 void fst_render_rect(void* data, FSTrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
 void fst_render_tex(void* data, FSTrenderTarget* targ, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
+void fst_render_renderTarget(void* data, FSTrenderTarget* targ, FSTrenderTarget* rtarg, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a); // wow thats big
 
 #endif

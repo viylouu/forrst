@@ -178,6 +178,8 @@ FSTrenderTarget* fst_renderTarget_make(s32 width, s32 height) {
     targ->tex = tex;
     targ->fbo = fbo;
     targ->depth = depth;
+    targ->width = width;
+    targ->height = height;
 
     return targ;
 }
@@ -325,4 +327,8 @@ void fst_render_tex(void* data, FSTrenderTarget* targ, FSTtexture* tex, mat4 tra
     inst.sh = sh / (f32)tex->height; 
 
     state->batch.push_back(inst);
+}
+
+void fst_render_renderTarget(void* data, FSTrenderTarget* targ, FSTrenderTarget* rtarg, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a) {
+    fst_render_tex(data, targ, targ->tex, transf, x,y,w,h, sx,sy,sw,sh, r,g,b,a);
 }

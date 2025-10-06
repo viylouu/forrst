@@ -4,6 +4,4 @@ you interface with it through c++98
 it is only built using c99 and c++98  
 
 # todo:
-- render targets being main thing
-    - render to main scene w/ render_target NULL in render funcs
-    - batches reset when render target swaps
+- fix rendertarget draw segfault

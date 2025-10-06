@@ -8,14 +8,20 @@
 #include <GLFW/glfw3.h>
 #include <core/editor/editor.hh>
 
+#define FST_WIDTH fst_query_width()
+#define FST_HEIGHT fst_query_height()
+
+static void* rstate;
+
 void fst_cb_size(GLFWwindow* window, s32 width, s32 height);
 void* fst_init(const char* title, s32 width, s32 height);
 char fst_shouldClose(void* state);
 void fst_poll(void* state);
 void fst_swapBuffer(void* state);
 void fst_end(void* state);
+static inline s32 fst_query_width() { return ((FSTrenderState*)rstate)->width; }
+static inline s32 fst_query_height() { return ((FSTrenderState*)rstate)->height; }
 
-static void* rstate;
 static f64 time;
 
 class FSTgame {
