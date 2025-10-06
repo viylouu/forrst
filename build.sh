@@ -6,7 +6,7 @@ COMPILER=("zig" "cc")
 COMPILER_CC=("g++")
 CFLAGS="-std=c99"
 CCFLAGS="-std=gnu++98"
-FLAGS_COMP="-Wno-narrowing -Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
+FLAGS_COMP="-Wno-write-strings -Wno-narrowing -Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
 FLAGS_LINK=""
 CFLAGS_COMP=""
 

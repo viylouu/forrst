@@ -47,7 +47,7 @@ public:
     void end() {
         fst_texture_unload(tex);
 
-        for (s32 i = 0; i < scene->children.size(); ++i)
+        for (s32 i = 0; i < (s32)scene->children.size(); ++i)
             delete[] scene->children[i]->name;
     }
 
@@ -59,7 +59,7 @@ public:
         fst_render_clear(rstate, .2,.4,.3,1); 
         
         srand(glfwGetTime()*10000000);
-        for (s32 i = 0; i < scene->children.size(); ++i) {
+        for (s32 i = 0; i < (s32)scene->children.size(); ++i) {
             FSTnode* node = scene->children[i];
             FSTrenderer2d* comp = (FSTrenderer2d*)scene->children[i]->components[0];
 
