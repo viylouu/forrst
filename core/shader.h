@@ -1,5 +1,5 @@
-#ifndef FST_SHADER_H
-#define FST_SHADER_H
+#ifndef FUR_SHADER_H
+#define FUR_SHADER_H
 
 #include <core/macros.h>
 
@@ -9,23 +9,23 @@ extern "C" {
 
 typedef struct {
     u32 part;
-} FSTshaderPart;
+} FURshaderPart;
 
 typedef struct {
     u32 shader;
-    FSTshaderPart** parts;
+    FURshaderPart** parts;
     u32 part_amt;
-} FSTshader;
+} FURshader;
 
-char* fst_shaderPart_loadSource(const char* path);
-FSTshaderPart* fst_shaderPart_loadFromSource(u32 type, const char** source);
-void fst_shaderPart_unload(FSTshaderPart* part);
+char* fur_shaderPart_loadSource(const char* path);
+FURshaderPart* fur_shaderPart_loadFromSource(u32 type, const char** source);
+void fur_shaderPart_unload(FURshaderPart* part);
 
-FSTshader* fst_shader_compileFromParts(FSTshaderPart** parts, u32 amount);
-inline FSTshader* fst_shader_loadFromParts(FSTshaderPart** parts, u32 amount);
-FSTshader* fst_shader_loadFromSource(const char** vert, const char** frag);
-FSTshader* fst_shader_load(const char* vert, const char* frag);
-void fst_shader_unload(FSTshader* shader);
+FURshader* fur_shader_compileFromParts(FURshaderPart** parts, u32 amount);
+inline FURshader* fur_shader_loadFromParts(FURshaderPart** parts, u32 amount);
+FURshader* fur_shader_loadFromSource(const char** vert, const char** frag);
+FURshader* fur_shader_load(const char* vert, const char* frag);
+void fur_shader_unload(FURshader* shader);
 
 #ifdef __cplusplus
 }

@@ -13,7 +13,7 @@
  * [PART]
  */
 
-char* fst_shaderPart_loadSource(const char* path) {
+char* fur_shaderPart_loadSource(const char* path) {
     FILE* file = fopen(path, "rb");
     ERROR_IF(!file, "failed to open shader part at \"%s\"!\n", path);
 
@@ -32,7 +32,7 @@ char* fst_shaderPart_loadSource(const char* path) {
     return buffer;
 }
 
-FSTshaderPart* fst_shaderPart_loadFromSource(u32 type, const char** source) {
+FURshaderPart* fur_shaderPart_loadFromSource(u32 type, const char** source) {
     u32 part = glCreateShader(type);
     glShaderSource(part, 1, source, 0);
     glCompileShader(part);
@@ -53,13 +53,13 @@ FSTshaderPart* fst_shaderPart_loadFromSource(u32 type, const char** source) {
         exit(1);
     }
 
-    FSTshaderPart* out = malloc(sizeof(FSTshaderPart));
+    FURshaderPart* out = malloc(sizeof(FURshaderPart));
     out->part = part;
 
     return out;
 }
 
-void fst_shaderPart_unload(FSTshaderPart* part) {
+void fur_shaderPart_unload(FURshaderPart* part) {
     glDeleteShader(part->part);
     free(part);
 }
@@ -68,11 +68,11 @@ void fst_shaderPart_unload(FSTshaderPart* part) {
  * [SHADER]
  */
 
-FSTshader* fst_shader_compileFromParts(FSTshaderPart** parts, u32 amount) {
+FURshader* fur_shader_compileFromParts(FURshaderPart** parts, u32 amount) {
     u32 shader = glCreateProgram();
 
     for (u32 i = 0; i < amount; ++i)
-        glAttachShader(shader, (*(FSTshaderPart**)((char*)parts+sizeof(uptr)*i))->part);
+        glAttachShader(shader, (*(FURshaderPart**)((char*)parts+sizeof(uptr)*i))->part);
     glLinkProgram(shader);
 
     s32 success = 0;
@@ -91,7 +91,7 @@ FSTshader* fst_shader_compileFromParts(FSTshaderPart** parts, u32 amount) {
         exit(1);
     }
 
-    FSTshader* out = malloc(sizeof(FSTshader));
+    FURshader* out = malloc(sizeof(FURshader));
     out->shader = shader;
     out->parts = parts;
     out->part_amt = amount;
@@ -99,30 +99,30 @@ FSTshader* fst_shader_compileFromParts(FSTshaderPart** parts, u32 amount) {
     return out;
 }
 
-inline FSTshader* fst_shader_loadFromParts(FSTshaderPart** parts, u32 amount) {
-    return fst_shader_compileFromParts(parts, amount);
+inline FURshader* fur_shader_loadFromParts(FURshaderPart** parts, u32 amount) {
+    return fur_shader_compileFromParts(parts, amount);
 }
 
-FSTshader* fst_shader_loadFromSource(const char** vert, const char** frag) {
-    FSTshaderPart* vertex = fst_shaderPart_loadFromSource(GL_VERTEX_SHADER, vert);
-    FSTshaderPart* fragment = fst_shaderPart_loadFromSource(GL_FRAGMENT_SHADER, frag);
+FURshader* fur_shader_loadFromSource(const char** vert, const char** frag) {
+    FURshaderPart* vertex = fur_shaderPart_loadFromSource(GL_VERTEX_SHADER, vert);
+    FURshaderPart* fragment = fur_shaderPart_loadFromSource(GL_FRAGMENT_SHADER, frag);
 
-    FSTshader* shader = fst_shader_compileFromParts((FSTshaderPart*[2]){ vertex, fragment }, 2);
+    FURshader* shader = fur_shader_compileFromParts((FURshaderPart*[2]){ vertex, fragment }, 2);
 
-    fst_shaderPart_unload(vertex);
-    fst_shaderPart_unload(fragment);
+    fur_shaderPart_unload(vertex);
+    fur_shaderPart_unload(fragment);
 
     return shader;
 }
 
-FSTshader* fst_shader_load(const char* vert, const char* frag) {
-    char* vertbuffer = fst_shaderPart_loadSource(vert);
-    char* fragbuffer = fst_shaderPart_loadSource(frag);
+FURshader* fur_shader_load(const char* vert, const char* frag) {
+    char* vertbuffer = fur_shaderPart_loadSource(vert);
+    char* fragbuffer = fur_shaderPart_loadSource(frag);
 
     const char* vertsource = vertbuffer;
     const char* fragsource = fragbuffer;
 
-    FSTshader* shader = fst_shader_loadFromSource(&vertsource, &fragsource);
+    FURshader* shader = fur_shader_loadFromSource(&vertsource, &fragsource);
 
     free(vertbuffer);
     free(fragbuffer);
@@ -130,7 +130,7 @@ FSTshader* fst_shader_load(const char* vert, const char* frag) {
     return shader;
 }
 
-void fst_shader_unload(FSTshader* shader) {
+void fur_shader_unload(FURshader* shader) {
     glDeleteProgram(shader->shader);
     free(shader);
 }

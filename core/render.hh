@@ -1,5 +1,5 @@
-#ifndef FST_RENDER_HH
-#define FST_RENDER_HH
+#ifndef FUR_RENDER_HH
+#define FUR_RENDER_HH
 
 #include <core/macros.h>
 #include <core/shader.h>
@@ -25,8 +25,8 @@
  */
 
 /* [CONSTS] */
-#define FST_MAX_BATCH_SIZE 8192
-#define FST_MAX_BUFFER_SIZE FST_MAX_BATCH_SIZE * sizeof(FSTinstanceData)
+#define FUR_MAX_BATCH_SIZE 8192
+#define FUR_MAX_BUFFER_SIZE FUR_MAX_BATCH_SIZE * sizeof(FURinstanceData)
 
 /*
  * [GL STRUCTS]
@@ -35,51 +35,51 @@
  * very silly
  */
 
-#define FST_genericInitEnd(name)        \
-    void fst_##name##_init(void* data); \
-    void fst_##name##_end(void* data)
+#define FUR_genericInitEnd(name)        \
+    void fur_##name##_init(void* data); \
+    void fur_##name##_end(void* data)
 
 /* [gl struct 2d] */
-#define FST_r2dGeneric() \
-    FSTshader* shader; u32 bo, tbo
-#define FST_r2dGenericLoc() \
+#define FUR_r2dGeneric() \
+    FURshader* shader; u32 bo, tbo
+#define FUR_r2dGenericLoc() \
     s32 inst_size; s32 insts; s32 proj
 
 
-struct FST_r2dRect {
-    FST_r2dGeneric();
+struct FUR_r2dRect {
+    FUR_r2dGeneric();
     struct {
-        FST_r2dGenericLoc();
+        FUR_r2dGenericLoc();
     } loc;
 };
 
-struct FST_r2dTex {
-    FST_r2dGeneric();
+struct FUR_r2dTex {
+    FUR_r2dGeneric();
     struct {
-        FST_r2dGenericLoc();
+        FUR_r2dGenericLoc();
         s32 tex;
     } loc;
 };
 
 /* [gl struct spritestack] */
-#define FST_rSsGeneric() \
-    FSTshader* shad; u32 bo, tbo
+#define FUR_rSsGeneric() \
+    FURshader* shad; u32 bo, tbo
 // if this is too big... idgaf no it isnt
-#define FST_rSsGenericLoc() \
+#define FUR_rSsGenericLoc() \
     s32 inst_size, insts, proj, cam_rot, cam_pos, cam_z, cam_tilt, cam_scale
 
 
-struct FST_rSsCube {
-    FST_rSsGeneric();
+struct FUR_rSsCube {
+    FUR_rSsGeneric();
     struct {
-        FST_rSsGenericLoc();
+        FUR_rSsGenericLoc();
     } loc;
 };
 
-struct FST_rSsModel {
-    FST_rSsGeneric();
+struct FUR_rSsModel {
+    FUR_rSsGeneric();
     struct {
-        FST_rSsGenericLoc();
+        FUR_rSsGenericLoc();
         s32 tex;
     } loc;
 };
@@ -89,14 +89,14 @@ typedef struct {
     f32 r,g,b,a;
     f32 sx,sy,sw,sh;
     mat4 transf;
-} FSTinstanceData;
+} FURinstanceData;
 
 typedef enum {
-    FST_BATCH_2D_RECT,
-    FST_BATCH_2D_TEX,
-    FST_BATCH_SS_CUBE,
-    FST_BATCH_SS_MODEL
-} FSTbatchType;
+    FUR_BATCH_2D_RECT,
+    FUR_BATCH_2D_TEX,
+    FUR_BATCH_SS_CUBE,
+    FUR_BATCH_SS_MODEL
+} FURbatchType;
 
 /*
  * [DATATYPES]
@@ -105,12 +105,12 @@ typedef enum {
 typedef struct {
     u32 fbo;
     u32 depth;
-    FSTtexture* tex;
+    FURtexture* tex;
     s32 width, height;
-} FSTrenderTarget;
+} FURrenderTarget;
 
-void fst_renderTarget_unload(FSTrenderTarget* targ);
-FSTrenderTarget* fst_renderTarget_make(s32 width, s32 height);
+void fur_renderTarget_unload(FURrenderTarget* targ);
+FURrenderTarget* fur_renderTarget_make(s32 width, s32 height);
 
 typedef struct {
     /*
@@ -122,52 +122,52 @@ typedef struct {
 
     s32 width, height;
 
-    std::vector<FSTinstanceData> batch;
-    FSTbatchType batch_type;
-    FSTtexture* batch_tex;
-    FSTrenderTarget* batch_targ;
+    std::vector<FURinstanceData> batch;
+    FURbatchType batch_type;
+    FURtexture* batch_tex;
+    FURrenderTarget* batch_targ;
 
     mat4 proj2d;
 
-    struct FST_r2dRect rect;
-    struct FST_r2dTex tex;
+    struct FUR_r2dRect rect;
+    struct FUR_r2dTex tex;
 
-    struct FST_rSsCube ssCube;
-    struct FST_rSsModel ssModel;
-} FSTrenderState;
+    struct FUR_rSsCube ssCube;
+    struct FUR_rSsModel ssModel;
+} FURrenderState;
 
 /*
  * [INIT]
  */
 
-void* fst_render_init(void);
+void* fur_render_init(void);
 
 /*
  * [END]
  */
 
-void fst_render_end(void* data);
+void fur_render_end(void* data);
 
 /*
  * [UPDATE]
  */
 
 /* [resize] */
-void fst_render_resize(void* data, s32 width, s32 height);
+void fur_render_resize(void* data, s32 width, s32 height);
 
 /*
  * [FUNCS]
  */
 
 /* [funcs generic] */
-void fst_render_flush(void* data);
-void fst_render_clear(void* data, FSTrenderTarget* targ, f32 r, f32 g, f32 b, f32 a);
+void fur_render_flush(void* data);
+void fur_render_clear(void* data, FURrenderTarget* targ, f32 r, f32 g, f32 b, f32 a);
 
 /**** [funcs generic - transform] */
 
 /* [funcs 2d] */
-void fst_render_rect(void* data, FSTrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
-void fst_render_tex(void* data, FSTrenderTarget* targ, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
-void fst_render_renderTarget(void* data, FSTrenderTarget* targ, FSTrenderTarget* rtarg, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a); // wow thats big
+void fur_render_rect(void* data, FURrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
+void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
+void fur_render_renderTarget(void* data, FURrenderTarget* targ, FURrenderTarget* rtarg, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a); // wow thats big
 
 #endif

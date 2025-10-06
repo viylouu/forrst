@@ -1,57 +1,57 @@
-#ifndef FST_NODE_HH
-#define FST_NODE_HH
+#ifndef FUR_NODE_HH
+#define FUR_NODE_HH
 
 #include <core/macros.h>
 #include <vector>
 #include <stdio.h>
 #include <core/mat4.h>
 
-class FSTnode;
+class FURnode;
 
 typedef enum {
-    FST_TYPEOF_STRING,
-    FST_TYPEOF_REF,
-    FST_TYPEOF_VECTOR,
-    FST_TYPEOF_INT,
-    FST_TYPEOF_FLOAT,
-    FST_TYPEOF_VEC2,
-    FST_TYPEOF_VEC3,
-    FST_TYPEOF_VEC4
-} FSTtype;
+    FUR_TYPEOF_STRING,
+    FUR_TYPEOF_REF,
+    FUR_TYPEOF_VECTOR,
+    FUR_TYPEOF_INT,
+    FUR_TYPEOF_FLOAT,
+    FUR_TYPEOF_VEC2,
+    FUR_TYPEOF_VEC3,
+    FUR_TYPEOF_VEC4
+} FURtype;
 
 typedef struct {
     void* var;
     const char* name;
-    FSTtype type;
-} FSTvarInfo;
+    FURtype type;
+} FURvarInfo;
 
-class FSTcomponent {
+class FURcomponent {
 public:
     const char* title;
-    std::vector<FSTvarInfo> publics;
+    std::vector<FURvarInfo> publics;
 
-    FSTcomponent() { title = "untitled"; }
+    FURcomponent() { title = "untitled"; }
 
     virtual void init()            {}
-    FSTnode* parent;
+    FURnode* parent;
     virtual void update(f32 delta) {}
     virtual void render()          {}
-    virtual ~FSTcomponent()        {}
+    virtual ~FURcomponent()        {}
 };
 
-class FSTnode {
+class FURnode {
 public:
     char* name;
 
-    FSTnode* parent;
-    std::vector<FSTnode*> children;
-    std::vector<FSTcomponent*> components;
+    FURnode* parent;
+    std::vector<FURnode*> children;
+    std::vector<FURcomponent*> components;
 
     v3 pos, scale, rot;
     mat4 transf;
 
-    FSTnode() : parent(NULL) { name = "untitled"; }
-    virtual ~FSTnode() {
+    FURnode() : parent(NULL) { name = "untitled"; }
+    virtual ~FURnode() {
         for (s32 i = 0; i < (s32)children.size(); ++i)
             delete children[i];
         for (s32 i = 0; i < (s32)components.size(); ++i)
@@ -59,12 +59,12 @@ public:
 
     }
 
-    void addChild(FSTnode* child) { 
+    void addChild(FURnode* child) { 
         child->parent = this;
         children.push_back(child); 
     }
 
-    void addComponent(FSTcomponent* component) {
+    void addComponent(FURcomponent* component) {
         component->parent = this;
         components.push_back(component);
         component->init();
@@ -78,16 +78,16 @@ public:
     }
 
     void recrender() {
-        fst_mat4_scale(&transf, scale.x,scale.y,scale.z);
+        fur_mat4_scale(&transf, scale.x,scale.y,scale.z);
         mat4 a;
-        fst_mat4_rotateX(&a, rot.x);
-        fst_mat4_multiply(&transf, transf, a);
-        fst_mat4_rotateY(&a, rot.y);
-        fst_mat4_multiply(&transf, transf, a);
-        fst_mat4_rotateZ(&a, rot.z);
-        fst_mat4_multiply(&transf, transf, a);
-        fst_mat4_translate(&a, pos.x,pos.y,pos.z);
-        fst_mat4_multiply(&transf, transf, a);
+        fur_mat4_rotateX(&a, rot.x);
+        fur_mat4_multiply(&transf, transf, a);
+        fur_mat4_rotateY(&a, rot.y);
+        fur_mat4_multiply(&transf, transf, a);
+        fur_mat4_rotateZ(&a, rot.z);
+        fur_mat4_multiply(&transf, transf, a);
+        fur_mat4_translate(&a, pos.x,pos.y,pos.z);
+        fur_mat4_multiply(&transf, transf, a);
 
         for (s32 i = 0; i < (s32)components.size(); ++i)
             components[i]->render();

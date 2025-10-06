@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 
-void fst_mat4_make(
+void fur_mat4_make(
     mat4* mat,
     f32 m00, f32 m01, f32 m02, f32 m03,
     f32 m10, f32 m11, f32 m12, f32 m13,
@@ -20,7 +20,7 @@ void fst_mat4_make(
     //for(s32 i = 0; i < 16; ++i) (*mat)[i] = tmp[i];
 }
 
-void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
+void fur_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
     mat4 result;
     for (s32 row = 0; row < 4; row++)
         for (s32 col = 0; col < 4; col++) {
@@ -35,7 +35,7 @@ void fst_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
     //for(s32 i = 0; i < 16; ++i) (*out)[i] = result[i];
 }
 
-void fst_mat4_ortho(
+void fur_mat4_ortho(
     mat4* mat, 
     f32 left, f32 right,
     f32 bottom, f32 top,
@@ -45,7 +45,7 @@ void fst_mat4_ortho(
     f32 tb = top - bottom;
     f32 fn = far - near;
 
-    fst_mat4_make(mat, 
+    fur_mat4_make(mat, 
         2.f/rl, 0, 0, 0,
         0, 2.f/tb, 0, 0,
         0, 0,-2.f/fn, 0,
@@ -53,8 +53,8 @@ void fst_mat4_ortho(
         );
 }
 
-void fst_mat4_identity(mat4* mat) {
-     fst_mat4_make(mat, 
+void fur_mat4_identity(mat4* mat) {
+     fur_mat4_make(mat, 
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -62,11 +62,11 @@ void fst_mat4_identity(mat4* mat) {
         );
 }
 
-void fst_mat4_translate(
+void fur_mat4_translate(
     mat4* mat,
     f32 x, f32 y, f32 z
 ) {
-    fst_mat4_make(mat,
+    fur_mat4_make(mat,
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -74,11 +74,11 @@ void fst_mat4_translate(
         );
 }
 
-void fst_mat4_scale(
+void fur_mat4_scale(
     mat4* mat,
     f32 x, f32 y, f32 z
 ) {
-    fst_mat4_make(mat,
+    fur_mat4_make(mat,
         x, 0, 0, 0,
         0, y, 0, 0,
         0, 0, z, 0,
@@ -86,11 +86,11 @@ void fst_mat4_scale(
         );
 }
 
-void fst_mat4_rotateX(mat4* mat, f32 ang) {
+void fur_mat4_rotateX(mat4* mat, f32 ang) {
     f32 c = cosf(ang);
     f32 s = sinf(ang);
 
-    fst_mat4_make(mat,
+    fur_mat4_make(mat,
         1, 0, 0, 0,
         0, c,-s, 0,
         0, s, c, 0,
@@ -98,11 +98,11 @@ void fst_mat4_rotateX(mat4* mat, f32 ang) {
         );
 }
 
-void fst_mat4_rotateY(mat4* mat, f32 ang) {
+void fur_mat4_rotateY(mat4* mat, f32 ang) {
     f32 c = cosf(ang);
     f32 s = sinf(ang);
 
-    fst_mat4_make(mat,
+    fur_mat4_make(mat,
         c, 0, s, 0,
         0, 1, 0, 0,
        -s, 0, c, 0,
@@ -110,11 +110,11 @@ void fst_mat4_rotateY(mat4* mat, f32 ang) {
         );
 }
 
-void fst_mat4_rotateZ(mat4* mat, f32 ang) {
+void fur_mat4_rotateZ(mat4* mat, f32 ang) {
     f32 c = cosf(ang);
     f32 s = sinf(ang);
 
-    fst_mat4_make(mat,
+    fur_mat4_make(mat,
         c,-s, 0, 0,
         s, c, 0, 0,
         0, 0, 1, 0,

@@ -21,7 +21,7 @@
 
     #define LOAD(name)                                                              \
                 do {                                                                \
-                    if (fst_use_wayland) name = (name##_t)eglGetProcAddress(#name); \
+                    if (fur_use_wayland) name = (name##_t)eglGetProcAddress(#name); \
                     else name = (name##_t)glXGetProcAddress((const GLubyte*)name);  \
                     if (!name) { printf("failed to load %s!\n", #name); return; } \
                 } while(0)
@@ -30,7 +30,7 @@
 #define FUNC_C(name, ret_type, ...) \
     name##_t name = NULL
 
-b8 fst_use_wayland;
+b8 fur_use_wayland;
 
 #ifdef _WIN32
 FUNC_C(glActiveTexture, void, GLenum texture);
@@ -81,7 +81,7 @@ FUNC_C(glRenderbufferStorage, void, GLenum target, GLenum internalformat, GLsize
 FUNC_C(glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
 FUNC_C(glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers);
 
-void fst_gl_load(void) {
+void fur_gl_load(void) {
 
 #ifdef _WIN32
 LOAD(glActiveTexture);

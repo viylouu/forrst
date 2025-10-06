@@ -1,5 +1,5 @@
-#ifndef FST_TEXTURE_H
-#define FST_TEXTURE_H
+#ifndef FUR_TEXTURE_H
+#define FUR_TEXTURE_H
 
 #include <core/macros.h>
 
@@ -11,13 +11,13 @@ typedef struct {
     u32 glid;
     s32 width;
     s32 height;
-} FSTtexture;
+} FURtexture;
 
-void fst_texture_unload(FSTtexture* tex);
-FSTtexture* fst_texture_make(s32 width, s32 height);
-FSTtexture* fst_texture_loadFromData(u8* data, s64 size);
-char* fst_texture_loadData(const char* path, s64* outsize);
-FSTtexture* fst_texture_load(const char* path);
+void fur_texture_unload(FURtexture* tex);
+FURtexture* fur_texture_make(s32 width, s32 height);
+FURtexture* fur_texture_loadFromData(u8* data, s64 size);
+char* fur_texture_loadData(const char* path, s64* outsize);
+FURtexture* fur_texture_load(const char* path);
 
 #ifdef __cplusplus
 }

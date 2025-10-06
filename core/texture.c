@@ -6,12 +6,12 @@
 #include <core/macros.h>
 #include <core/auto/load_gl.h>
 
-void fst_texture_unload(FSTtexture* tex) {
+void fur_texture_unload(FURtexture* tex) {
     glDeleteTextures(1, &tex->glid);
     free(tex);
 }
 
-FSTtexture* fst_texture_make(s32 width, s32 height) {
+FURtexture* fur_texture_make(s32 width, s32 height) {
     u32 id;
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
@@ -25,7 +25,7 @@ FSTtexture* fst_texture_make(s32 width, s32 height) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    FSTtexture* tex = malloc(sizeof(FSTtexture));
+    FURtexture* tex = malloc(sizeof(FURtexture));
     tex->glid = id;
     tex->width = width;
     tex->height = height;
@@ -33,7 +33,7 @@ FSTtexture* fst_texture_make(s32 width, s32 height) {
     return tex;
 }
 
-FSTtexture* fst_texture_loadFromData(u8* data, s64 size) {
+FURtexture* fur_texture_loadFromData(u8* data, s64 size) {
     s32 w,h,c;
     u8* texdata = stbi_load_from_memory(data, size, &w,&h,&c, 4);
     ERROR_IF(!texdata, "failed to load texture!\n");
@@ -51,7 +51,7 @@ FSTtexture* fst_texture_loadFromData(u8* data, s64 size) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    FSTtexture* tex = malloc(sizeof(FSTtexture));
+    FURtexture* tex = malloc(sizeof(FURtexture));
     tex->glid = id;
     tex->width = w;
     tex->height = h;
@@ -59,7 +59,7 @@ FSTtexture* fst_texture_loadFromData(u8* data, s64 size) {
     return tex;
 }
 
-char* fst_texture_loadData(const char* path, s64* outsize) {
+char* fur_texture_loadData(const char* path, s64* outsize) {
     FILE* file = fopen(path, "rb");
     if (!file) { printf("failed to load texture at \"%s\"!\n", path); exit(1); }
 
@@ -78,12 +78,12 @@ char* fst_texture_loadData(const char* path, s64* outsize) {
     return buffer;
 }
 
-FSTtexture* fst_texture_load(const char* path) {
+FURtexture* fur_texture_load(const char* path) {
     s64 size;
-    char* buf = fst_texture_loadData(path, &size);
+    char* buf = fur_texture_loadData(path, &size);
     ERROR_IF(!buf, "failed to read file at \"%s\"!\n", path);
 
-    FSTtexture* tex = fst_texture_loadFromData((u8*)buf, size);
+    FURtexture* tex = fur_texture_loadFromData((u8*)buf, size);
     free(buf);
 
     ERROR_IF(!tex, "failed to load texture at \"%s\"!\n", path);

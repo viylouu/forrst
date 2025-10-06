@@ -1,5 +1,5 @@
-#ifndef FST_MACROS_H
-#define FST_MACROS_H
+#ifndef FUR_MACROS_H
+#define FUR_MACROS_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,15 +46,15 @@ typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
 #define MAYBE_CALL(func, ...) \
     if ((func)) func(__VA_ARGS__)
 
-#define FST_OPS1(a) ops a
-#define FST_OPS2(a,b) ops a; ops b
-#define FST_OPS3(a,b,c) ops a; ops b; ops c
-#define FST_OPS4(a,b,c,d) ops a; ops b; ops c; ops d
-#define FST_OPS5(a,b,c,d,e) ops a; ops b; ops c; ops d; ops e
+#define FUR_OPS1(a) ops a
+#define FUR_OPS2(a,b) ops a; ops b
+#define FUR_OPS3(a,b,c) ops a; ops b; ops c
+#define FUR_OPS4(a,b,c,d) ops a; ops b; ops c; ops d
+#define FUR_OPS5(a,b,c,d,e) ops a; ops b; ops c; ops d; ops e
 
-#define FST_OPS_GET(_1,_2,_3,_4,_5,NAME,...) NAME
-#define FST_OPS_HELPER(...) \
-    FST_OPS_GET(__VA_ARGS__, FST_OPS5,FST_OPS4,FST_OPS3,FST_OPS2,FST_OPS1)(__VA_ARGS__)
+#define FUR_OPS_GET(_1,_2,_3,_4,_5,NAME,...) NAME
+#define FUR_OPS_HELPER(...) \
+    FUR_OPS_GET(__VA_ARGS__, FUR_OPS5,FUR_OPS4,FUR_OPS3,FUR_OPS2,FUR_OPS1)(__VA_ARGS__)
 
 #ifdef __cplusplus
 }

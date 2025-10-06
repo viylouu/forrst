@@ -1,5 +1,5 @@
-#ifndef FRST_FORRST_HH
-#define FRST_FORRST_HH
+#ifndef FUR_FURRY_HH
+#define FUR_FURRY_HH
 
 #include <core/macros.h>
 #include <core/render.hh>
@@ -8,28 +8,28 @@
 #include <GLFW/glfw3.h>
 #include <core/editor/editor.hh>
 
-#define FST_WIDTH fst_query_width()
-#define FST_HEIGHT fst_query_height()
+#define FUR_WIDTH fst_query_width()
+#define FUR_HEIGHT fst_query_height()
 
 static void* rstate;
 
-void fst_cb_size(GLFWwindow* window, s32 width, s32 height);
-void* fst_init(const char* title, s32 width, s32 height);
-char fst_shouldClose(void* state);
-void fst_poll(void* state);
-void fst_swapBuffer(void* state);
-void fst_end(void* state);
-static inline s32 fst_query_width() { return ((FSTrenderState*)rstate)->width; }
-static inline s32 fst_query_height() { return ((FSTrenderState*)rstate)->height; }
+void fur_cb_size(GLFWwindow* window, s32 width, s32 height);
+void* fur_init(const char* title, s32 width, s32 height);
+char fur_shouldClose(void* state);
+void fur_poll(void* state);
+void fur_swapBuffer(void* state);
+void fur_end(void* state);
+static inline s32 fur_query_width() { return ((FURrenderState*)rstate)->width; }
+static inline s32 fur_query_height() { return ((FURrenderState*)rstate)->height; }
 
 static f64 time;
 
-class FSTgame {
+class FURgame {
 public:
-    FSTnode* scene;
+    FURnode* scene;
 
     void constr()   { 
-        scene = new FSTnode(); 
+        scene = new FURnode(); 
         scene->name = "scene";
     }
 
@@ -40,15 +40,15 @@ public:
 };
 
 template<typename Tgame>
-s32 fst_windowDoShit(const char* title, v2 dims) {
-    FSTgame* forcetype = static_cast<Tgame*>(0); (void)forcetype;
+s32 fur_windowDoShit(const char* title, v2 dims) {
+    FURgame* forcetype = static_cast<Tgame*>(0); (void)forcetype;
 
-    void* state = fst_init(title, dims.x,dims.y);
-    fst_gl_load();
-    rstate = fst_render_init();
+    void* state = fur_init(title, dims.x,dims.y);
+    fur_gl_load();
+    rstate = fur_render_init();
 
     glfwSetWindowUserPointer((GLFWwindow*)state, rstate);
-    glfwSetFramebufferSizeCallback((GLFWwindow*)state, fst_cb_size);
+    glfwSetFramebufferSizeCallback((GLFWwindow*)state, fur_cb_size);
 
     glViewport(0,0,dims.x,dims.y);
 
@@ -57,10 +57,10 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     glfwSetWindowSize((GLFWwindow*)state, dims.x,dims.y);
 #endif
 
-    #ifdef FST_EDITOR
+    #ifdef FUR_EDITOR
     b8 editor = 1;
     b8 prevKey = 0;
-    void* estate = fst_editor_init();
+    void* estate = fur_editor_init();
     #endif
 
     Tgame game;
@@ -70,8 +70,8 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
 
     f32 lasttime = glfwGetTime();
 
-    while (!fst_shouldClose(state)) {
-        fst_poll(state);
+    while (!fur_shouldClose(state)) {
+        fur_poll(state);
 
         time = glfwGetTime();
         f32 delta = time - lasttime;
@@ -83,19 +83,19 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
         game.scene->recupdate(delta);
         game.scene->recrender();
 
-        #ifdef FST_EDITOR
+        #ifdef FUR_EDITOR
         b8 curKey = glfwGetKey((GLFWwindow*)state, GLFW_KEY_F1);
         if (curKey == GLFW_PRESS && prevKey == GLFW_RELEASE)
             editor = !editor;
         prevKey = curKey;
 
         if(editor)
-            fst_editor(estate, state, rstate, game.scene);
+            fur_editor(estate, state, rstate, game.scene);
         #endif
 
-        fst_render_flush(rstate);
+        fur_render_flush(rstate);
 
-        fst_swapBuffer(state);
+        fur_swapBuffer(state);
     }
 
     game.end();
@@ -103,17 +103,17 @@ s32 fst_windowDoShit(const char* title, v2 dims) {
     delete game.scene;
 
     #ifdef FST_EDITOR
-    fst_editor_end(estate);
+    fur_editor_end(estate);
     #endif
 
-    fst_render_end(rstate);
-    fst_end(state);
+    fur_render_end(rstate);
+    fur_end(state);
     return 0;
 }
 
-#define FST_MAIN(class)                                                \
+#define FUR_MAIN(class)                                                \
 int main(void) {                                                       \
-    return fst_windowDoShit<class>("title", ((v2){800,600})); \
+    return fur_windowDoShit<class>("title", ((v2){800,600})); \
 }
 
 #endif

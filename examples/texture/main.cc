@@ -1,5 +1,5 @@
-#define FST_EDITOR
-#include <forrst.hh>
+#define FUR_EDITOR
+#include <furry.hh>
 
 #include <core/render.hh>
 #include <cstdlib>
@@ -8,43 +8,43 @@
 #include <cstring>
 #include <cstdlib>
 
-class FSTrenderer2d : public FSTcomponent {
+class FURrenderer2d : public FURcomponent {
 public:
     v4 col;
-    FSTtexture* tex;
+    FURtexture* tex;
     v4 sample;
-    FSTrenderTarget* targ;
+    FURrenderTarget* targ;
 
-    FSTrenderer2d() {
+    FURrenderer2d() {
         targ = NULL;
     }
 
     void init() {
-        publics.push_back((FSTvarInfo){ &tex, "texture", FST_TYPEOF_REF });
-        publics.push_back((FSTvarInfo){ &col, "tint (float)", FST_TYPEOF_VEC4 }); 
+        publics.push_back((FURvarInfo){ &tex, "texture", FUR_TYPEOF_REF });
+        publics.push_back((FURvarInfo){ &col, "tint (float)", FUR_TYPEOF_VEC4 }); 
     }
 
     void render() {
-        fst_render_tex(rstate, targ, tex, parent->transf, 0,0,1,1, sample.x,sample.y,sample.z,sample.w, col.x,col.y,col.z,col.w);
+        fur_render_tex(rstate, targ, tex, parent->transf, 0,0,1,1, sample.x,sample.y,sample.z,sample.w, col.x,col.y,col.z,col.w);
     }
 };
 
-class game : public FSTgame {
+class game : public FURgame {
 public:
-    FSTtexture* tex;
+    FURtexture* tex;
     char buf[256];
-    FSTrenderTarget* targ;
+    FURrenderTarget* targ;
     mat4 transf;
 
     void init() {
-        tex = fst_texture_load("examples/texture/youresosilly.jpg");
+        tex = fur_texture_load("examples/texture/youresosilly.jpg");
 
-        targ = fst_renderTarget_make(640,480);
+        targ = fur_renderTarget_make(640,480);
 
         for (s32 i = 0; i < 1024; ++i) {
-            FSTnode* node = new FSTnode();
-            node->addComponent(new FSTrenderer2d());
-            ((FSTrenderer2d*)node->components[0])->targ = targ;
+            FURnode* node = new FURnode();
+            node->addComponent(new FURrenderer2d());
+            ((FURrenderer2d*)node->components[0])->targ = targ;
             
             sprintf(buf, "cone #%d", i);
             node->name = (char*)malloc(strlen(buf) + 1);
@@ -53,16 +53,16 @@ public:
             scene->addChild(node);
         }
 
-        fst_mat4_identity(&transf);
+        fur_mat4_identity(&transf);
     }
 
     void end() {
-        fst_texture_unload(tex);
+        fur_texture_unload(tex);
 
         for (s32 i = 0; i < (s32)scene->children.size(); ++i)
             delete[] scene->children[i]->name;
 
-        fst_renderTarget_unload(targ);
+        fur_renderTarget_unload(targ);
     }
 
     void update(float delta) {
@@ -70,12 +70,12 @@ public:
     }
 
     void render() {
-        fst_render_clear(rstate, targ, .2,.4,.3,1); 
+        fur_render_clear(rstate, targ, .2,.4,.3,1); 
         
         srand(glfwGetTime()*10000000);
         for (s32 i = 0; i < (s32)scene->children.size(); ++i) {
-            FSTnode* node = scene->children[i];
-            FSTrenderer2d* comp = (FSTrenderer2d*)scene->children[i]->components[0];
+            FURnode* node = scene->children[i];
+            FURrenderer2d* comp = (FURrenderer2d*)scene->children[i]->components[0];
 
             comp->col = (v4){
                 (rand()%256)/256.f,
@@ -107,8 +107,8 @@ public:
                 };
         }
 
-        fst_render_renderTarget(rstate, NULL, targ, transf, 0,0,FST_WIDTH,FST_HEIGHT,0,0,targ->width,targ->height, 1,1,1,1);
+        fur_render_renderTarget(rstate, NULL, targ, transf, 0,0,FUR_WIDTH,FUR_HEIGHT,0,0,targ->width,targ->height, 1,1,1,1);
     }
 };
 
-FST_MAIN(game);
+FUR_MAIN(game);

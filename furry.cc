@@ -1,18 +1,18 @@
-#include "forrst.hh"
+#include "furry.hh"
 
 #include <GLFW/glfw3.h>
 
 #include <core/auto/load_gl.h>
 #include <core/render.hh>
 
-void fst_cb_size(GLFWwindow* window, s32 width, s32 height) {
+void fur_cb_size(GLFWwindow* window, s32 width, s32 height) {
     glViewport(0,0,width,height);
     void* state = glfwGetWindowUserPointer(window);
     if (state)
-        fst_render_resize(state,width,height);
+        fur_render_resize(state,width,height);
 }
 
-void* fst_init(const char* title, s32 width, s32 height) {
+void* fur_init(const char* title, s32 width, s32 height) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -26,30 +26,30 @@ void* fst_init(const char* title, s32 width, s32 height) {
 
     glfwMakeContextCurrent(window);
 
-    fst_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;   
+    fur_use_wayland = glfwGetPlatform() == GLFW_PLATFORM_WAYLAND;   
 
     glfwSwapInterval(0);
 
     return window;
 }
 
-char fst_shouldClose(void* state) {
+char fur_shouldClose(void* state) {
     GLFWwindow* window = (GLFWwindow*)state;
     return glfwWindowShouldClose(window);
 }
 
-void fst_poll(void* state) {
+void fur_poll(void* state) {
     UNUSED(state);
 
     glfwPollEvents();
 }
 
-void fst_swapBuffer(void* state) {
+void fur_swapBuffer(void* state) {
     GLFWwindow* window = (GLFWwindow*)state;
     glfwSwapBuffers(window);
 }
 
-void fst_end(void* state) {
+void fur_end(void* state) {
     GLFWwindow* window = (GLFWwindow*)state;
 
     glfwPollEvents(); // fix for segfault on crash for some reason? idk, glfw is weird
