@@ -7,6 +7,7 @@
 #include <core/texture.h>
 #include <cstring>
 #include <cstdlib>
+#include <cstdio>
 
 class FURrenderer2d : public FURcomponent {
 public:
