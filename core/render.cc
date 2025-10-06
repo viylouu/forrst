@@ -321,14 +321,28 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
     inst.g = g;
     inst.b = b;
     inst.a = a;
-    inst.sx = sx / (f32)tex->width;
-    inst.sy = sy / (f32)tex->height;
-    inst.sw = sw / (f32)tex->width;
-    inst.sh = sh / (f32)tex->height; 
+    if(tex) {
+        inst.sx = sx / (f32)tex->width;
+        inst.sy = sy / (f32)tex->height;
+        inst.sw = sw / (f32)tex->width;
+        inst.sh = sh / (f32)tex->height; 
+    } else {
+        if (targ) {
+            inst.sx = sx / (f32)targ->tex->width;
+            inst.sy = sy / (f32)targ->tex->height;
+            inst.sw = sw / (f32)targ->tex->width;
+            inst.sh = sh / (f32)targ->tex->height; 
+        } else {
+            inst.sx = sx / state->width;
+            inst.sy = sy / state->height;
+            inst.sw = sw / state->width;
+            inst.sh = sh / state->height;
+        }
+    }
 
     state->batch.push_back(inst);
 }
 
 void fur_render_renderTarget(void* data, FURrenderTarget* targ, FURrenderTarget* rtarg, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a) {
-    fur_render_tex(data, targ, targ->tex, transf, x,y,w,h, sx,sy,sw,sh, r,g,b,a);
+    fur_render_tex(data, targ, rtarg->tex, transf, x,y,w,h, sx,sy,sw,sh, r,g,b,a);
 }

@@ -8,8 +8,8 @@
 #include <GLFW/glfw3.h>
 #include <core/editor/editor.hh>
 
-#define FUR_WIDTH fst_query_width()
-#define FUR_HEIGHT fst_query_height()
+#define FUR_WIDTH fur_query_width()
+#define FUR_HEIGHT fur_query_height()
 
 static void* rstate;
 
