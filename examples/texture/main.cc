@@ -28,6 +28,12 @@ public:
 
     void init() {
         tex = fst_texture_load("examples/texture/youresosilly.jpg");
+    }
+
+    void render() {
+        fst_render_clear(rstate, .2,.4,.3,1); 
+
+        scene->children.clear();
 
         srand(glfwGetTime()*10000000);
         for (s32 i = 0; i < 2048; ++i) {
@@ -64,10 +70,6 @@ public:
                 (rand()%256)/256.f*3.14159265f
                 };
         }
-    }
-
-    void render() {
-        fst_render_clear(rstate, .2,.4,.3,1);       
     }
 };
 
