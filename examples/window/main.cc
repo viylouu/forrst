@@ -5,7 +5,7 @@
 #include <cstdlib>
 #include <core/mat4.h>
 
-class FSTrenderer : public FSTcomponent {
+class FSTrenderer2d : public FSTcomponent {
 public:
     v4 col;
 
@@ -25,7 +25,7 @@ public:
     void init() {
         //for (s32 i = 0; i < 16384; ++i) {
             FSTnode* node = new FSTnode();
-            FSTrenderer* comp = new FSTrenderer();
+            FSTrenderer2d* comp = new FSTrenderer2d();
             comp->col = (v4){1,0,0,1};
             node->addComponent(comp);
             scene->addChild(node);

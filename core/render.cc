@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <core/shader.h>
 #include <core/mat4.h>
+#include <core/texture.h>
 
 /* table of contents:
  **** [GL STRUCTS]
@@ -65,29 +66,29 @@ FST_genericInitEnd(rSsModel);
     fst_shader_unload(state->shader); \
     glDeleteTextures(1, &state->tbo); \
     glDeleteBuffers(1, &state->bo)
-#define FST_r2dDrawGeneric(rect) do { \
-    glUseProgram(rect->shader->shader); \
+#define FST_r2dDrawGeneric(obj) do { \
+    glUseProgram(obj->shader->shader); \
     glBindVertexArray(state->vao); \
 \
-    glUniformMatrix4fv(rect->loc.proj, 1,0, state->proj2d); \
+    glUniformMatrix4fv(obj->loc.proj, 1,0, state->proj2d); \
 \
-    glBindBuffer(GL_TEXTURE_BUFFER, rect->bo); \
+    glBindBuffer(GL_TEXTURE_BUFFER, obj->bo); \
     glBufferSubData(GL_TEXTURE_BUFFER, 0, state->batch.size() * sizeof(FSTinstanceData), state->batch.data()); \
 \
     glActiveTexture(GL_TEXTURE0); \
-    glBindTexture(GL_TEXTURE_BUFFER, rect->tbo); \
-    glUniform1i(rect->loc.insts, 0); \
+    glBindTexture(GL_TEXTURE_BUFFER, obj->tbo); \
+    glUniform1i(obj->loc.insts, 0); \
 \
-    glUniform1i(rect->loc.inst_size, sizeof(FSTinstanceData) / 16); \
+    glUniform1i(obj->loc.inst_size, sizeof(FSTinstanceData) / 16); \
 } while(0)
 
 
-void fst_r2dRect_init(void* rect) {
-    FST_r2dRect* state = (FST_r2dRect*)rect;
+void fst_r2dRect_init(void* data) {
+    FST_r2dRect* state = (FST_r2dRect*)data;
 
     FST_r2dInitGeneric("data/eng/rect.vert", "data/eng/rect.frag");
-} void fst_r2dRect_end(void* rect) {
-    FST_r2dRect* state = (FST_r2dRect*)rect;
+} void fst_r2dRect_end(void* data) {
+    FST_r2dRect* state = (FST_r2dRect*)data;
 
     FST_r2dEndGeneric();
 } void fst_r2dRect_draw(void* data, void* obj) {
@@ -100,8 +101,26 @@ void fst_r2dRect_init(void* rect) {
 }
 
 void fst_r2dTex_init(void* data) {
+    FST_r2dTex* state = (FST_r2dTex*)data;
+
+    FST_r2dInitGeneric("data/eng/tex.vert", "data/eng/tex.frag");
+
+    state->loc.tex = glGetUniformLocation(state->shader->shader, "tex");
 } void fst_r2dTex_end(void* data) {
+    FST_r2dTex* state = (FST_r2dTex*)data;
+
+    FST_r2dEndGeneric();
 } void fst_r2dTex_draw(void* data, void* obj) {
+    FSTrenderState* state = (FSTrenderState*)data;
+    FST_r2dTex* tex = (FST_r2dTex*)obj;
+
+    FST_r2dDrawGeneric(tex);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, state->batch_tex->glid);
+    glUniform1i(tex->loc.tex, 1);
+
+    glDrawArraysInstanced(GL_TRIANGLES, 0,6, state->batch.size());
 }
 
 /* [gl struct spritestack funcs] */
@@ -217,6 +236,36 @@ void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r,
     inst.g = g;
     inst.b = b;
     inst.a = a;
+
+    state->batch.push_back(inst);
+}
+
+void fst_render_tex(void* data, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a) {
+    FSTrenderState* state = (FSTrenderState*)data;
+
+    if (state->batch_type != FST_BATCH_2D_TEX) fst_render_flush(data);
+    if (state->batch.size() >= FST_MAX_BATCH_SIZE) fst_render_flush(data);
+    if (state->batch_tex != tex) fst_render_flush(data);
+
+    state->batch_type = FST_BATCH_2D_TEX;
+    state->batch_tex = tex;
+
+    FSTinstanceData inst;
+
+    std::copy(transf,transf+16,inst.transf);
+
+    inst.x = x;
+    inst.y = y;
+    inst.w = w;
+    inst.h = h;
+    inst.r = r;
+    inst.g = g;
+    inst.b = b;
+    inst.a = a;
+    inst.sx = sx / (f32)tex->width;
+    inst.sy = sy / (f32)tex->height;
+    inst.sw = sw / (f32)tex->width;
+    inst.sh = sh / (f32)tex->height; 
 
     state->batch.push_back(inst);
 }

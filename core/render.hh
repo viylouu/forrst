@@ -4,6 +4,7 @@
 #include <core/macros.h>
 #include <core/shader.h>
 #include <vector>
+#include <core/texture.h>
 #include <core/mat4.h>
 
 /* table of contents:
@@ -59,8 +60,6 @@ struct FST_r2dTex {
     } loc;
 };
 
-FST_genericInitEnd(r2dTex);
-
 /* [gl struct spritestack] */
 #define FST_rSsGeneric() \
     FSTshader* shad; u32 bo, tbo
@@ -76,7 +75,6 @@ struct FST_rSsCube {
     } loc;
 };
 
-
 struct FST_rSsModel {
     FST_rSsGeneric();
     struct {
@@ -89,7 +87,7 @@ typedef struct {
     f32 x,y,w,h;
     f32 r,g,b,a;
     f32 sx,sy,sw,sh;
-    float transf[16];
+    mat4 transf;
 } FSTinstanceData;
 
 typedef enum {
@@ -109,6 +107,7 @@ typedef struct {
 
     std::vector<FSTinstanceData> batch;
     FSTbatchType batch_type;
+    FSTtexture* batch_tex;
 
     mat4 proj2d;
 
@@ -150,5 +149,6 @@ void fst_render_clear(void* data, f32 r, f32 g, f32 b, f32 a);
 
 /* [funcs 2d] */
 void fst_render_rect(void* data, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
+void fst_render_tex(void* data, FSTtexture* tex, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 sx, f32 sy, f32 sw, f32 sh, f32 r, f32 g, f32 b, f32 a);
 
 #endif
