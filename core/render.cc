@@ -317,6 +317,9 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
 
     std::copy(transf,transf+16,inst.transf);
 
+    if (targ)
+        printf("%p, %p\n", targ, state->batch_targ);
+
     inst.x = x;
     inst.y = y;
     inst.w = w;

@@ -72,7 +72,7 @@ public:
 
     void render() {
         fur_render_clear(rstate, targ, .2,.4,.3,1); 
-        
+
         srand(glfwGetTime()*10000000);
         for (s32 i = 0; i < (s32)scene->children.size(); ++i) {
             FURnode* node = scene->children[i];
