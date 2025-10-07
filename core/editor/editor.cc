@@ -31,14 +31,8 @@ s32 fur_editor_hierarchy(void* mstate, void* rstate, FURnode* node, mat4 ident, 
     FUReditorState* state = (FUReditorState*)mstate;
     FURrenderState* rend = (FURrenderState*)rstate;
 
-    if (y > -state->font->charH*2) {
-        char buf[1024];
-        sprintf(buf, "%*s%s", indent*2,"", node->name);
-
-        const char* cbuf = buf;
-
-        fur_text_draw(rstate, NULL, state->font, ident, cbuf, 2, 2,y+2, 0,0,0,1);
-    }
+    if (y > -state->font->charH*2)
+        fur_text_draw(rstate, NULL, state->font, ident, node->name, 2, 2+indent*state->font->charW*4,y+2, 0,0,0,1);
 
     for (s32 i = 0; i < (s32)node->children.size(); ++i) {
         y = fur_editor_hierarchy(mstate, rstate, node->children[i], ident, y + state->font->charH*2, indent+1);

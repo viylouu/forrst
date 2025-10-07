@@ -248,6 +248,9 @@ void fur_render_resize(void* data, s32 width, s32 height) {
 void fur_render_flush(void* data) {
     FURrenderState* state = (FURrenderState*)data;
 
+    if (state->batch.size() == 0)
+        return;
+
     switch(state->batch_type) {
         case FUR_BATCH_2D_RECT:
             fur_r2dRect_draw(data, &state->rect); break;

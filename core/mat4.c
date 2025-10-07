@@ -17,7 +17,6 @@ void fur_mat4_make(
         m30, m31, m32, m33
     };
     memcpy(*mat, tmp, sizeof(tmp));
-    //for(s32 i = 0; i < 16; ++i) (*mat)[i] = tmp[i];
 }
 
 void fur_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
@@ -32,7 +31,6 @@ void fur_mat4_multiply(mat4* out, const mat4 a, const mat4 b) {
         }
 
     memcpy(*out, result, sizeof(result));
-    //for(s32 i = 0; i < 16; ++i) (*out)[i] = result[i];
 }
 
 void fur_mat4_ortho(
