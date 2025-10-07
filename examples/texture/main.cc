@@ -39,7 +39,7 @@ public:
     void init() {
         tex = fur_texture_load("examples/texture/youresosilly.jpg");
 
-        targ = fur_renderTarget_make(640,480);
+        targ = fur_renderTarget_make(64,64);
 
         for (s32 i = 0; i < 1024; ++i) {
             FURnode* node = new FURnode();
@@ -96,10 +96,11 @@ public:
                 (rand()%256)+64,
                 1};
 
-            node->pos = (v3){
+            /*node->pos = (v3){
                 rand()%1440,
                 rand()%1440,
-                0};
+                0};*/
+            node->pos = (v3){0,0,0};
 
             node->rot = (v3){
                 (rand()%256)/256.f*3.14159265f,
@@ -107,6 +108,8 @@ public:
                 (rand()%256)/256.f*3.14159265f
                 };
         }
+
+        fur_render_rect(rstate, targ, transf, 0,0,16,16,1,0,0,1);
 
         fur_render_renderTarget(rstate, NULL, targ, transf, 0,0,FUR_WIDTH,FUR_HEIGHT,0,0,targ->width,targ->height, 1,1,1,1);
     }

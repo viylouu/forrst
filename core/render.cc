@@ -23,14 +23,16 @@
  **** **** [funcs 2d]
  */
 
-#define FUR_useTarget(targ) do {                            \
-    if (targ) {                                             \
-        glBindFramebuffer(GL_FRAMEBUFFER, targ->fbo);       \
-        glViewport(0,0,targ->tex->width,targ->tex->height); \
-    } else {                                                \
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);               \
-        glViewport(0,0,state->width,state->height);         \
-    }                                                       \
+#define FUR_useTarget(targ) do {                                                                    \
+    if (targ) {                                                                                     \
+        glBindFramebuffer(GL_FRAMEBUFFER, targ->fbo);                                               \
+        glViewport(0,0,targ->width,targ->height);                                                   \
+        fur_mat4_ortho(&state->proj2d, 0,targ->width,0,targ->height,-214783647.f,214683647.f);      \
+    } else {                                                                                        \
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);                                                       \
+        glViewport(0,0,state->width,state->height);                                                 \
+        fur_mat4_ortho(&state->proj2d, 0,state->width,state->height,0,-2147483647.f,2147483647.f);  \
+    }                                                                                               \
 } while(0)
 
 /*
@@ -233,9 +235,7 @@ void fur_render_end(void* data) {
 /* [resize] */
 void fur_render_resize(void* data, s32 width, s32 height) {
     FURrenderState* state = (FURrenderState*)data;
-
-    fur_mat4_ortho(&state->proj2d, 0,width,height,0,-2147483647.f,2147483647.f);
-
+    
     state->width = width;
     state->height = height;
 }
@@ -259,8 +259,6 @@ void fur_render_flush(void* data) {
             fur_rSsModel_draw(data, &state->ssModel); break;
     }
 
-    state->batch_targ = NULL;
-    //state->batch_tex = NULL;
     state->batch.clear();
 }
 
@@ -317,9 +315,6 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
 
     std::copy(transf,transf+16,inst.transf);
 
-    if (targ)
-        printf("%p, %p\n", targ, state->batch_targ);
-
     inst.x = x;
     inst.y = y;
     inst.w = w;
@@ -336,10 +331,10 @@ void fur_render_tex(void* data, FURrenderTarget* targ, FURtexture* tex, mat4 tra
         inst.sh = sh / (f32)tex->height;
     } else {
         if(targ) {
-            inst.sx = sx / (f32)targ->tex->width;
-            inst.sy = sy / (f32)targ->tex->height;
-            inst.sw = sw / (f32)targ->tex->width;
-            inst.sh = sh / (f32)targ->tex->height;
+            inst.sx = sx / (f32)targ->width;
+            inst.sy = sy / (f32)targ->height;
+            inst.sw = sw / (f32)targ->width;
+            inst.sh = sh / (f32)targ->height;
         } else {
             inst.sx = sx / state->width;
             inst.sy = sy / state->height;
