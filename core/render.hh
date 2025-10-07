@@ -8,20 +8,19 @@
 #include <core/mat4.h>
 
 /* table of contents:
- * [CONSTS]
- * [GL STRUCTS]
- **** [gl struct 2d]
- **** [gl struct spritestack]
- * [DATATYPES]
- * [STATE]
- * [INIT]
- * [END]
- * [UPDATE]
- **** [resize]
- * [FUNCS]
- **** [funcs generic]
- **** **** [funcs generic - transform]
- **** [funcs 2d]
+ **** [CONSTS]
+ **** [GL STRUCTS]
+ **** **** [gl struct 2d]
+ **** **** [gl struct spritestack]
+ **** [DATATYPES]
+ **** [STATE]
+ **** [INIT]
+ **** [END]
+ **** [UPDATE]
+ **** **** [resize]
+ **** [FUNCS]
+ **** **** [funcs generic]
+ **** **** [funcs 2d]
  */
 
 /* [CONSTS] */
@@ -162,8 +161,6 @@ void fur_render_resize(void* data, s32 width, s32 height);
 /* [funcs generic] */
 void fur_render_flush(void* data);
 void fur_render_clear(void* data, FURrenderTarget* targ, f32 r, f32 g, f32 b, f32 a);
-
-/**** [funcs generic - transform] */
 
 /* [funcs 2d] */
 void fur_render_rect(void* data, FURrenderTarget* targ, mat4 transf, f32 x, f32 y, f32 w, f32 h, f32 r, f32 g, f32 b, f32 a);
