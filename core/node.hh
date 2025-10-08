@@ -27,7 +27,7 @@ typedef struct {
 
 class FURcomponent {
 public:
-    const char* title;
+    char* title;
     std::vector<FURvarInfo> publics;
 
     FURcomponent() { title = "untitled"; }
