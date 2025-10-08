@@ -51,6 +51,8 @@ FURtexture* fur_texture_loadFromData(u8* data, s64 size) {
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
+    stbi_image_free(texdata);
+
     FURtexture* tex = malloc(sizeof(FURtexture));
     tex->glid = id;
     tex->width = w;
