@@ -75,9 +75,9 @@ s32 fur_windowDoShit(const char* title, v2 dims) {
         lasttime = glfwGetTime();
 
         game.update(delta);
-        game.render();
-
         game.scene->recupdate(delta);
+
+        game.render();
         game.scene->recrender();
 
         #ifdef FUR_EDITOR

@@ -25,10 +25,13 @@ public:
     }
 
     void render() {
+        // WHAT THE FUUUUUUCCCCKKKKKK AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         if (rstate)
             fur_render_rect(rstate, targ, /*tex,*/ parent->transf, 0,0,1,1, /*sample.x,sample.y,sample.z,sample.w,*/ col.x,col.y,col.z,col.w);
         else
             printf("no rstate?\n");
+
+        printf("%p, %p, %p, %d,%d,%d,%d, %f,%f,%f,%f\n", rstate, targ, parent->transf, 0,0,1,1, col.x,col.y,col.z,col.w);
     }
 };
 
