@@ -43,7 +43,7 @@ namespace fur {
 
             glfwSwapInterval(0);
 
-            fur::load_gl();
+            fur_gl_load();
 
             render = new fur::Render();
         }
