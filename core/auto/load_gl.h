@@ -7,10 +7,6 @@
 
 #include <core/macros.h>
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <GL/gl.h>
 
 #ifdef _WIN32
@@ -18,6 +14,8 @@ extern "C" {
 #define APIENTRYP APIENTRY *
 #include <GL/glext.h>
 #endif
+
+namespace fur {
 
 #define FUNC(name, ret_type, ...)                       \
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \
@@ -76,8 +74,5 @@ FUNC(glRenderbufferStorage, void, GLenum target, GLenum internalformat, GLsizei 
 FUNC(glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
 FUNC(glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers);
 
-#ifdef __cplusplus
-}
-#endif
 
 #endif
