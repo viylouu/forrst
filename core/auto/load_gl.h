@@ -9,6 +9,10 @@
 
 #include <GL/gl.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef _WIN32
 #include <windows.h>
 #define APIENTRYP APIENTRY *
@@ -74,5 +78,9 @@ FUNC(glRenderbufferStorage, void, GLenum target, GLenum internalformat, GLsizei 
 FUNC(glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer);
 FUNC(glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
