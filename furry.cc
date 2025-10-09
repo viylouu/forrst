@@ -5,13 +5,6 @@
 #include <core/auto/load_gl.h>
 #include <core/render.hh>
 
-void fur_cb_size(GLFWwindow* window, s32 width, s32 height) {
-    
-}
-
-void* fur_init(const char* title, s32 width, s32 height) {
-   }
-
 char fur_shouldClose(void* state) {
     GLFWwindow* window = (GLFWwindow*)state;
     return glfwWindowShouldClose(window);
