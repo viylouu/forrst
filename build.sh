@@ -126,11 +126,10 @@ echo -e "\n]" >> "$OUT"
 echo -e "COMPILING: ${FILES_C[@]} ${FILES_CC[@]}\n"
 
 OBJ_DIR="build/obj"
-mkdir -p "$OBJ_DIR"
 OBJS=()
 
 rm -rf build/obj/
-mkdir build/obj
+mkdir -p build/obj
 
 max_jobs=$(nproc)  # use number of CPU cores
 
@@ -140,7 +139,11 @@ compile_file() {
     local flags="$3"
     
     obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
-    "${compiler[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+    if [[ $file == *.c ]]; then
+        "${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+    else
+        "${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+    fi 
     echo "$obj" >> "$OBJ_DIR/objs.tmp"
 }
 
@@ -161,7 +164,7 @@ done
 
 wait
 
-mapfile -t OBJS < "objs.tmp"
+mapfile -t OBJS < "$OBJ_DIR/objs.tmp"
 
 rm -f objs.tmp
 
