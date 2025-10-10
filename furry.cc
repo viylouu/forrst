@@ -4,6 +4,7 @@
 #include <core/auto/load_gl.h>
 #include <core/render.hh>
 #include <core/text.hh>
+#include <core/editor/editor.hh>
 
 namespace fur {
     void State::init() {
@@ -66,75 +67,5 @@ namespace fur {
 
     b8   State::shouldClose() { return glfwWindowShouldClose(window); }
     void State::poll() { glfwPollEvents(); }
-    void State::swapBuffer() { glfwSwapBuffers(window); }
-
-    /*
-     *
-     */
-
-    template<typename Tprogram>
-    s32 windowDoShit(const char* title, v2 dims) {
-        State* st = new State();
-        st->glfwSetPtr(st);
-
-        glViewport(0,0,dims.x,dims.y);
-
-#ifdef _WIN32
-        glfwSetWindowSize((GLFWwindow*)state, dims.x+1,dims.y+1);
-        glfwSetWindowSize((GLFWwindow*)state, dims.x,dims.y);
-#endif
-
-        #ifdef FUR_EDITOR
-        b8 editor = 1;
-        b8 prevKey = 0;
-        void* estate = fur_editor_init();
-        #endif
-
-        Tprogram* game = new Tprogram(st);
-
-        game->scene = new Node();
-        game->scene->name = (char*)"scene";
-
-        f32 lasttime = glfwGetTime();
-
-        while (!st->shouldClose()) {
-            st->poll();
-
-            st->time = glfwGetTime();
-            st->delta = st->time - lasttime;
-            lasttime = glfwGetTime();
-
-            game->update(st->delta);
-            game->scene->recupdate(st->delta);
-
-            game->render();
-            game->scene->recrender();
-
-            #ifdef FUR_EDITOR
-            b8 curKey = glfwGetKey((GLFWwindow*)state, GLFW_KEY_F1);
-            if (curKey == GLFW_PRESS && prevKey == GLFW_RELEASE)
-                editor = !editor;
-            prevKey = curKey;
-
-            if(editor)
-                fur_editor(estate, state, rstate, game.scene);
-            #endif
-
-            st->render->flush();
-
-            st->swapBuffer();
-        }
-
-        delete game->scene;
-        delete game;
-
-        #ifdef FST_EDITOR
-        fur_editor_end(estate);
-        #endif
-
-        delete st;
-        return 0;
-    }
-
-    template s32 windowDoShit<Program>(const char* title, v2 dims);
+    void State::swapBuffer() { glfwSwapBuffers(window); }   
 }

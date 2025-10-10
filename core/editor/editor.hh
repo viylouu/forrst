@@ -2,13 +2,24 @@
 #define FUR_EDITOR_HH
 
 #include <core/node.hh>
+#include <core/render.hh>
+#include <core/text.hh>
 
 namespace fur {
-    namespace editor {
-        void* init();
-        void  end(void* mstate);
-        void  main(void* mstate, void* gstate, void* rstate, Node* scene);
-    }
+    class Editor {
+    private:
+        Render* render;
+        Text* text;
+
+        Font* font;
+
+        s32 width, height;
+    public:
+        Editor(Render* render, Text* text);
+        ~Editor();
+        s32 hierarchy(Node* node, mat4 ident, s32 y, s32 indent);
+        void main(s32 width, s32 height, Node* scene);
+    };
 }
 
 #endif

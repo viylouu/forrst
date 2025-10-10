@@ -1,17 +1,15 @@
 #define FUR_EDITOR
 #include <furry.hh>
 
-#include <cstdlib>
-
-class Game : public FURgame {
+class Game : public fur::Program {
 public:
-	const fur::State* st;
-
-    Game(const fur::State* state) { st = state; }
+    Game(fur::State* state) : Program(state) {}
 
     void render() {
-	    st->render->clear(rstate, NULL, .2,.4,.3,1);       
+	    st->render->clear(v4{.2,.4,.3,1});       
     }
 };
 
-FUR_MAIN(Game);
+int main() {
+    fur::windowDoShit<Game>("helo", v2{800,600});
+}

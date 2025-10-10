@@ -79,16 +79,16 @@ namespace fur {
         }
 
         void recrender() {
-            fur_mat4_scale(&transf, scale.x,scale.y,scale.z);
+            mat4_scale(&transf, scale.x,scale.y,scale.z);
             mat4 a;
-            fur_mat4_rotateX(&a, rot.x);
-            fur_mat4_multiply(&transf, transf, a);
-            fur_mat4_rotateY(&a, rot.y);
-            fur_mat4_multiply(&transf, transf, a);
-            fur_mat4_rotateZ(&a, rot.z);
-            fur_mat4_multiply(&transf, transf, a);
-            fur_mat4_translate(&a, pos.x,pos.y,pos.z);
-            fur_mat4_multiply(&transf, transf, a);
+            mat4_rotateX(&a, rot.x);
+            mat4_multiply(&transf, transf, a);
+            mat4_rotateY(&a, rot.y);
+            mat4_multiply(&transf, transf, a);
+            mat4_rotateZ(&a, rot.z);
+            mat4_multiply(&transf, transf, a);
+            mat4_translate(&a, pos.x,pos.y,pos.z);
+            mat4_multiply(&transf, transf, a);
 
             for (s32 i = 0; i < (s32)components.size(); ++i)
                 components[i]->render();
