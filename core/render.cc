@@ -6,13 +6,9 @@
 #include <core/shader.hh>
 #include <core/mat4.h>
 #include <core/texture.hh>
-#include <vector>
 
 namespace fur {           
     /* table of contents:
-     **** [GL STRUCTS]
-     **** **** [gl struct 2d]
-     **** **** [gl struct spritestack]
      **** [GL STRUCT FUNCS]
      **** **** [gl struct 2d funcs]
      **** **** [gl struct spritestack funcs]
@@ -24,137 +20,68 @@ namespace fur {
      */
 
     /*
-     * [GL STRUCTS]
-     *
-     * this is the data for opengl to use
-     * very silly
-     */
-
-
-    /* [gl struct 2d] */
-#define FUR_r2dGeneric() \
-        Shader* shader; u32 bo, tbo
-#define FUR_r2dGenericLoc() \
-        s32 inst_size; s32 insts; s32 proj
-
-    struct r2dRect {
-        FUR_r2dGeneric();
-        struct {
-            FUR_r2dGenericLoc();
-        } loc;
-    };
-
-    struct r2dTex {
-        FUR_r2dGeneric();
-        struct {
-            FUR_r2dGenericLoc();
-            s32 tex;
-        } loc;
-    };
-
-    /* [gl struct spritestack] */
-#define FUR_rSsGeneric() \
-        Shader* shad; u32 bo, tbo
-    // if this is too big... idgaf no it isnt
-#define FUR_rSsGenericLoc() \
-        s32 inst_size, insts, proj, cam_rot, cam_pos, cam_z, cam_tilt, cam_scale
-
-    struct rSsCube {
-        FUR_rSsGeneric();
-        struct {
-            FUR_rSsGenericLoc();
-        } loc;
-    };
-
-    struct rSsModel {
-        FUR_rSsGeneric();
-        struct {
-            FUR_rSsGenericLoc();
-            s32 tex;
-        } loc;
-    };
-
-    /*
-     * [some shi]
-     */
-
-    struct InstanceData {
-        f32 x,y,w,h;
-        f32 r,g,b,a;
-        f32 sx,sy,sw,sh;
-        mat4 transf;
-    };
-
-    enum BatchType {
-        BATCH_2D_RECT,
-        BATCH_2D_TEX,
-        BATCH_SS_CUBE,
-        BATCH_SS_MODEL
-    };
-
-    /*
      * [GL STRUCT FUNCS]
      */
 
     /* [gl struct 2d funcs] */
 
-#define FUR_r2dInitGeneric(state,vert,frag)                                              \
-        state->shader = shader::load(vert,frag);                                         \
-                                                                                         \
-        glGenBuffers(1, &state->bo);                                                     \
-        glBindBuffer(GL_TEXTURE_BUFFER, state->bo);                                      \
-        glBufferData(GL_TEXTURE_BUFFER, FUR_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);     \
-                                                                                         \
-        glGenTextures(1, &state->tbo);                                                   \
-        glBindTexture(GL_TEXTURE_BUFFER, state->bo);                                     \
-        glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state->bo);                           \
-                                                                                         \
-        state->loc.insts     = glGetUniformLocation(state->shader->shader, "insts");     \
-        state->loc.inst_size = glGetUniformLocation(state->shader->shader, "inst_size"); \
-        state->loc.proj      = glGetUniformLocation(state->shader->shader, "proj")
-#define FUR_r2dEndGeneric(state)          \
-        shader::unload(state->shader);    \
-        glDeleteTextures(1, &state->tbo); \
-        glDeleteBuffers(1, &state->bo)
-#define FUR_r2dDrawGeneric(obj) do {                                                                                \
-        glUseProgram(obj->shader->shader);                                                                          \
+#define FUR_rSdInitGeneric(state,vert,frag)                                                       \
+        state.generic.shader = shader::load(vert,frag);                                                  \
+                                                                                                  \
+        glGenBuffers(1, &state.generic.bo);                                                     \
+        glBindBuffer(GL_TEXTURE_BUFFER, state.generic.bo);                                      \
+        glBufferData(GL_TEXTURE_BUFFER, FUR_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);              \
+                                                                                                  \
+        glGenTextures(1, &state.generic.tbo);                                                   \
+        glBindTexture(GL_TEXTURE_BUFFER, state.generic.bo);                                     \
+        glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state.generic.bo);                           \
+                                                                                                  \
+        state.generic.loc.insts     = glGetUniformLocation(state.generic.shader->shader, "insts");     \
+        state.generic.loc.inst_size = glGetUniformLocation(state.generic.shader->shader, "inst_size"); \
+        state.generic.loc.proj      = glGetUniformLocation(state.generic.shader->shader, "proj")
+#define FUR_rSdEndGeneric(state)          \
+        shader::unload(state.generic.shader);    \
+        glDeleteTextures(1, &state.generic.tbo); \
+        glDeleteBuffers(1, &state.generic.bo)
+#define FUR_rSdDrawGeneric(obj) do {                                                                                \
+        glUseProgram(obj.generic.shader->shader);                                                                          \
         glBindVertexArray(vao);                                                                                     \
                                                                                                                     \
-        glUniformMatrix4fv(obj->loc.proj, 1,0, proj2d);                                                             \
+        glUniformMatrix4fv(obj.generic.loc.proj, 1,0, proj2d);                                                             \
                                                                                                                     \
-        glBindBuffer(GL_TEXTURE_BUFFER, obj->bo);                                                                   \
+        glBindBuffer(GL_TEXTURE_BUFFER, obj.generic.bo);                                                                   \
         glBufferSubData(GL_TEXTURE_BUFFER, 0, batch.size() * sizeof(InstanceData), batch.data());                   \
                                                                                                                     \
         glActiveTexture(GL_TEXTURE0);                                                                               \
-        glBindTexture(GL_TEXTURE_BUFFER, obj->tbo);                                                                 \
-        glUniform1i(obj->loc.insts, 0);                                                                             \
+        glBindTexture(GL_TEXTURE_BUFFER, obj.generic.tbo);                                                                 \
+        glUniform1i(obj.generic.loc.insts, 0);                                                                             \
                                                                                                                     \
-        glUniform1i(obj->loc.inst_size, sizeof(InstanceData) / 16);                                                 \
+        glUniform1i(obj.generic.loc.inst_size, sizeof(InstanceData) / 16);                                                 \
     } while(0)
 
 
-    void Render::r2dRect_init() {
-        FUR_r2dInitGeneric(sdRect, "data/eng/rect.vert", "data/eng/rect.frag");
-    } void Render::r2dRect_end() {
-        FUR_r2dEndGeneric(sdRect);
-    } void Render::r2dRect_draw() {
-        FUR_r2dDrawGeneric(sdRect);
+    void Render::rSdRect_init() {
+        FUR_rSdInitGeneric(sdRect, "data/eng/rect.vert", "data/eng/rect.frag");
+    } void Render::rSdRect_end() {
+        FUR_rSdEndGeneric(sdRect);
+    } void Render::rSdRect_draw() {
+        FUR_rSdDrawGeneric(sdRect);
         
-        glDrawArraysInstanced(GL_TRIANGLES, 0,6, sdRect->batch.size());
+        glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch.size());
     }
 
-    void Render::r2dTex_init() {
-        FUR_r2dInitGeneric(sdTex, "data/eng/tex.vert", "data/eng/tex.frag");
+    void Render::rSdTex_init() {
+        FUR_rSdInitGeneric(sdTex, "data/eng/tex.vert", "data/eng/tex.frag");
 
-        sdTex->loc.tex = glGetUniformLocation(sdTex->shader->shader, "tex");
-    } void Render::r2dTex_end() {
-        FUR_r2dEndGeneric(sdTex);
-    } void Render::r2dTex_draw() {
-        FUR_r2dDrawGeneric(sdTex);
+        sdTex.loc.tex = glGetUniformLocation(sdTex.generic.shader->shader, "tex");
+    } void Render::rSdTex_end() {
+        FUR_rSdEndGeneric(sdTex);
+    } void Render::rSdTex_draw() {
+        FUR_rSdDrawGeneric(sdTex);
 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, batch_tex->glid);
-        glUniform1i(sdTex->loc.tex, 1);
+        glUniform1i(sdTex.loc.tex, 1);
 
         glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch.size());
     }
@@ -186,19 +113,19 @@ namespace fur {
         nil = texture::load("data/eng/nil.png");
         ERROR_IF(!nil, "failed to load nil texture!\n");
 
-        fur_r2dRect_init(&sdRect);
-        fur_r2dTex_init(&sdTex);
+        rSdRect_init();
+        rSdTex_init();
 
-        fur_rSsCube_init(&ssCube);
-        fur_rSsModel_init(&ssModel);
+        rSsCube_init();
+        rSsModel_init();
     }
 
     Render::~Render() {
-        fur_r2dRect_end(&sdRect);
-        fur_r2dTex_end(&sdTex);
+        rSdRect_end();
+        rSdTex_end();
 
-        fur_rSsCube_end(&ssCube);
-        fur_rSsModel_end(&ssModel);
+        rSsCube_end();
+        rSsModel_end();
 
         glDeleteVertexArrays(1, &vao);
     }
@@ -223,9 +150,9 @@ namespace fur {
 
         switch(batch_type) {
             case BatchType::BATCH_2D_RECT:
-                r2dRect_draw(); break;
+                rSdRect_draw(); break;
             case BatchType::BATCH_2D_TEX:
-                r2dTex_draw(); break;
+                rSdTex_draw(); break;
             case BatchType::BATCH_SS_CUBE:
                 rSsCube_draw(); break;
             case BatchType::BATCH_SS_MODEL:
