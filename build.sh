@@ -122,13 +122,12 @@ done
 
 echo -e "\n]" >> "$OUT"
 
-
 echo -e "COMPILING: ${FILES_C[@]} ${FILES_CC[@]}\n"
 
 OBJ_DIR="build/obj"
 OBJS=()
 
-rm -rf build/obj/
+#rm -rf build/obj/
 mkdir -p build/obj
 
 max_jobs=$(nproc) 
@@ -139,12 +138,14 @@ compile_file() {
     local flags="$3"
     
     obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
+    echo "$obj" >> "$OBJ_DIR/objs.tmp"
+    [[ -f "$obj" && "$obj" -nt "$file" ]] && return
+
     if [[ $file == *.c ]]; then
         "${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
     else
         "${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
     fi 
-    echo "$obj" >> "$OBJ_DIR/objs.tmp"
 }
 
 > "$OBJ_DIR/objs.tmp"  # clear temp file
@@ -169,14 +170,7 @@ mapfile -t OBJS < "$OBJ_DIR/objs.tmp"
 rm -f objs.tmp
 
 if $BUILD_WINDOWS; then
-    #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.exe
-    #if [[ "$OSTYPE" == "linux-gnu" ]]; then
-    #    wine ./build/out.exe
-    #else
-    #    ./build/out.exe
-    #fi
-    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
+    "${COMPILER_CC[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
 else
-    #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.game && ./build/out.game
-    "${COMPILER_CC[@]}" "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
+    "${COMPILER_CC[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
 fi
