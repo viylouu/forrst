@@ -25,8 +25,6 @@ extern \"C\" {
 #include <GL/glext.h>
 #endif
 
-namespace fur {
-
 #define FUNC(name, ret_type, ...)                       \\
     typedef ret_type (APIENTRYP name##_t)(__VA_ARGS__); \\
     extern name##_t name

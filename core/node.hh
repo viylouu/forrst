@@ -6,94 +6,96 @@
 #include <stdio.h>
 #include <core/mat4.h>
 
-class FURnode;
+namespace fur {
+    class Node;
 
-typedef enum {
-    FUR_TYPEOF_STRING,
-    FUR_TYPEOF_REF,
-    FUR_TYPEOF_VECTOR,
-    FUR_TYPEOF_INT,
-    FUR_TYPEOF_FLOAT,
-    FUR_TYPEOF_VEC2,
-    FUR_TYPEOF_VEC3,
-    FUR_TYPEOF_VEC4
-} FURtype;
+    enum class Type : u8 {
+        STRING,
+        REF,
+        VECTOR,
+        INT,
+        FLOAT,
+        VEC2,
+        VEC3,
+        VEC4
+    };
 
-typedef struct {
-    void* var;
-    const char* name;
-    FURtype type;
-} FURvarInfo;
+    struct VarInfo {
+        void* var;
+        const char* name;
+        Type type;
+    };
 
-class FURcomponent {
-public:
-    char* title;
-    std::vector<FURvarInfo> publics;
+    class Component {
+    public:
+        char* title;
+        std::vector<VarInfo> publics;
 
-    FURcomponent() { title = "untitled"; }
+        Component() { title = "untitled"; }
 
-    virtual void init()            {}
-    FURnode* parent;
-    virtual void update(f32 delta) {}
-    virtual void render()          {}
-    virtual ~FURcomponent()        {}
-};
+        virtual void init()            {}
+        Node* parent;
+        virtual void update(f32 delta) {}
+        virtual void render()          {}
+        virtual ~Component()           {}
+    };
 
-class FURnode {
-public:
-    char* name;
+    class Node {
+    public:
+        char* name;
 
-    FURnode* parent;
-    std::vector<FURnode*> children;
-    std::vector<FURcomponent*> components;
+        Node* parent;
+        std::vector<Node*> children;
+        std::vector<Component*> components;
 
-    v3 pos, scale, rot;
-    mat4 transf;
+        v3 pos, scale, rot;
+        mat4 transf;
 
-    FURnode() : parent(NULL) { name = "untitled"; }
-    virtual ~FURnode() {
-        for (s32 i = 0; i < (s32)children.size(); ++i)
-            delete children[i];
-        for (s32 i = 0; i < (s32)components.size(); ++i)
-            delete components[i];
+        Node() : parent(NULL) { name = "untitled"; }
+        virtual ~Node() {
+            for (s32 i = 0; i < (s32)children.size(); ++i)
+                delete children[i];
+            for (s32 i = 0; i < (s32)components.size(); ++i)
+                delete components[i];
 
-    }
+        }
 
-    void addChild(FURnode* child) { 
-        child->parent = this;
-        children.push_back(child); 
-    }
+        void addChild(Node* child) { 
+            child->parent = this;
+            children.push_back(child); 
+        }
 
-    void addComponent(FURcomponent* component) {
-        component->parent = this;
-        components.push_back(component);
-        component->init();
-    }
+        void addComponent(Component* component) {
+            component->parent = this;
+            components.push_back(component);
+            component->init();
+        }
 
-    void recupdate(f32 delta) {
-        for (s32 i = 0; i < (s32)components.size(); ++i)
-            components[i]->update(delta);
-        for (s32 i = 0; i < (s32)children.size(); ++i)
-            children[i]->recupdate(delta);
-    }
+        void recupdate(f32 delta) {
+            for (s32 i = 0; i < (s32)components.size(); ++i)
+                components[i]->update(delta);
+            for (s32 i = 0; i < (s32)children.size(); ++i)
+                children[i]->recupdate(delta);
+        }
 
-    void recrender() {
-        fur_mat4_scale(&transf, scale.x,scale.y,scale.z);
-        mat4 a;
-        fur_mat4_rotateX(&a, rot.x);
-        fur_mat4_multiply(&transf, transf, a);
-        fur_mat4_rotateY(&a, rot.y);
-        fur_mat4_multiply(&transf, transf, a);
-        fur_mat4_rotateZ(&a, rot.z);
-        fur_mat4_multiply(&transf, transf, a);
-        fur_mat4_translate(&a, pos.x,pos.y,pos.z);
-        fur_mat4_multiply(&transf, transf, a);
+        void recrender() {
+            fur_mat4_scale(&transf, scale.x,scale.y,scale.z);
+            mat4 a;
+            fur_mat4_rotateX(&a, rot.x);
+            fur_mat4_multiply(&transf, transf, a);
+            fur_mat4_rotateY(&a, rot.y);
+            fur_mat4_multiply(&transf, transf, a);
+            fur_mat4_rotateZ(&a, rot.z);
+            fur_mat4_multiply(&transf, transf, a);
+            fur_mat4_translate(&a, pos.x,pos.y,pos.z);
+            fur_mat4_multiply(&transf, transf, a);
 
-        for (s32 i = 0; i < (s32)components.size(); ++i)
-            components[i]->render();
-        for (s32 i = 0; i < (s32)children.size(); ++i)
-            children[i]->recrender();
-    }
-};
+            for (s32 i = 0; i < (s32)components.size(); ++i)
+                components[i]->render();
+            for (s32 i = 0; i < (s32)children.size(); ++i)
+                children[i]->recrender();
+        }
+    };
+}
 
 #endif

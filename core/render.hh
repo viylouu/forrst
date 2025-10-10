@@ -2,13 +2,14 @@
 #define FUR_RENDER_HH
 
 #include <core/macros.h>
-#include <core/shader.h>
-#include <core/texture.h>
+#include <core/shader.hh>
+#include <core/texture.hh>
 #include <core/mat4.h>
 
 namespace fur {
     class Render;
     class Render {
+public:
         /* table of contents:
          **** [CONSTS]
          **** [GL STRUCTS]

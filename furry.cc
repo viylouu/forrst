@@ -26,7 +26,7 @@ namespace fur {
 
         fur_gl_load();
 
-        render = new fur::Render();
+        render = new Render();
     }
 
     void State::end() {
@@ -75,13 +75,6 @@ namespace fur {
     s32 windowDoShit(const char* title, v2 dims) {
         State* st = new State();
         st->glfwSetPtr(st);
-
-        //void* state = fur::init(title, dims.x,dims.y);
-        //fur_gl_load();
-        //void* rstate = fur_render_init();
-
-        //glfwSetWindowUserPointer((GLFWwindow*)state, rstate);
-        //glfwSetFramebufferSizeCallback((GLFWwindow*)state, fur::cb_size);
 
         glViewport(0,0,dims.x,dims.y);
 

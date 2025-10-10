@@ -3,8 +3,12 @@
 
 #include <core/node.hh>
 
-void* fur_editor_init();
-void fur_editor_end(void* mstate);
-void fur_editor(void* mstate, void* gstate, void* rstate, FURnode* scene);
+namespace fur {
+    namespace editor {
+        void* init();
+        void  end(void* mstate);
+        void  main(void* mstate, void* gstate, void* rstate, Node* scene);
+    }
+}
 
 #endif
