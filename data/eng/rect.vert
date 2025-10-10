@@ -29,5 +29,5 @@ void main() {
         texelFetch(insts,base+6)
     );
 
-    gl_Position = proj * transform * vec4(vert * size + pos, 0,1);
+    gl_Position = /*proj */ transform * vec4(vert * size + pos, 0,1);
 }
