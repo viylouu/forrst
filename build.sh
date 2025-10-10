@@ -127,7 +127,7 @@ echo -e "COMPILING: ${FILES_C[@]} ${FILES_CC[@]}\n"
 OBJ_DIR="build/obj"
 OBJS=()
 
-#rm -rf build/obj/
+[[ $BUILD_TEST == false ]] && rm -rf build/obj/
 mkdir -p build/obj
 
 max_jobs=$(nproc) 
