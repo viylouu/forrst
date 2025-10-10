@@ -2,3 +2,7 @@
 /build/
 /compile_commands.json
 *.trace
+/core/auto/*.c
+/core/auto/*.cc
+/core/auto/*.h
+/core/auto/*.hh
