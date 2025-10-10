@@ -1,12 +1,12 @@
 mkdir -p build
 
-./forrst/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
+./furry/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
 
 COMPILER=("zig" "cc")
 COMPILER_CC=("g++")
 CFLAGS="-std=c99"
 CCFLAGS="-std=c++11"
-FLAGS_COMP="-Wno-write-strings -Wno-narrowing -Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
+FLAGS_COMP="-Wno-write-strings -Wno-narrowing -Wall -Ifurry -I. -Ideps -Ifurry/deps -isystem"
 FLAGS_LINK=""
 CFLAGS_COMP=""
 
@@ -105,7 +105,7 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
         STD="-std=c++11"
     fi
 
-    CMD="$COMP $STD -Iforrst -I. -Ideps -Iforrst/deps -c \\\"$file\\\""
+    CMD="$COMP $STD -Ifurry -I. -Ideps -Ifurry/deps -c \\\"$file\\\""
 
     if [ $FIRST -eq 1 ]; then
         FIRST=0
