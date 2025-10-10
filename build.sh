@@ -5,7 +5,7 @@ mkdir -p build
 COMPILER=("zig" "cc")
 COMPILER_CC=("g++")
 CFLAGS="-std=c99"
-CCFLAGS="-std=gnu++98"
+CCFLAGS="-std=c++11"
 FLAGS_COMP="-Wno-write-strings -Wno-narrowing -Wall -Iforrst -I. -Ideps -Iforrst/deps -isystem"
 FLAGS_LINK=""
 CFLAGS_COMP=""
@@ -103,7 +103,7 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
         STD="-std=c99"
     else
         COMP="g++"
-        STD="-std=gnu++98"
+        STD="-std=c++11"
     fi
 
     CMD="$COMP $STD -Iforrst -I. -Ideps -Iforrst/deps -c \\\"$file\\\""
