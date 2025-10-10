@@ -132,50 +132,31 @@ OBJS=()
 rm -rf build/obj/
 mkdir build/obj
 
-for file in "${FILES_C[@]}"; do
-    (
-        if [[ ! $file == src/* ]]; then
-            obj="$OBJ_DIR/$(basename "$file" .c).o"
-            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-            #OBJS+=("$obj")
-            echo "$obj" >> objs.tmp
-        fi
-    ) &
-done
+max_jobs=$(nproc)  # use number of CPU cores
 
-for file in "${FILES_CC[@]}"; do
-    (
-        if [[ ! $file == src/* ]]; then
-            obj="$OBJ_DIR/$(basename "$file" .cc).o"
-            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-            #OBJS+=("$obj")
-            echo "$obj" >> objs.tmp
-        fi
-    ) &
-done
+compile_file() {
+    local file="$1"
+    local compiler=("${!2}")  # pass array name
+    local flags="$3"
+    
+    obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
+    "${compiler[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+    echo "$obj" >> "$OBJ_DIR/objs.tmp"
+}
 
-wait
+> "$OBJ_DIR/objs.tmp"  # clear temp file
 
-for file in "${FILES_C[@]}"; do
-    (
-        if [[ $file == src/* ]]; then
-            obj="$OBJ_DIR/$(basename "$file" .c).o"
-            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-            #OBJS+=("$obj")
-            echo "$obj" >> objs.tmp
-        fi
-    ) &
-done
+for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
+    compiler_arr=FILES_C[@]
+    flags="$CFLAGS $FLAGS_COMP $CFLAGS_COMP"
+    [[ $file == *.cc ]] && { compiler_arr=FILES_CC[@]; flags="$CCFLAGS $FLAGS_COMP"; }
 
-for file in "${FILES_CC[@]}"; do
-    (
-        if [[ $file == src/* ]]; then
-            obj="$OBJ_DIR/$(basename "$file" .cc).o"
-            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-            #OBJS+=("$obj")
-            echo "$obj" >> objs.tmp
-        fi
-    ) &
+    compile_file "$file" compiler_arr "$flags" &
+
+    # limit parallel jobs
+    while [ $(jobs -r | wc -l) -ge $max_jobs ]; do
+        sleep 0.1
+    done
 done
 
 wait
