@@ -64,6 +64,8 @@ private:
 
         s32 width, height;
 
+        mat4 ident;
+
         std::vector<InstanceData> batch;
         BatchType batch_type;
         Texture* batch_tex;

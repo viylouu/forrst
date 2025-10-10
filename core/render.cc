@@ -110,6 +110,8 @@ namespace fur {
 
         glGenVertexArrays(1, &vao);
 
+        mat4_identity(&ident);
+
         nil = texture::load("data/eng/nil.png");
         ERROR_IF(!nil, "failed to load nil texture!\n");
 
@@ -179,7 +181,10 @@ namespace fur {
 
         InstanceData inst;
 
-        std::copy(transf,transf+16,inst.transf);
+        if (transf)
+            std::copy(transf,transf+16,inst.transf);
+        else
+            std::copy(ident,ident+16,inst.transf);
 
         inst.x = pos.x;
         inst.y = pos.y;
@@ -212,7 +217,10 @@ namespace fur {
 
         InstanceData inst;
 
-        std::copy(transf,transf+16,inst.transf);
+        if (transf)
+            std::copy(transf,transf+16,inst.transf);
+        else
+            std::copy(ident,ident+16,inst.transf);
 
         inst.x = pos.x;
         inst.y = pos.y;
