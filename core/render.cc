@@ -120,6 +120,8 @@ namespace fur {
 
         rSsCube_init();
         rSsModel_init();
+
+        mat4_ortho(&proj2d, 0,800,600,0,-1,1);
     }
 
     Render::~Render() {
@@ -139,6 +141,7 @@ namespace fur {
     void Render::resize(s32 width, s32 height) {
         this->width = width;
         this->height = height;
+        mat4_ortho(&proj2d, 0,width,height,0,-1,1);
     }
 
     /*

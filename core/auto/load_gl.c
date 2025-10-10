@@ -22,7 +22,7 @@
     #define LOAD(name)                                                              \
                 do {                                                                \
                     if (fur_use_wayland) name = (name##_t)eglGetProcAddress(#name); \
-                    else name = (name##_t)glXGetProcAddress((const GLubyte*)name);  \
+                    else name = (name##_t)glXGetProcAddress((const GLubyte*)#name); \
                     if (!name) { printf("failed to load %s!\n", #name); return; } \
                 } while(0)
 #endif

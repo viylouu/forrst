@@ -41,3 +41,5 @@ glBindRenderbuffer, void, GLenum target, GLuint renderbuffer
 glRenderbufferStorage, void, GLenum target, GLenum internalformat, GLsizei width, GLsizei height
 glFramebufferRenderbuffer, void, GLenum target, GLenum attachment, GLenum renderbuffertarget, GLuint renderbuffer
 glDeleteRenderbuffers, void, GLsizei n, const GLuint* renderbuffers
+
+glGetVertexAttribfv, void, GLuint index, GLenum pname, GLfloat* params
