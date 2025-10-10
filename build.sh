@@ -92,7 +92,6 @@ for dir in "${SRC_DIRS[@]}"; do
     done < <(find "$dir" -type f ! -path "*/examples/*")
 done
 
-
 OUT="compile_commands.json"
 echo "[" > "$OUT"
 
@@ -134,16 +133,56 @@ rm -rf build/obj/
 mkdir build/obj
 
 for file in "${FILES_C[@]}"; do
-    obj="$OBJ_DIR/$(basename "$file" .c).o"
-    "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-    OBJS+=("$obj")
+    (
+        if [[ ! $file == src/* ]]; then
+            obj="$OBJ_DIR/$(basename "$file" .c).o"
+            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
+            #OBJS+=("$obj")
+            echo "$obj" >> objs.tmp
+        fi
+    ) &
 done
 
 for file in "${FILES_CC[@]}"; do
-    obj="$OBJ_DIR/$(basename "$file" .cc).o"
-    "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
-    OBJS+=("$obj")
+    (
+        if [[ ! $file == src/* ]]; then
+            obj="$OBJ_DIR/$(basename "$file" .cc).o"
+            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
+            #OBJS+=("$obj")
+            echo "$obj" >> objs.tmp
+        fi
+    ) &
 done
+
+wait
+
+for file in "${FILES_C[@]}"; do
+    (
+        if [[ $file == src/* ]]; then
+            obj="$OBJ_DIR/$(basename "$file" .c).o"
+            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
+            #OBJS+=("$obj")
+            echo "$obj" >> objs.tmp
+        fi
+    ) &
+done
+
+for file in "${FILES_CC[@]}"; do
+    (
+        if [[ $file == src/* ]]; then
+            obj="$OBJ_DIR/$(basename "$file" .cc).o"
+            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP -fno-sanitize=undefined -c "$file" -o "$obj"
+            #OBJS+=("$obj")
+            echo "$obj" >> objs.tmp
+        fi
+    ) &
+done
+
+wait
+
+mapfile -t OBJS < "objs.tmp"
+
+rm -f objs.tmp
 
 if $BUILD_WINDOWS; then
     #"${COMPILER[@]}" "${FILES[@]}" $CFLAGS -o build/out.exe
