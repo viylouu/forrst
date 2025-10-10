@@ -44,6 +44,15 @@ typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
     } \
 } while(0)
 
+#define RETURN_IF(check, val, ...) do {                     \
+        if((check)) {                                       \
+        printf("ERORR! \"%s\" [%d]\n", __FILE__,__LINE__);  \
+        printf(__VA_ARGS__);                                \
+        return val;                                         \
+    } \
+} while(0)
+
+
 #define MAYBE_CALL(func, ...) \
     if ((func)) func(__VA_ARGS__)
 

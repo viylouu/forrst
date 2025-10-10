@@ -38,7 +38,7 @@ namespace fur {
         Texture* loadFromData(u8* data, s64 size) {
             s32 w,h,c;
             u8* texdata = stbi_load_from_memory(data, size, &w,&h,&c, 4);
-            ERROR_IF(!texdata, "failed to load texture!\n");
+            RETURN_IF(!texdata, (stbi_image_free(texdata), (Texture*)NULL), "failed to load texture!\n");
 
             u32 id;
             glGenTextures(1, &id);
@@ -65,14 +65,15 @@ namespace fur {
 
         char* loadData(const char* path, s64* outsize) {
             FILE* file = fopen(path, "rb");
-            if (!file) { printf("failed to load texture at \"%s\"!\n", path); exit(1); }
+            // mm yes very clean
+            RETURN_IF(!file, (fclose(file), (char*)NULL), "failed to load texture at \"%s\"!\n", path);
 
             fseek(file, 0, SEEK_END);
             s64 size = ftell(file);     
             rewind(file);
 
             char* buffer = (char*)malloc(size);
-            ERROR_IF(!buffer, "failed to allocate size for the texture at \"%s\"!\n", path);
+            RETURN_IF(!buffer, (fclose(file), (char*)NULL), "failed to allocate size for the texture at \"%s\"!\n", path);
 
             fread(buffer, 1, size, file);
             fclose(file);
@@ -85,12 +86,12 @@ namespace fur {
         Texture* load(const char* path) {
             s64 size;
             char* buf = loadData(path, &size);
-            ERROR_IF(!buf, "failed to read file at \"%s\"!\n", path);
+            RETURN_IF(!buf, (free(buf), (Texture*)NULL), "failed to read file at \"%s\"!\n", path);
 
             Texture* tex = loadFromData((u8*)buf, size);
             free(buf);
 
-            ERROR_IF(!tex, "failed to load texture at \"%s\"!\n", path);
+            RETURN_IF(!tex, NULL, "failed to load texture at \"%s\"!\n", path);
 
             return tex;
         }

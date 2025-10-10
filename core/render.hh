@@ -37,11 +37,13 @@ private:
         rSsCube ssCube;
         rSsModel ssModel;
 
+        Texture* nil;
+
 private:
 
         /* [CONSTS] */
 #define FUR_MAX_BATCH_SIZE 8192
-#define FUR_MAX_BUFFER_SIZE FUR_MAX_BATCH_SIZE * sizeof(FURinstanceData)
+#define FUR_MAX_BUFFER_SIZE FUR_MAX_BATCH_SIZE * sizeof(InstanceData)
 
 
 #define FUR_genericInitEnd(name)        \

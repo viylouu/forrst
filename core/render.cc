@@ -117,15 +117,13 @@ namespace fur {
         glDeleteTextures(1, &state->tbo); \
         glDeleteBuffers(1, &state->bo)
 #define FUR_r2dDrawGeneric(obj) do {                                                                                \
-        FUR_useTarget(state->batch_targ);                                                                           \
-                                                                                                                    \
         glUseProgram(obj->shader->shader);                                                                          \
-        glBindVertexArray(state->vao);                                                                              \
+        glBindVertexArray(vao);                                                                                     \
                                                                                                                     \
-        glUniformMatrix4fv(obj->loc.proj, 1,0, state->proj2d);                                                      \
+        glUniformMatrix4fv(obj->loc.proj, 1,0, proj2d);                                                             \
                                                                                                                     \
         glBindBuffer(GL_TEXTURE_BUFFER, obj->bo);                                                                   \
-        glBufferSubData(GL_TEXTURE_BUFFER, 0, state->batch.size() * sizeof(TnstanceData), batch.data());            \
+        glBufferSubData(GL_TEXTURE_BUFFER, 0, batch.size() * sizeof(InstanceData), batch.data());                   \
                                                                                                                     \
         glActiveTexture(GL_TEXTURE0);                                                                               \
         glBindTexture(GL_TEXTURE_BUFFER, obj->tbo);                                                                 \
@@ -184,6 +182,9 @@ namespace fur {
         glDepthFunc(GL_LEQUAL);
 
         glGenVertexArrays(1, &vao);
+
+        nil = texture::load("data/eng/nil.png");
+        ERROR_IF(!nil, "failed to load nil texture!\n");
 
         fur_r2dRect_init(&sdRect);
         fur_r2dTex_init(&sdTex);
@@ -268,11 +269,18 @@ namespace fur {
     void Render::tex(Texture* tex, mat4 transf, v2 pos, v2 size, v4 sample, v4 col) {
         if (batch_type != BATCH_2D_TEX) flush();
         if (batch.size() >= FUR_MAX_BATCH_SIZE) flush();
-        if (batch_tex != tex) flush();
         //if (batch_targ != targ) flush();
 
+        if (tex == NULL) {
+            if (batch_tex != nil) flush();
+            batch_tex = nil;
+            printf("rendering a nil texture!\n");
+        } else {
+            if (batch_tex != tex) flush();
+            batch_tex = tex;
+        }
+
         batch_type = BATCH_2D_TEX;
-        batch_tex = tex;
         //state->batch_targ = targ;
 
         InstanceData inst;
