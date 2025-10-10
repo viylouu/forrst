@@ -131,7 +131,7 @@ OBJS=()
 rm -rf build/obj/
 mkdir -p build/obj
 
-max_jobs=$(nproc)  # use number of CPU cores
+max_jobs=$(nproc) 
 
 compile_file() {
     local file="$1"
