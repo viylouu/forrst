@@ -7,12 +7,14 @@
 #include <core/node.hh>
 #include <GLFW/glfw3.h>
 #include <core/editor/editor.hh>
+#include <core/text.hh>
 
 namespace fur {
     class State;
     class State {
     public:
-        const Render* render;
+        Render* render;
+        Text* text;
 
         f32 time;
         f32 delta;

@@ -5,16 +5,13 @@
 #include <core/shader.hh>
 #include <core/texture.hh>
 #include <core/mat4.h>
+#include <vector>
 
 namespace fur {
     class Render;
     class Render {
-public:
         /* table of contents:
          **** [CONSTS]
-         **** [GL STRUCTS]
-         **** **** [gl struct 2d]
-         **** **** [gl struct spritestack]
          **** [some shi]
          **** [STATE]
          **** [INIT/END]
@@ -22,9 +19,42 @@ public:
          **** [FUNCS]
          */
 
+private:
+        // shit ass garbage vao
+        u32 vao;
+
+        s32 width, height;
+
+        std::vector<InstanceData> batch;
+        BatchType batch_type;
+        Texture* batch_tex;
+
+        mat4 proj2d;
+
+        r2dRect sdRect;
+        r2dTex sdTex;
+
+        rSsCube ssCube;
+        rSsModel ssModel;
+
+private:
+
         /* [CONSTS] */
 #define FUR_MAX_BATCH_SIZE 8192
 #define FUR_MAX_BUFFER_SIZE FUR_MAX_BATCH_SIZE * sizeof(FURinstanceData)
+
+
+#define FUR_genericInitEnd(name)        \
+        void name##_init();             \
+        void name##_end();              \
+        void name##_draw();
+
+        FUR_genericInitEnd(r2dRect);
+        FUR_genericInitEnd(r2dTex);
+        FUR_genericInitEnd(rSsCube);
+        FUR_genericInitEnd(rSsModel);
+
+public:
 
         /*
          * [INIT/END]
@@ -37,7 +67,7 @@ public:
          * [UPDATE]
          */
 
-        void resize(void* data, s32 width, s32 height);
+        void resize(s32 width, s32 height);
 
         /*
          * [FUNCS]

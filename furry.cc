@@ -1,9 +1,9 @@
 #include "furry.hh"
 
 #include <GLFW/glfw3.h>
-
 #include <core/auto/load_gl.h>
 #include <core/render.hh>
+#include <core/text.hh>
 
 namespace fur {
     void State::init() {
@@ -27,6 +27,7 @@ namespace fur {
         fur_gl_load();
 
         render = new Render();
+        text = new Text(render);
     }
 
     void State::end() {
@@ -38,7 +39,7 @@ namespace fur {
 
     void State::cb_size(GLFWwindow* window, s32 width, s32 height) {
         glViewport(0,0,width,height);
-        void* st = glfwGetWindowUserPointer(window);
+        State* st = (State*)glfwGetWindowUserPointer(window);
         if (st)
             st->render->resize(width,height);           
     }
@@ -63,9 +64,9 @@ namespace fur {
         glfwSetWindowUserPointer(window, state); 
     }
 
-    b8   State::shouldClose() {}
-    void State::poll() {}
-    void State::swapBuffer() {}
+    b8   State::shouldClose() { return glfwWindowShouldClose(window); }
+    void State::poll() { glfwPollEvents(); }
+    void State::swapBuffer() { glfwSwapBuffers(window); }
 
     /*
      *
@@ -91,8 +92,8 @@ namespace fur {
 
         Tprogram* game = new Tprogram(st);
 
-        game->scene = new FURnode();
-        game->scene->name = "scene";
+        game->scene = new Node();
+        game->scene->name = (char*)"scene";
 
         f32 lasttime = glfwGetTime();
 

@@ -4,17 +4,17 @@
 #include <core/macros.h>
 
 namespace fur {
+    struct ShaderPart {
+        u32 part;
+    };
+
+    struct Shader {
+        u32 shader;
+        ShaderPart** parts;
+        u32 part_amt;
+    };
+
     namespace shader {
-        struct ShaderPart {
-            u32 part;
-        };
-
-        struct Shader {
-            u32 shader;
-            ShaderPart** parts;
-            u32 part_amt;
-        };
-
         char*       shaderPart_loadSource(const char* path);
         ShaderPart* shaderPart_loadFromSource(u32 type, const char** source);
         void        shaderPart_unload(ShaderPart* part);
