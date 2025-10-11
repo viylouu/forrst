@@ -62,7 +62,7 @@ private:
         // shit ass garbage vao
         u32 vao;
 
-        s32 width, height;
+        
 
         mat4 ident;
 
@@ -96,6 +96,9 @@ private:
         FUR_genericInitEnd(rSdTex);
         FUR_genericInitEnd(rSsCube);
         FUR_genericInitEnd(rSsModel);
+
+public:
+        s32 width, height;
 
 public:
 

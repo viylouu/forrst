@@ -88,6 +88,9 @@ namespace fur {
             st->delta = st->time - lasttime;
             lasttime = glfwGetTime();
 
+            st->width = st->render->width;
+            st->height = st->render->height;
+
             game->update(st->delta);
             game->scene->recupdate(st->delta);
 
