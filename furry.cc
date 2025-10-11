@@ -31,7 +31,7 @@ namespace fur {
         render = new Render();
         text = new Text(render);
 
-        glfwSetWindowUserPointer(window, render);
+        glfwSetFramebufferSizeCallback(window, cb_size);
     }
 
     void State::end() {

@@ -28,7 +28,7 @@ namespace fur {
     private:
         void init();
         void end();
-        void cb_size(GLFWwindow* window, s32 width, s32 height);
+        static void cb_size(GLFWwindow* window, s32 width, s32 height);
 
     public:
         State(const char* title, s32 width, s32 height);
