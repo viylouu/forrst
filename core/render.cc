@@ -33,7 +33,7 @@ namespace fur {
         glBufferData(GL_TEXTURE_BUFFER, FUR_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);                    \
                                                                                                         \
         glGenTextures(1, &state.generic.tbo);                                                           \
-        glBindTexture(GL_TEXTURE_BUFFER, state.generic.bo);                                             \
+        glBindTexture(GL_TEXTURE_BUFFER, state.generic.tbo);                                            \
         glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state.generic.bo);                                   \
                                                                                                         \
         state.generic.loc.insts     = shader::getUniform(state.generic.shader, "insts");                \
