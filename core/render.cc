@@ -140,7 +140,6 @@ namespace fur {
         this->width = width;
         this->height = height;
         mat4_ortho(&proj2d, 0,width,height,0,-1,1);
-        glViewport(0,0,width,height);
     }
 
     /*
