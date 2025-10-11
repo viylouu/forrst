@@ -71,7 +71,7 @@ namespace fur {
     void Render::rSdTex_init() {
         FUR_rSdInitGeneric(sdTex, "data/eng/tex.vert", "data/eng/tex.frag");
 
-        sdTex.loc.tex = glGetUniformLocation(sdTex.generic.shader->shader, "tex");
+        sdTex.loc.tex = shader::getUniform(sdTex.generic.shader, "tex");
     } void Render::rSdTex_end() {
         FUR_rSdEndGeneric(sdTex);
     } void Render::rSdTex_draw() {
