@@ -128,7 +128,35 @@ OBJ_DIR="build/obj"
 OBJS=()
 
 [[ $BUILD_TEST == false ]] && rm -rf build/obj/
+#rm -rf build/obj/
 mkdir -p build/obj
+
+needs_rebuild() {
+    local file="$1"
+    local obj="$2"
+    local dep="$3"
+    local margin=1  # integer seconds
+
+    [[ ! -f "$obj" || ! -f "$dep" ]] && return 0
+
+    local src_time obj_time dep_time
+    src_time=$(stat -c %Y "$file")
+    obj_time=$(stat -c %Y "$obj")
+
+    (( src_time - obj_time > margin )) && return 0
+
+    # read deps from .d, ignore object name
+    local depfile
+    sed 's/\\//g' "$dep" | sed 's/^[^:]*: *//' | tr ' ' '\n' | grep -E '.' | while read -r depfile; do
+        # resolve relative path
+        depfile="$PWD/$depfile"
+        [[ -f "$depfile" ]] || continue
+        dep_time=$(stat -c %Y "$depfile")
+        (( dep_time - obj_time > margin )) && return 0
+    done
+
+    return 1
+}
 
 max_jobs=$(nproc) 
 
@@ -137,14 +165,29 @@ compile_file() {
     local compiler=("${!2}")  # pass array name
     local flags="$3"
     
-    obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
+    #obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
+    #dep="$OBJ_DIR/$(basename "$file" .${file##*.}).d"
+    filename=$(basename "$file")
+    basename_noext="${filename%.*}"
+    obj="$OBJ_DIR/$basename_noext.o"
+    dep="$OBJ_DIR/$basename_noext.d"
     echo "$obj" >> "$OBJ_DIR/objs.tmp"
-    [[ -f "$obj" && "$obj" -nt "$file" ]] && return
+    #[[ -f "$obj" && "$obj" -nt "$file" ]] && return
+    if ! needs_rebuild "$file" "$obj" "$dep"; then
+        echo "up to date: $file"
+        return
+    fi
 
     if [[ $file == *.c ]]; then
-        "${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+        #"${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+        "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP \
+            -MD -MF "$dep" \
+            -fno-sanitize=undefined -c "$file" -o "$obj"
     else
-        "${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+        #"${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+        "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP \
+            -MD -MF "$dep" \
+            -fno-sanitize=undefined -c "$file" -o "$obj"
     fi 
 }
 
