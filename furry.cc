@@ -30,6 +30,8 @@ namespace fur {
 
         render = new Render();
         text = new Text(render);
+
+        glfwSetWindowUserPointer(window, render);
     }
 
     void State::end() {
