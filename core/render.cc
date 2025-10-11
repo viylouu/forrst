@@ -25,40 +25,38 @@ namespace fur {
 
     /* [gl struct 2d funcs] */
 
-#define FUR_rSdInitGeneric(state,vert,frag)                                                       \
-        state.generic.shader = shader::load(vert,frag);                                                  \
-                                                                                                  \
-        glGenBuffers(1, &state.generic.bo);                                                     \
-        glBindBuffer(GL_TEXTURE_BUFFER, state.generic.bo);                                      \
-        glBufferData(GL_TEXTURE_BUFFER, FUR_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);              \
-                                                                                                  \
-        glGenTextures(1, &state.generic.tbo);                                                   \
-        glBindTexture(GL_TEXTURE_BUFFER, state.generic.bo);                                     \
-        glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state.generic.bo);                           \
-                                                                                                  \
-        state.generic.loc.insts     = glGetUniformLocation(state.generic.shader->shader, "insts");     \
-        state.generic.loc.inst_size = glGetUniformLocation(state.generic.shader->shader, "inst_size"); \
-        state.generic.loc.proj      = glGetUniformLocation(state.generic.shader->shader, "proj")
-#define FUR_rSdEndGeneric(state)          \
-        shader::unload(state.generic.shader);    \
-        glDeleteTextures(1, &state.generic.tbo); \
+#define FUR_rSdInitGeneric(state,vert,frag)                                                             \
+        state.generic.shader = shader::load(vert,frag);                                                 \
+                                                                                                        \
+        glGenBuffers(1, &state.generic.bo);                                                             \
+        glBindBuffer(GL_TEXTURE_BUFFER, state.generic.bo);                                              \
+        glBufferData(GL_TEXTURE_BUFFER, FUR_MAX_BUFFER_SIZE, NULL, GL_DYNAMIC_DRAW);                    \
+                                                                                                        \
+        glGenTextures(1, &state.generic.tbo);                                                           \
+        glBindTexture(GL_TEXTURE_BUFFER, state.generic.bo);                                             \
+        glTexBuffer(GL_TEXTURE_BUFFER, GL_RGBA32F, state.generic.bo);                                   \
+                                                                                                        \
+        state.generic.loc.insts     = shader::getUniform(state.generic.shader, "insts");                \
+        state.generic.loc.inst_size = shader::getUniform(state.generic.shader, "inst_size");            \
+        state.generic.loc.proj      = shader::getUniform(state.generic.shader, "proj")
+#define FUR_rSdEndGeneric(state)                    \
+        shader::unload(state.generic.shader);       \
+        glDeleteTextures(1, &state.generic.tbo);    \
         glDeleteBuffers(1, &state.generic.bo)
-#define FUR_rSdDrawGeneric(obj) do {                                                                                \
-        glUseProgram(obj.generic.shader->shader);                                                                          \
-        glBindVertexArray(vao);                                                                                     \
-                                                                                                                    \
-        glUniformMatrix4fv(obj.generic.loc.proj, 1,0, proj2d);                                                             \
-                                                                                                                    \
-        glBindBuffer(GL_TEXTURE_BUFFER, obj.generic.bo);                                                                   \
-        glBufferSubData(GL_TEXTURE_BUFFER, 0, batch.size() * sizeof(InstanceData), batch.data());                   \
-                                                                                                                    \
-        glActiveTexture(GL_TEXTURE0);                                                                               \
-        glBindTexture(GL_TEXTURE_BUFFER, obj.generic.tbo);                                                                 \
-        glUniform1i(obj.generic.loc.insts, 0);                                                                             \
-                                                                                                                    \
-        glUniform1i(obj.generic.loc.inst_size, sizeof(InstanceData) / 16);                                                 \
-    } while(0)
-
+#define FUR_rSdDrawGeneric(obj)                                                                     \
+        glUseProgram(obj.generic.shader->shader);                                                   \
+        glBindVertexArray(vao);                                                                     \
+                                                                                                    \
+        glUniformMatrix4fv(obj.generic.loc.proj, 1,0, proj2d);                                      \
+                                                                                                    \
+        glBindBuffer(GL_TEXTURE_BUFFER, obj.generic.bo);                                            \
+        glBufferSubData(GL_TEXTURE_BUFFER, 0, batch.size() * sizeof(InstanceData), batch.data());   \
+                                                                                                    \
+        glActiveTexture(GL_TEXTURE0);                                                               \
+        glBindTexture(GL_TEXTURE_BUFFER, obj.generic.tbo);                                          \
+        glUniform1i(obj.generic.loc.insts, 0);                                                      \
+                                                                                                    \
+        glUniform1i(obj.generic.loc.inst_size, sizeof(InstanceData) / 16)
 
     void Render::rSdRect_init() {
         FUR_rSdInitGeneric(sdRect, "data/eng/rect.vert", "data/eng/rect.frag");

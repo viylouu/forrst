@@ -65,6 +65,12 @@ namespace fur {
          * [SHADER]
          */
 
+        s32 getUniform(Shader* shader, const char* name) {
+            s32 uni = glGetUniformLocation(shader->shader, name);
+            RETURN_IF(uni == -1, -1, "uniform not found / optimized out!\n");
+            return uni;
+        }
+
         void unload(Shader* shader) {
             glDeleteProgram(shader->shader);
             delete shader;

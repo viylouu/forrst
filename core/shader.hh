@@ -19,6 +19,8 @@ namespace fur {
         ShaderPart* shaderPart_loadFromSource(u32 type, const char** source);
         void        shaderPart_unload(ShaderPart* part);
 
+        s32 getUniform(Shader* shader, const char* name);
+
         Shader* compileFromParts(ShaderPart** parts, u32 amount);
         Shader* loadFromParts(ShaderPart** parts, u32 amount);
         Shader* loadFromSource(const char** vert, const char** frag);
