@@ -12,7 +12,5 @@ public:
 };
 
 int main() {
-    ERROR_IF(1, "uhh, hi");
-
     fur::windowDoShit<Game>("helo", v2{800,600});
 }
