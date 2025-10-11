@@ -62,10 +62,10 @@ namespace fur {
 
         glViewport(0,0,dims.x,dims.y);
 
-//#ifdef _WIN32
+#ifdef _WIN32
         glfwSetWindowSize((GLFWwindow*)st->window, dims.x+1,dims.y+1);
         glfwSetWindowSize((GLFWwindow*)st->window, dims.x,dims.y);
-//#endif
+#endif
 
         #ifdef FUR_EDITOR
         b8 editorOn = 1;
