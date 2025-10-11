@@ -109,6 +109,7 @@ namespace fur {
         glGenVertexArrays(1, &vao);
 
         mat4_identity(&ident);
+        mat4_ortho(&proj2d, 0,800,600,0,-1,1);
 
         nil = texture::load("data/eng/nil.png");
         ERROR_IF(!nil, "failed to load nil texture!\n");

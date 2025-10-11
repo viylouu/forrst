@@ -67,7 +67,7 @@ namespace fur {
 
         s32 getUniform(Shader* shader, const char* name) {
             s32 uni = glGetUniformLocation(shader->shader, name);
-            RETURN_IF(uni == -1, -1, "uniform not found / optimized out!\n");
+            RETURN_IF(uni == -1, -1, "uniform \"%s\" not found / optimized out!\n", name);
             return uni;
         }
 
