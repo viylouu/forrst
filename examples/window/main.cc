@@ -1,4 +1,4 @@
-//#define FUR_EDITOR
+#define FUR_EDITOR
 #include <furry.hh>
 
 class Game : public fur::Program {
