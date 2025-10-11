@@ -40,7 +40,6 @@ namespace fur {
     }
 
     void State::cb_size(GLFWwindow* window, s32 width, s32 height) {
-        glViewport(0,0,width,height);
         State* st = (State*)glfwGetWindowUserPointer(window);
         if (st)
             st->render->resize(width,height);           
