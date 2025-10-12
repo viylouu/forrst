@@ -6,7 +6,7 @@ COMPILER=("zig" "cc")
 COMPILER_CC=("g++")
 CFLAGS="-std=c99"
 CCFLAGS="-std=c++11"
-FLAGS_COMP="-Wno-narrowing -Wall -Ifurry -I. -Ideps -Ifurry/deps -isystem"
+FLAGS_COMP="-Wno-narrowing -Wall -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
 FLAGS_LINK=""
 CFLAGS_COMP=""
 
@@ -75,9 +75,9 @@ else
 fi
 
 if [ -n "$EXAMPLE" ]; then
-    SRC_DIRS=("." "examples/$EXAMPLE")
+    SRC_DIRS=("." "examples/$EXAMPLE" "deps/imgui/backends/imgui_impl_glfw.h" "deps/imgui/backends/imgui_impl_opengl3.h")
 else
-    SRC_DIRS=("forrst" "src")
+    SRC_DIRS=("forrst" "src" "deps/imgui/backends/imgui_impl_glfw.h" "deps/imgui/backends/imgui_impl_opengl3.h")
 fi
 
 FILES_C=()
@@ -89,7 +89,7 @@ for dir in "${SRC_DIRS[@]}"; do
             c) FILES_C+=("$file") ;;
             cpp|cc) FILES_CC+=("$file") ;;
         esac
-    done < <(find "$dir" -type f ! -path "*/examples/*")
+    done < <(find "$dir" -type f ! -path "*/examples/*" ! -path "*/deps/imgui/backends/*")
 done
 
 OUT="compile_commands.json"
@@ -105,7 +105,7 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
         STD="-std=c++11"
     fi
 
-    CMD="$COMP $STD -Ifurry -I. -Ideps -Ifurry/deps -c \\\"$file\\\""
+    CMD="$COMP $STD -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -c \\\"$file\\\""
 
     if [ $FIRST -eq 1 ]; then
         FIRST=0
@@ -128,7 +128,7 @@ OBJ_DIR="build/obj"
 OBJS=()
 
 #[[ $BUILD_TEST == false ]] && rm -rf build/obj/
-rm -rf build/obj/
+#rm -rf build/obj/
 mkdir -p build/obj
 
 max_jobs=$(nproc) 
@@ -143,21 +143,30 @@ compile_file() {
     filename=$(basename "$file")
     basename_noext="${filename%.*}"
     obj="$OBJ_DIR/$basename_noext.o"
-    dep="$OBJ_DIR/$basename_noext.d"
+    #dep="$OBJ_DIR/$basename_noext.d"
     echo "$obj" >> "$OBJ_DIR/objs.tmp"
     #[[ -f "$obj" && "$obj" -nt "$file" ]] && return
 
-    if [[ $file == *.c ]]; then
-        #"${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
-        "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP \
-            -MD -MF "$dep" \
-            -fno-sanitize=undefined -c "$file" -o "$obj"
-    else
-        #"${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
-        "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP \
-            -MD -MF "$dep" \
-            -fno-sanitize=undefined -c "$file" -o "$obj"
-    fi 
+    skip_compile=false
+
+    if [[ $BUILD_TEST && -f "$obj" ]]; then
+        # check if "deps" is anywhere in the path
+        if [[ "$file" == */deps/* ]]; then
+            skip_compile=true
+        fi
+    fi
+
+    if [[ $skip_compile != true ]]; then
+        if [[ $file == *.c ]]; then
+            #"${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP \
+                -fno-sanitize=undefined -c "$file" -o "$obj"
+        else
+            #"${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
+            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP \
+                -fno-sanitize=undefined -c "$file" -o "$obj"
+        fi 
+    fi
 }
 
 > "$OBJ_DIR/objs.tmp"  # clear temp file
