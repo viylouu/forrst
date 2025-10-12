@@ -33,7 +33,7 @@ namespace fur {
         std::vector<VarInfo> publics;
         fur::State* st;
 
-        Component(State* state) { title = "untitled"; st = state; }
+        Component(State* state) { title = (char*)"component"; st = state; }
 
         Node* parent;
         virtual void update(f32 delta) {}
@@ -52,7 +52,7 @@ namespace fur {
         v3 pos, scale, rot;
         mat4 transf;
 
-        Node() : parent(NULL) { name = "untitled"; pos = v3{0,0,0}; scale = v3{1,1,1}; rot = v3{0,0,0}; }
+        Node() : parent(NULL) { name = (char*)"node"; pos = v3{0,0,0}; scale = v3{1,1,1}; rot = v3{0,0,0}; }
         virtual ~Node() {
             for (s32 i = 0; i < (s32)children.size(); ++i)
                 delete children[i];
