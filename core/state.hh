@@ -4,12 +4,14 @@
 #include <core/render.hh>
 #include <core/text.hh>
 #include <GLFW/glfw3.h>
+#include <core/input.hh>
 
 namespace fur {
     class State {
     public:
         Render* render;
         Text* text;
+        Input* input;
 
         f32 time;
         f32 delta;

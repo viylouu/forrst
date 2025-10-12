@@ -5,6 +5,7 @@
 #include <core/render.hh>
 #include <core/text.hh>
 #include <core/editor/editor.hh>
+#include <core/input.hh>
 
 namespace fur {
     void State::init() {
@@ -30,11 +31,16 @@ namespace fur {
 
         render = new Render();
         text = new Text(render);
+        input = new Input();
 
         glfwSetFramebufferSizeCallback(window, cb_size);
     }
 
     void State::end() {
+        delete input;
+        delete text;
+        delete render;
+
         glfwPollEvents(); // fix for segfault on crash for some reason? idk, glfw is weird
 
         glfwDestroyWindow(window);
@@ -69,6 +75,6 @@ namespace fur {
     }
 
     b8   State::shouldClose() { return glfwWindowShouldClose(window); }
-    void State::poll() { glfwPollEvents(); }
+    void State::poll() { glfwPollEvents(); input->poll(window); }
     void State::swapBuffer() { glfwSwapBuffers(window); }   
 }

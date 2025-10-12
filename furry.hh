@@ -37,7 +37,6 @@ namespace fur {
 
         #ifdef FUR_EDITOR
         b8 editorOn = 1;
-        b8 prevKey = 0;
         Editor* editor = new Editor(st->render, st->text);
         #endif
 
@@ -63,10 +62,8 @@ namespace fur {
             game->scene->recrender();
 
             #ifdef FUR_EDITOR
-            b8 curKey = glfwGetKey((GLFWwindow*)st->window, GLFW_KEY_F1);
-            if (curKey == GLFW_PRESS && prevKey == GLFW_RELEASE)
+            if (st->input->isKeyPressed(GLFW_KEY_F1))
                 editorOn = !editorOn;
-            prevKey = curKey;
 
             if(editorOn)
                 editor->main(st->width, st->height, game->scene);
