@@ -16,13 +16,11 @@ namespace fur {
         Node* scene;
         State* st;
 
-        Program(State* state) { st = state; scene = new Node(); }
+        Program(State* state) { st = state; scene = new Node(); scene->name = (char*)"scene"; }
         virtual ~Program() {}
 
-        virtual void init()            {}
         virtual void update(f32 delta) {}
         virtual void render()          {}
-        virtual void end()             {}
     };
 
     template<typename Tprogram>
@@ -44,10 +42,6 @@ namespace fur {
         #endif
 
         Tprogram* game = new Tprogram(st);
-
-        game->scene = new Node();
-        game->scene->name = (char*)"scene";
-        game->init();
 
         f32 lasttime = glfwGetTime();
 
@@ -82,7 +76,6 @@ namespace fur {
             st->swapBuffer();
         }
 
-        game->end();
         delete game->scene;
         delete game;
 
