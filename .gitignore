@@ -6,3 +6,4 @@
 /core/auto/*.cc
 /core/auto/*.h
 /core/auto/*.hh
+/imgui.ini
