@@ -1,6 +1,8 @@
 #define FUR_EDITOR
 #include <furry.hh>
 
+// why the fuck does it work here?
+
 class Square : public fur::Component {
 public:
     Square(fur::State* state) : Component(state) {}
