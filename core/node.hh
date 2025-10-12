@@ -81,12 +81,16 @@ namespace fur {
         void recrender() {
             mat4_scale(&transf, scale.x,scale.y,scale.z);
             mat4 a;
-            mat4_rotateX(&a, rot.x);
-            mat4_multiply(&transf, transf, a);
-            mat4_rotateY(&a, rot.y);
-            mat4_multiply(&transf, transf, a);
-            mat4_rotateZ(&a, rot.z);
-            mat4_multiply(&transf, transf, a);
+            if (rot.x != 0) {
+                mat4_rotateX(&a, rot.x);
+                mat4_multiply(&transf, transf, a);
+            } if (rot.y != 0) {
+                mat4_rotateY(&a, rot.y);
+                mat4_multiply(&transf, transf, a);
+            } if (rot.z != 0) {
+                mat4_rotateZ(&a, rot.z);
+                mat4_multiply(&transf, transf, a);
+            }
             mat4_translate(&a, pos.x,pos.y,pos.z);
             mat4_multiply(&transf, transf, a);
 
