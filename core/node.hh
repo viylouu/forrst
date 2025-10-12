@@ -36,8 +36,10 @@ namespace fur {
         Component(State* state) { title = (char*)"component"; st = state; }
 
         Node* parent;
+        virtual void init()            {}
         virtual void update(f32 delta) {}
         virtual void render()          {}
+        virtual void end()             {}
         virtual ~Component()           {}
     };
 
@@ -71,6 +73,13 @@ namespace fur {
             components.push_back(component);
         }
 
+        void recinit() {
+            for (s32 i = 0; i < (s32)components.size(); ++i)
+                components[i]->init();
+            for (s32 i = 0; i < (s32)children.size(); ++i)
+                children[i]->recinit();
+        }
+
         void recupdate(f32 delta) {
             for (s32 i = 0; i < (s32)components.size(); ++i)
                 components[i]->update(delta);
@@ -98,6 +107,13 @@ namespace fur {
                 components[i]->render();
             for (s32 i = 0; i < (s32)children.size(); ++i)
                 children[i]->recrender();
+        }
+
+        void recend() {
+            for (s32 i = 0; i < (s32)components.size(); ++i)
+                components[i]->end();
+            for (s32 i = 0; i < (s32)children.size(); ++i)
+                children[i]->recend();
         }
     };
 }

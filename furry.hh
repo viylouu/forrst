@@ -42,6 +42,7 @@ namespace fur {
         #endif
 
         Tprogram* game = new Tprogram(st);
+        game->scene->recinit();
 
         f32 lasttime = glfwGetTime();
 
@@ -76,6 +77,7 @@ namespace fur {
             st->swapBuffer();
         }
 
+        game->scene->recend();
         delete game->scene;
         delete game;
 
