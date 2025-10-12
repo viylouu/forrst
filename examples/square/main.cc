@@ -3,7 +3,7 @@
 
 class Square : public fur::Component {
 public:
-    Square(fur::State* state) : Component(state) {}
+    Square(fur::State* state) : Component(state) { title = (char*)"square"; }
 
     void render() {
         st->render->rect(NULL, v2{0,0}, v2{64,64}, v4{1,0,0,1});

@@ -33,6 +33,8 @@ namespace fur {
         std::vector<VarInfo> publics;
         fur::State* st;
 
+        b8 editor_open;
+
         Component(State* state) { title = (char*)"component"; st = state; }
 
         Node* parent;
@@ -53,6 +55,8 @@ namespace fur {
 
         v3 pos, scale, rot;
         mat4 transf;
+
+        b8 editor_open;
 
         Node() : parent(NULL) { name = (char*)"node"; pos = v3{0,0,0}; scale = v3{1,1,1}; rot = v3{0,0,0}; }
         virtual ~Node() {

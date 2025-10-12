@@ -16,7 +16,7 @@ namespace fur {
         Node* scene;
         State* st;
 
-        Program(State* state) { st = state; scene = new Node(); scene->name = (char*)"scene"; }
+        Program(State* state) { st = state; scene = new Node(); scene->name = (char*)"scene"; scene->editor_open = 1; }
         virtual ~Program() {}
 
         virtual void update(f32 delta) {}
@@ -37,7 +37,7 @@ namespace fur {
 
         #ifdef FUR_EDITOR
         b8 editorOn = 1;
-        Editor* editor = new Editor(st->render, st->text);
+        Editor* editor = new Editor(st->render, st->text, st->input);
         #endif
 
         Tprogram* game = new Tprogram(st);

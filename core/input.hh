@@ -14,8 +14,7 @@ namespace fur {
 
     class Input {
     public:
-        f32 mouseX;
-        f32 mouseY;
+        v2 mouse;
 
         void poll(GLFWwindow* window);
 
