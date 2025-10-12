@@ -5,6 +5,7 @@
 #include <core/node.hh>
 #include <core/text.hh>
 #include <core/input.hh>
+#include <imgui/imgui.h>
 
 namespace fur {
     Editor::Editor(Render* render, Text* text, Input* input) {
@@ -59,5 +60,7 @@ namespace fur {
         render->rect(ident, v2{0,0}, v2{256,(f32)height}, v4{1,1,1,1});
 
         hierarchy(scene, ident, 0,0);
+
+        ImGui::ShowDemoWindow();
     }
 }

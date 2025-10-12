@@ -9,6 +9,9 @@
 #include <core/editor/editor.hh>
 #include <core/text.hh>
 #include <core/state.hh>
+#include <imgui/imgui.h>
+#include <imgui/backends/imgui_impl_opengl3.h>
+#include <imgui/backends/imgui_impl_glfw.h>
 
 namespace fur {
     class Program {
@@ -58,6 +61,10 @@ namespace fur {
             game->update(st->delta);
             game->scene->recupdate(st->delta);
 
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
             game->render();
             game->scene->recrender();
 
@@ -70,6 +77,9 @@ namespace fur {
             #endif
 
             st->render->flush();
+
+            ImGui::Render();
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             st->swapBuffer();
         }

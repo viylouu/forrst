@@ -75,9 +75,9 @@ else
 fi
 
 if [ -n "$EXAMPLE" ]; then
-    SRC_DIRS=("." "examples/$EXAMPLE" "deps/imgui/backends/imgui_impl_glfw.h" "deps/imgui/backends/imgui_impl_opengl3.h")
+    SRC_DIRS=("." "examples/$EXAMPLE")
 else
-    SRC_DIRS=("forrst" "src" "deps/imgui/backends/imgui_impl_glfw.h" "deps/imgui/backends/imgui_impl_opengl3.h")
+    SRC_DIRS=("forrst" "src")
 fi
 
 FILES_C=()
@@ -89,7 +89,7 @@ for dir in "${SRC_DIRS[@]}"; do
             c) FILES_C+=("$file") ;;
             cpp|cc) FILES_CC+=("$file") ;;
         esac
-    done < <(find "$dir" -type f ! -path "*/examples/*" ! -path "*/deps/imgui/backends/*")
+    done < <(find "$dir" -type f ! -path "*/examples/*")
 done
 
 OUT="compile_commands.json"

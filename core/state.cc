@@ -21,6 +21,7 @@ namespace fur {
 
         ERROR_IF(!glfwInit(), "failed to init glfw!\n");
 
+        f32 main_scale = ImGui_ImplGlfw_GetContentScaleForMonitor(glfwGetPrimaryMonitor());
         window = glfwCreateWindow(width, height, title, NULL,NULL);
         ERROR_IF(!window, "failed to make glfw window!\n");
 
@@ -31,6 +32,20 @@ namespace fur {
         glfwSwapInterval(0);
 
         fur_gl_load();
+
+        IMGUI_CHECKVERSION();
+        ImGui::CreateContext();
+        ImGuiIO& io = ImGui::GetIO(); (void)io;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+        ImGui::StyleColorsDark();
+
+        ImGuiStyle& style = ImGui::GetStyle();
+        style.ScaleAllSizes(main_scale);
+        style.FontScaleDpi = main_scale;
+
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 130");
 
         render = new Render();
         text = new Text(render);
@@ -43,6 +58,10 @@ namespace fur {
         delete input;
         delete text;
         delete render;
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
 
         glfwPollEvents(); // fix for segfault on crash for some reason? idk, glfw is weird
 
