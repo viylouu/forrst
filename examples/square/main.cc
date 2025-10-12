@@ -6,7 +6,7 @@ public:
     Square(fur::State* state) : Component(state) {}
 
     void render() {
-        st->render->rect(parent->transf, v2{0,0}, v2{1,1}, v4{1,0,0,1});
+        st->render->rect(NULL, v2{0,0}, v2{1,1}, v4{1,0,0,1});
     }
 };
 

@@ -16,7 +16,7 @@ namespace fur {
         Node* scene;
         State* st;
 
-        Program(State* state) { st = state; }
+        Program(State* state) { st = state; scene = new Node(); }
         virtual ~Program() {}
 
         virtual void init()            {}
