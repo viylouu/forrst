@@ -5,6 +5,7 @@
 #include <vector>
 #include <stdio.h>
 #include <core/mat4.h>
+#include <core/state.hh>
 
 namespace fur {
     class Node;
@@ -30,10 +31,10 @@ namespace fur {
     public:
         char* title;
         std::vector<VarInfo> publics;
+        fur::State* st;
 
-        Component() { title = "untitled"; }
+        Component(State* state) { title = "untitled"; st = state; }
 
-        virtual void init()            {}
         Node* parent;
         virtual void update(f32 delta) {}
         virtual void render()          {}
@@ -51,7 +52,7 @@ namespace fur {
         v3 pos, scale, rot;
         mat4 transf;
 
-        Node() : parent(NULL) { name = "untitled"; }
+        Node() : parent(NULL) { name = "untitled"; pos = v3{0,0,0}; scale = v3{1,1,1}; rot = v3{0,0,0}; }
         virtual ~Node() {
             for (s32 i = 0; i < (s32)children.size(); ++i)
                 delete children[i];
@@ -68,7 +69,6 @@ namespace fur {
         void addComponent(Component* component) {
             component->parent = this;
             components.push_back(component);
-            component->init();
         }
 
         void recupdate(f32 delta) {

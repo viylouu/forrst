@@ -1,4 +1,4 @@
-#include "furry.hh"
+#include "state.hh"
 
 #include <GLFW/glfw3.h>
 #include <core/auto/load_gl.h>

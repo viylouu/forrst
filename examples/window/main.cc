@@ -7,7 +7,6 @@ public:
 
     void render() {
 	    st->render->clear(v4{.2,.4,.3,1});
-        st->render->rect(NULL, v2{0,0}, v2{64,64}, v4{1,0,0,1});
     }
 };
 

@@ -8,39 +8,9 @@
 #include <GLFW/glfw3.h>
 #include <core/editor/editor.hh>
 #include <core/text.hh>
+#include <core/state.hh>
 
 namespace fur {
-    class State;
-    class State {
-    public:
-        Render* render;
-        Text* text;
-
-        f32 time;
-        f32 delta;
-
-        const char* title;
-        s32 width;
-        s32 height;
-
-        GLFWwindow* window;
-
-    private:
-        void init();
-        void end();
-        static void cb_size(GLFWwindow* window, s32 width, s32 height);
-
-    public:
-        State(const char* title, s32 width, s32 height);
-        ~State();
-
-        void glfwSetPtr(fur::State* state);
-
-        b8 shouldClose();
-        void poll();
-        void swapBuffer();
-    };
-
     class Program {
     public:
         Node* scene;
