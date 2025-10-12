@@ -6,6 +6,7 @@
 #include <core/text.hh>
 #include <core/input.hh>
 #include <imgui/imgui.h>
+#include <imgui/imgui_internal.h>
 
 namespace fur {
     Editor::Editor(Render* render, Text* text, Input* input) {
@@ -20,34 +21,12 @@ namespace fur {
         text->unloadFont(font);
     }
     
-    s32 Editor::hierarchy(Node* node, mat4 ident, s32 y, s32 indent) {
-        if (y > -font->charH*2) {
-            v4 rect = v4{
-                0, (f32)y,
-                256, font->charH*2.f
-                };
-
-            if (input->mouse.x > rect.x && input->mouse.x < rect.x+rect.z &&
-                input->mouse.y > rect.y && input->mouse.y < rect.y+rect.w) {
-                render->rect(NULL, v2{rect.x,rect.y}, v2{rect.z,rect.w}, v4{.9f,.9f,.9f,1});
-
-                if (input->isMousePressed(GLFW_MOUSE_BUTTON_LEFT))
-                    node->editor_open = !node->editor_open;
-            }
-
-            text->drawFont(font, ident, node->editor_open? "v" : ">", 2, v2{8.f,(f32)y+2}, v4{0,0,0,1});
-            text->drawFont(font, ident, node->name, 2, v2{2.f+indent*font->charW*4+font->charW*4,(f32)y+2}, v4{0,0,0,1});
-        }
+    void Editor::hierarchy(Node* node, mat4 ident) {
+        
 
         if (node->editor_open)
-            for (s32 i = 0; i < (s32)node->children.size(); ++i) {
-                y = hierarchy(node->children[i], ident, y + font->charH*2, indent+1);
-
-                if (y > height)
-                    return y;
-            }
-
-        return y;
+            for (s32 i = 0; i < (s32)node->children.size(); ++i)
+                hierarchy(node->children[i], ident);
     }
 
     void Editor::main(s32 width, s32 height, Node* scene) {
@@ -59,8 +38,21 @@ namespace fur {
 
         render->rect(ident, v2{0,0}, v2{256,(f32)height}, v4{1,1,1,1});
 
-        hierarchy(scene, ident, 0,0);
+        ImGuiViewport* viewport = ImGui::GetMainViewport();
 
-        ImGui::ShowDemoWindow();
+        ImGui::SetNextWindowPos(viewport->Pos);
+        ImGui::SetNextWindowSize(viewport->Size);
+        ImGui::SetNextWindowViewport(viewport->ID);
+
+        ImGui::Begin("editor");
+        ImGui::End();
+
+        if (ImGui::Begin("hierarchy")) {
+            hierarchy(scene, ident);
+        } ImGui::End();
+
+        if (ImGui::Begin("game")) {
+            ImGui::Text("hah you thought something was here");
+        } ImGui::End();
     }
 }
