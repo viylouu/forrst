@@ -52,7 +52,9 @@ namespace fur {
         } ImGui::End();
 
         if (ImGui::Begin("game")) {
-            ImGui::Text("hah you thought something was here");
+            ImGui::BeginChild("game");
+            //ImGui::Image((ImTextureID)render->defout, ImGui::GetWindowSize(), ImVec2(0,1), ImVec2(1,0));
+            ImGui::EndChild();
         } ImGui::End();
     }
 }
