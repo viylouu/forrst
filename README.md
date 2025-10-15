@@ -1,7 +1,6 @@
 # furry
 furry engine is a game engine designed to be a game engine  
-you interface with it through c++  
-it is only built using c99 and c++  
+it is built using c99  
 
 # license
 this project is licensed under the LGPLv3 copyleft,  
