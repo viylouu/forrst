@@ -15,10 +15,6 @@ echo "
 
 #include <GL/gl.h>
 
-#ifdef __cplusplus
-extern \"C\" {
-#endif
-
 #ifdef _WIN32
 #include <windows.h>
 #define APIENTRYP APIENTRY *
@@ -42,10 +38,6 @@ FUNC(glActiveTexture, void, GLenum texture);
 sed -E 's/^(.*\S.*)$/FUNC(\1);/' "$DEF" >> "$CUR"
 
 echo "
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif" >> "$CUR"
 

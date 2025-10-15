@@ -2,10 +2,9 @@
 #define FUR_NODE_HH
 
 #include <core/macros.h>
-#include <vector>
 #include <stdio.h>
 #include <core/mat4.h>
-#include <core/state.hh>
+#include <core/state.h>
 
 namespace fur {
     class Node;

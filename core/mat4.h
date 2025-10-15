@@ -3,10 +3,6 @@
 #ifndef FUR_MAT4_H
 #define FUR_MAT4_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
 #include <core/macros.h>
 
 typedef f32 mat4[16];
@@ -36,9 +32,5 @@ void mat4_scale(mat4* mat, f32 x, f32 y, f32 z);
 void mat4_rotateX(mat4* mat, f32 ang);
 void mat4_rotateY(mat4* mat, f32 ang);
 void mat4_rotateZ(mat4* mat, f32 ang);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
