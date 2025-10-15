@@ -2,10 +2,24 @@
 furry engine is a game engine designed to be a game engine  
 it is built using c99  
 
-# documentation
+## design philosophy
+furry engine is designed around fast compile times, (relatively) clean code, and not fucking deviating your septum. not fucking deviating from the rules i swear to god if you even TOUCH the rules i WILL rewrite your entire fucking MIND.  
+
+rules i will not tolerate the breakage of:  
+- language: C99
+- memory model: manual
+- no global state
+- every module has a state struct
+- no fucking code in the headers, i swear to god
+
+paerperrperr (i forgot the word precedence):
+- readability over performance (mostly in the headers, depends on just how bad it is in main source)
+- minimal dependencies. do not fucking add anything.
+
+## documentation
 the documentation is all in the header files  
 if there is a part of the code that does not have documentation, make an issue about it.  
 
-# license
+## license
 this project is licensed under the LGPLv3 copyleft,  
 for more information, see [here](LICENSE.LGPL)
