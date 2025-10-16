@@ -9,7 +9,7 @@
      * holds the opengl api's render state data
      */
 typedef struct {
-    s32 pretend_somethings_here;
+    u32 shitty_vao;
 } FUR_gl_renderState;
 
 /* ====== FUNCS ====== */
