@@ -3,7 +3,7 @@
 
 #include <render/gl/main.h>
 
-/* ====== STRUCTS ====== */
+/* ====== DATATYPES ====== */
 
     /* FUR_target_renderState union
      * pointer to the underlying api specific data
@@ -13,12 +13,21 @@
      */
 typedef void FUR_target_renderState;
 
+    /* FUR_targetRenderApi enum
+     * enum for which render api is being used
+     * stored in FUR_renderState
+     */
+typedef enum {
+    FUR_RENDER_API_GL
+} FUR_targetRenderApi;
+
     /* FUR_renderState struct
      * holds the api agnostic data
      * aswell as the specific data (stored as a FUR_target_renderState)
      */
 typedef struct {
-    FUR_target_renderState* data;
+    FUR_target_renderState* spec;
+    FUR_targetRenderApi api;
 } FUR_renderState;
 
 /* ====== FUNCS ====== */
@@ -32,6 +41,7 @@ typedef struct {
      * input render state must be created manually
 *** USAGE ***
 FUR_renderState* state = NEW(FUR_renderState);
+state->api = ...
 fur_render_constr(&state);
 *** ***** ***
      */
@@ -47,6 +57,7 @@ void fur_render_constr(FUR_renderState* state);
      * must be called after fur_render_init has been called
 *** USAGE ***
 FUR_renderState* state = NEW(FUR_renderState);
+state->api = ...
 fur_render_constr(&state);
 // do something
 fur_render_destr(&state);
