@@ -3,6 +3,8 @@
 
 #include <render/gl/main.h>
 
+/* ====== STRUCTS ====== */
+
     /* FUR_target_renderState union
      * pointer to the underlying api specific data
      * (not a pointer because i like typing TYPE*)
@@ -18,6 +20,8 @@ typedef void FUR_target_renderState;
 typedef struct {
     FUR_target_renderState* data;
 } FUR_renderState;
+
+/* ====== FUNCS ====== */
 
     /* fur_render_constr func
      * creates/initializes the input render state
