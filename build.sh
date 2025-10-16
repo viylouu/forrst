@@ -130,9 +130,11 @@ compile_file() {
     
     #obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
     #dep="$OBJ_DIR/$(basename "$file" .${file##*.}).d"
-    filename=$(basename "$file")
-    basename_noext="${filename%.*}"
-    obj="$OBJ_DIR/$basename_noext.o"
+    #filename=$("$file")
+    #basename_noext="${filename%.*}"
+    cleanpath="${file#./}"
+    obj="$OBJ_DIR/${cleanpath%.c}.o"
+    mkdir -p "$(dirname "$obj")"
     #dep="$OBJ_DIR/$basename_noext.d"
     echo "$obj" >> "$OBJ_DIR/objs.tmp"
     #[[ -f "$obj" && "$obj" -nt "$file" ]] && return
