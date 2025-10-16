@@ -43,6 +43,6 @@ fur_render_gl_constr(&state);
 fur_render_gl_destr(&state);
 *** ***** ***
      */
-void fur_render_gl_constr(FUR_gl_renderState* state);
+void fur_render_gl_destr(FUR_gl_renderState* state);
 
 #endif

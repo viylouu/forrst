@@ -52,6 +52,6 @@ fur_render_constr(&state);
 fur_render_destr(&state);
 *** ***** ***
      */
-void fur_render_constr(FUR_renderState* state);
+void fur_render_destr(FUR_renderState* state);
 
 #endif
