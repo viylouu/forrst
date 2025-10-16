@@ -34,6 +34,11 @@ typedef u64 b64;
         exit(1); \
     } while (0)
 
+    /* ERROR_IF macro
+     * if the condition is true, do the ERROR macro
+     */
+#define ERROR_IF(cond,...) do { if ((cond)) { ERROR(__VA_ARGS__); } } while(0)
+
     /* WARN macro
      * sends a warning message to the console, extra text provided by user
      */
@@ -41,6 +46,11 @@ typedef u64 b64;
         printf("WARNING! [\"%s\" ln:%d]\n", __FILE__, __LINE__); \
         printf(__VA_ARGS__;; \
     } while (0)
+
+    /* WARN_IF macro
+     * if the condition is true, do the WARN macro
+     */
+#define WARN_IF(cond,...) do { if ((cond)) { WARN(__VA_ARGS__); } } while(0)
 
     /* WARN_RET macro
      * sends a warning message to the console, extra text provided by user

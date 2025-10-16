@@ -1,6 +1,8 @@
 #ifndef FUR_PLATFORM_AGNOSTIC_H
 #define FUR_PLATFORM_AGNOSTIC_H
 
+#include <platf/glfw/main.h>
+
 /* ====== DATATYPES ====== */
 
     /* FUR_target_platfState union
@@ -23,7 +25,10 @@ typedef enum {
      */
 typedef struct {
     FUR_target_platfState* spec;
-    FUR_targetPlatf cur;
+    FUR_targetPlatf plat;
+
+    char* title;
+    s32 width, height;
 } FUR_platfState;
 
 /* ====== FUNCS ====== */
@@ -37,6 +42,7 @@ typedef struct {
      * input platform state must be created manually
 *** USAGE ***
 FUR_platfState* state = NEW(FUR_platfState);
+state->plat = ...
 fur_platf_constr(state);
 // do stuff
 *** ***** ***
@@ -53,6 +59,7 @@ void fur_platf_constr(FUR_platfState* state);
      * must be called after fur_platf_constr has been called
 *** USAGE ***
 FUR_platfState* state = NEW(FUR_platfState);
+state->plat = ...
 fur_platf_constr(&state);
 // do something
 fur_platf_destr(&state);
