@@ -161,10 +161,9 @@ compile_file() {
 
 > "$OBJ_DIR/objs.tmp"  # clear temp file
 
-for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
+for file in "${FILES_C[@]}"; do
     compiler_arr=FILES_C[@]
-    flags="$CFLAGS $FLAGS_COMP $CFLAGS_COMP"
-    [[ $file == *.cc ]] && { compiler_arr=FILES_CC[@]; flags="$CCFLAGS $FLAGS_COMP"; }
+    flags="$FLAGS_COMP"
 
     compile_file "$file" compiler_arr "$flags" &
 
