@@ -3,3 +3,4 @@
 /compile_commands.json
 /render/gl/loader.c
 /render/gl/loader.h
+/cloc.sh
