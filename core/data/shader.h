@@ -3,8 +3,16 @@
 
 #include <core/macros.h>
 
+/* ====== DATATYPES ====== */
+
+    /*
+     */
+typedef void FUR_apiShader;
+
+    /*
+     */
 typedef struct {
-    u32 data;
+    FUR_apiShader* spec;
 } FUR_shader;
 
 #endif
