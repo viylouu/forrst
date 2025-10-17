@@ -2,6 +2,7 @@
 #include <render/agnostic.h>
 #include <core/macros.h>
 #include <stdlib.h>
+#include <render/gl/loader.h>
 
 int main(void) {
     FUR_platfState* platf = NEW(FUR_platfState);
@@ -17,7 +18,14 @@ int main(void) {
     render->api = FUR_RENDER_API_GL;
     fur_render_constr(render);
 
-    
+    while (!fur_platf_shouldClose(platf)) {
+        fur_platf_poll(platf);
+
+        glClearColor(.2,.4,.3, 1);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        fur_platf_present(platf);
+    }   
 
     fur_render_destr(render);
     fur_platf_destr(platf);
