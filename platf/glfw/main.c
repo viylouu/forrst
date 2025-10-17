@@ -7,7 +7,11 @@
 
 /* ====== FUNCS ====== */
 
-void fur_platf_glfw_constr(FUR_glfw_platfState* state) {
+void fur_platf_glfw_constr(FUR_glfw_platfState* state, FUR_platfState* agnostic) {
+    if (!state)
+        state = NEW(FUR_glfw_platfState);
+    state->agnostic = agnostic;
+
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -25,4 +29,20 @@ void fur_platf_glfw_constr(FUR_glfw_platfState* state) {
 void fur_platf_glfw_destr(FUR_glfw_platfState* state) {
     glfwDestroyWindow(state->window);
     glfwTerminate();
+
+    free(state);
+}
+
+b8 fur_platf_glfw_shouldWindowClose(FUR_glfw_platfState* state) {
+    return glfwWindowShouldClose(state->window);
+}
+
+void fur_platf_glfw_poll(FUR_glfw_platfState* state) {
+    (void)state;
+
+    glfwPollEvents();
+}
+
+void fur_platf_glfw_present(FUR_glfw_platfState* state) {
+    glfwSwapBuffers(state->window);
 }

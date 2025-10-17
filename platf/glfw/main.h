@@ -20,13 +20,11 @@ typedef struct {
     /* fur_platf_glfw_constr func
      * constructs the input glfw platform state
      *
-     * state requires:
-     *  - (constructed) agnostic state reference
-     *
      * params:
      *  - FUR_glfw_platfState* state -- the input glfw platform state
+     *  - FUR_platfState* agnostic -- the input agnostic platform state
      */
-void fur_platf_glfw_constr(FUR_glfw_platfState* state);
+void fur_platf_glfw_constr(FUR_glfw_platfState* state, FUR_platfState* agnostic);
 
     /* fur_platf_glfw_destr func
      * destructs the input glfw platform state
@@ -48,7 +46,7 @@ void fur_platf_glfw_destr(FUR_glfw_platfState* state);
      * params
      *  - FUR_glfw_platfState* state -- the input glfw platform state
      */
-b8 fur_platf_shouldWindowClose(FUR_glfw_platfState* state);
+b8 fur_platf_glfw_shouldWindowClose(FUR_glfw_platfState* state);
 
     /* fur_platf_glfw_poll func
      * grabs input events
@@ -59,7 +57,7 @@ b8 fur_platf_shouldWindowClose(FUR_glfw_platfState* state);
      * params
      *  - FUR_glfw_platfState* state -- the input platform state
      */
-void fur_platf_poll(FUR_glfw_platfState* state);
+void fur_platf_glfw_poll(FUR_glfw_platfState* state);
 
     /* fur_platf_glfw_present func
      * presents/swaps the current window's buffer
@@ -72,6 +70,6 @@ void fur_platf_poll(FUR_glfw_platfState* state);
      *
      * must be called after fur_platf_constr has been called
      */
-void fur_platf_present(FUR_glfw_platfState* state);
+void fur_platf_glfw_present(FUR_glfw_platfState* state);
 
 #endif

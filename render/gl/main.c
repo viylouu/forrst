@@ -1,10 +1,14 @@
 #include "main.h"
 
 #include <render/gl/loader.h>
+#include <stdlib.h>
 
 /* ====== FUNCS ====== */
 
 void fur_render_gl_constr(FUR_gl_renderState* state) {
+    if (!state)
+        state = NEW(FUR_gl_renderState);
+
     fur_render_gl_load();
 
     glEnable(GL_BLEND);
@@ -18,4 +22,6 @@ void fur_render_gl_constr(FUR_gl_renderState* state) {
 
 void fur_render_gl_destr(FUR_gl_renderState* state) {
     glDeleteVertexArrays(1, &state->shitty_vao);
+
+    free(state);
 }
