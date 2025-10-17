@@ -2,6 +2,7 @@
 #define FUR_RENDER_GL_MAIN_H
 
 #include <core/macros.h>
+#include <render/state.h>
 
 /* ====== STRUCTS ====== */
 
@@ -9,40 +10,29 @@
      * holds the opengl api's render state data
      */
 typedef struct {
+    FUR_renderState* agnostic;
     u32 shitty_vao;
 } FUR_gl_renderState;
 
 /* ====== FUNCS ====== */
 
     /* fur_render_gl_constr func
-     * creates/initializes the input gl render state
+     * constructs and returns a FUR_gl_renderState
      *
      * params:
-     *  - FUR_gl_renderState* state -- the input gl render state
-     * 
-     * input gl render state must be created manually
-*** USAGE ***
-FUR_gl_renderState* state = NEW(FUR_gl_renderState);
-fur_render_gl_constr(&state);
-*** ***** ***
+     *  - FUR_renderState* agnostic -- the input agnostic render state
      */
-void fur_render_gl_constr(FUR_gl_renderState* state);
+FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic);
 
     /* fur_render_gl_destr func
-     * ends/destroys the input gl render state
+     * destructs the input gl render state
+     *
+     * state requires:
+     *  - to have been constructed
      *
      * params
      * - FUR_gl_renderState* state -- the input gl render state
-     *
-     * input gl render state must be created manually
-     * must be called after fur_render_gl_init has been called
-*** USAGE ***
-FUR_gl_renderState* state = NEW(FUR_gl_renderState);
-fur_render_gl_constr(&state);
-// do something
-fur_render_gl_destr(&state);
-*** ***** ***
-     */
+      */
 void fur_render_gl_destr(FUR_gl_renderState* state);
 
 #endif

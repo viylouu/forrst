@@ -7,9 +7,8 @@
 
 /* ====== FUNCS ====== */
 
-void fur_platf_glfw_constr(FUR_glfw_platfState* state, FUR_platfState* agnostic) {
-    if (!state)
-        state = NEW(FUR_glfw_platfState);
+FUR_glfw_platfState* fur_platf_glfw_constr(FUR_platfState* agnostic) {
+    FUR_glfw_platfState* state = NEW(FUR_glfw_platfState);
     state->agnostic = agnostic;
 
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
@@ -24,6 +23,8 @@ void fur_platf_glfw_constr(FUR_glfw_platfState* state, FUR_platfState* agnostic)
     state->window = glfwCreateWindow(state->agnostic->width, state->agnostic->height, state->agnostic->title, NULL,NULL);
 
     glfwMakeContextCurrent(state->window);
+
+    return state;
 }
 
 void fur_platf_glfw_destr(FUR_glfw_platfState* state) {

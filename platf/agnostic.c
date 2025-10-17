@@ -13,12 +13,20 @@
 
 /* ====== FUNCS ====== */
 
-void fur_platf_constr(FUR_platfState* state) {
+FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops) {
+    FUR_platfState* state = NEW(FUR_platfState);
+    state->plat = ops.plat;
+    state->title = ops.title;
+    state->width = ops.width;
+    state->height = ops.height;
+
     switch(state->plat) {
         case FUR_PLATF_GLFW:
-            fur_platf_glfw_constr(state->spec, state); break;
+            state->spec = fur_platf_glfw_constr(state); break;
         crit_def_for("fur_platf_constr");
     }
+    
+    return state;
 }
 
 void fur_platf_destr(FUR_platfState* state) {

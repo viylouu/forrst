@@ -7,18 +7,23 @@
 /* ====== FUNCS ====== */
 
     /* fur_platf_constr func
-     * constructs the input platform state
-     *
-     * state requires:
-     *  - title must be set
-     *  - width must be set
-     *  - height must be set
-     *  - plat must be set
-     *
-     * params:
-     * - FUR_platfState* state -- the input platform state
+     * constructs and returns a FUR_platfState*
+     * title must be set
      */
-void fur_platf_constr(FUR_platfState* state);
+typedef struct {
+    char* title;
+    s32 width;
+    s32 height;
+    FUR_targetPlatf plat;
+} OP_fur_platf_constr;
+FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops);
+#define fur_platf_constr(...)                      \
+    IMPL_fur_platf_constr((OP_fur_platf_constr){ \
+            .plat = FUR_PLATF_GLFW,                       \
+            .title = "untitled"                           \
+            .width = 800,                                 \
+            .height = 600,                                \
+            __VA_ARGS__})
 
     /* fur_platf_destr func
      * destructs the input platform state

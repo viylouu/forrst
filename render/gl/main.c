@@ -5,9 +5,9 @@
 
 /* ====== FUNCS ====== */
 
-void fur_render_gl_constr(FUR_gl_renderState* state) {
-    if (!state)
-        state = NEW(FUR_gl_renderState);
+FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
+    FUR_gl_renderState* state = NEW(FUR_gl_renderState);
+    state->agnostic = agnostic;
 
     fur_render_gl_load();
 
@@ -18,6 +18,8 @@ void fur_render_gl_constr(FUR_gl_renderState* state) {
     glDepthFunc(GL_LEQUAL);
 
     glGenVertexArrays(1, &state->shitty_vao);
+
+    return state;
 }
 
 void fur_render_gl_destr(FUR_gl_renderState* state) {

@@ -18,13 +18,12 @@ typedef struct {
 /* ====== FUNCS ====== */
 
     /* fur_platf_glfw_constr func
-     * constructs the input glfw platform state
+     * constructs and returns a glfw platform state
      *
      * params:
-     *  - FUR_glfw_platfState* state -- the input glfw platform state
      *  - FUR_platfState* agnostic -- the input agnostic platform state
      */
-void fur_platf_glfw_constr(FUR_glfw_platfState* state, FUR_platfState* agnostic);
+FUR_glfw_platfState* fur_platf_glfw_constr(FUR_platfState* agnostic);
 
     /* fur_platf_glfw_destr func
      * destructs the input glfw platform state
