@@ -49,6 +49,7 @@ b8 fur_platf_shouldWindowClose(FUR_platfState* state);
 
     /* fur_platf_poll func
      * grabs input events
+     * NOTE: this is required in order to have the window not "freeze" according to the desktop
      *
      * state requires:
      *  - to have been constructed

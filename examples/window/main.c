@@ -6,7 +6,6 @@
 
 int main(void) {
     FUR_platfState* platf = fur_platf_constr();
-
     FUR_renderState* render = fur_render_constr();
 
     while (!fur_platf_shouldWindowClose(platf)) {
