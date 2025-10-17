@@ -11,7 +11,7 @@
      * title must be set
      */
 typedef struct {
-    u8 dummy;
+    u8 _dummy;
     char* title;
     s32 width;
     s32 height;

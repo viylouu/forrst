@@ -10,7 +10,7 @@
      * constructs the input render state
      */
 typedef struct {
-    u8 dummy;
+    u8 _dummy;
     FUR_targetRenderApi api;
 } OP_fur_render_constr;
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops);
