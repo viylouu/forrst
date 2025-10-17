@@ -24,3 +24,8 @@ if there is a part of the code that does not have documentation, make an issue a
 ## license
 this project is licensed under the LGPLv3 copyleft,  
 for more information, see [here](LICENSE.LGPL)
+
+# TODO
+- implement an "optional parameter system" (the .thing = 0, .a = b, .foo = bar  in functions)
+    - auto zero the params before setting them
+    - then you can check for set and unset params
