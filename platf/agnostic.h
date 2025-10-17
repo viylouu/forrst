@@ -20,7 +20,7 @@ FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops);
 #define fur_platf_constr(...)                      \
     IMPL_fur_platf_constr((OP_fur_platf_constr){ \
             .plat = FUR_PLATF_GLFW,                       \
-            .title = "untitled"                           \
+            .title = "untitled",                          \
             .width = 800,                                 \
             .height = 600,                                \
             __VA_ARGS__})
