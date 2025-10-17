@@ -3,12 +3,11 @@
 #include <core/macros.h>
 #include <stdio.h>
 #include <stdlib.h>
-
 #include <GLFW/glfw3.h>
 
 /* ====== FUNCS ====== */
 
-void fur_platf_glfw_constr(FUR_glfw_platfState* state, const char* title, s32 width, s32 height) {
+void fur_platf_glfw_constr(FUR_glfw_platfState* state) {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_API);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -18,7 +17,7 @@ void fur_platf_glfw_constr(FUR_glfw_platfState* state, const char* title, s32 wi
 
     ERROR_IF(!glfwInit(), "failed to init glfw!\n");
 
-    state->window = glfwCreateWindow(width, height, title, NULL,NULL);
+    state->window = glfwCreateWindow(state->agnostic->width, state->agnostic->height, state->agnostic->title, NULL,NULL);
 
     glfwMakeContextCurrent(state->window);
 }

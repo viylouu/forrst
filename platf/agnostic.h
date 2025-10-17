@@ -1,35 +1,10 @@
 #ifndef FUR_PLATFORM_AGNOSTIC_H
 #define FUR_PLATFORM_AGNOSTIC_H
 
+#include <core/macros.h>
 #include <platf/glfw/main.h>
 
-/* ====== DATATYPES ====== */
 
-    /* FUR_target_platfState union
-     * pointer to the underlying os/platform specific data
-     * (not a pointer because i like typing TYPE*)
-     * valid cases:
-     * - FUR_glfw_platfState
-     */
-typedef void FUR_target_platfState;
-
-    /* FUR_targetPlatf enum
-     */
-typedef enum {
-    FUR_PLATF_GLFW
-} FUR_targetPlatf;
-
-    /* FUR_platfState struct
-     * holds the os/platform agnostic data
-     * aswell as the specific data (stored as a FUR_target_platfState)
-     */
-typedef struct {
-    FUR_target_platfState* spec;
-    FUR_targetPlatf plat;
-
-    char* title;
-    s32 width, height;
-} FUR_platfState;
 
 /* ====== FUNCS ====== */
 
@@ -58,19 +33,44 @@ void fur_platf_constr(FUR_platfState* state);
      * params
      * - FUR_platfState* state -- the input platform state
      *
-     * input platform state must be created manually
      * must be called after fur_platf_constr has been called
 *** USAGE ***
-FUR_platfState* state = NEW(FUR_platfState);
-state->plat = ...
-state->title = ...
-state->width = ...
 ...
 fur_platf_constr(&state);
-// do something
+// window stuff
 fur_platf_destr(&state);
 *** ***** ***
      */
 void fur_platf_destr(FUR_platfState* state);
+
+    /* fur_platf_shouldWindowClose func
+     * returns if the window should store processing events
+     *
+     * params
+     * - FUR_platfState* state -- the input platform state
+     *
+     * must be called after fur_platf_constr has been called
+     */
+b8 fur_platf_shouldWindowClose(FUR_platfState* state);
+
+    /* fur_platf_poll func
+     * grabs input events
+     *
+     * params
+     * - FUR_platfState* state -- the input platform state
+     *
+     * must be called after fur_platf_constr has been called
+     */
+void fur_platf_poll(FUR_platfState* state);
+
+    /* fur_platf_present func
+     * presents/swaps the current window's buffer
+     *
+     * params
+     * - FUR_platfState* state -- the input platform state
+     *
+     * must be called after fur_platf_constr has been called
+     */
+void fur_platf_present(FUR_platfState* state);
 
 #endif

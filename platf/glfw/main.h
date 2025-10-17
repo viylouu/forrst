@@ -3,6 +3,7 @@
 
 #include <core/macros.h>
 #include <GLFW/glfw3.h>
+#include <platf/state.h> // ts pmo
 
 /* ====== STRUCTS ====== */
 
@@ -10,6 +11,7 @@
      * holds the opengl api's render state data
      */
 typedef struct {
+    FUR_platfState* agnostic;
     GLFWwindow* window;
 } FUR_glfw_platfState;
 
@@ -18,32 +20,58 @@ typedef struct {
     /* fur_platf_glfw_constr func
      * constructs the input glfw platform state
      *
+     * state requires:
+     *  - (constructed) agnostic state reference
+     *
      * params:
      *  - FUR_glfw_platfState* state -- the input glfw platform state
-     * 
-     * input glfw platform state must be created manually
-*** USAGE ***
-FUR_glfw_platfState* state = NEW(FUR_glfw_platfState);
-fur_platf_glfw_constr(&state);
-*** ***** ***
      */
-void fur_platf_glfw_constr(FUR_glfw_platfState* state, const char* title, s32 width, s32 height);
+void fur_platf_glfw_constr(FUR_glfw_platfState* state);
 
     /* fur_platf_glfw_destr func
      * destructs the input glfw platform state
      *
-     * params
-     * - FUR_glfw_platfState* state -- the input glfw platform state
+     * state requires:
+     *  - to have been constructed
      *
-     * input glfw platform state must be created manually
-     * must be called after fur_platform_glfw_init has been called
-*** USAGE ***
-FUR_glfw_platfState* state = NEW(FUR_glfw_platfState);
-fur_platf_glfw_constr(&state);
-// do something
-fur_platf_glfw_destr(&state);
-*** ***** ***
+     * params
+     *  - FUR_glfw_platfState* state -- the input glfw platform state
      */
 void fur_platf_glfw_destr(FUR_glfw_platfState* state);
+
+    /* fur_platf_glfw_shouldWindowClose func
+     * returns if the window should store processing events
+     *
+     * state requires:
+     *  - to have been constructed
+     *
+     * params
+     *  - FUR_glfw_platfState* state -- the input glfw platform state
+     */
+b8 fur_platf_shouldWindowClose(FUR_glfw_platfState* state);
+
+    /* fur_platf_glfw_poll func
+     * grabs input events
+     *
+     * state requires:
+     *  - to have been constructed
+     *
+     * params
+     *  - FUR_glfw_platfState* state -- the input platform state
+     */
+void fur_platf_poll(FUR_glfw_platfState* state);
+
+    /* fur_platf_glfw_present func
+     * presents/swaps the current window's buffer
+     *
+     * state requires:
+     *  - to have been constructed
+     *
+     * params
+     *  - FUR_platfState* state -- the input platform state
+     *
+     * must be called after fur_platf_constr has been called
+     */
+void fur_platf_present(FUR_glfw_platfState* state);
 
 #endif

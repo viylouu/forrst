@@ -18,7 +18,7 @@ int main(void) {
     render->api = FUR_RENDER_API_GL;
     fur_render_constr(render);
 
-    while (!fur_platf_shouldClose(platf)) {
+    while (!fur_platf_shouldWindowClose(platf)) {
         fur_platf_poll(platf);
 
         glClearColor(.2,.4,.3, 1);
