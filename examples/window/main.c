@@ -7,9 +7,7 @@
 int main(void) {
     FUR_platfState* platf = fur_platf_constr();
 
-    FUR_renderState* render = NEW(FUR_renderState);
-    render->api = FUR_RENDER_API_GL;
-    FUR_renderState* render = fur_render_constr(.api = FUR_RENDER_API_GL);
+    FUR_renderState* render = fur_render_constr();
 
     while (!fur_platf_shouldWindowClose(platf)) {
         fur_platf_poll(platf);
