@@ -1,4 +1,4 @@
-# furry
+# furry engine
 furry engine is a game engine designed to be a game engine  
 you interface with it through c++  
 it is only built using c99 and c++  
