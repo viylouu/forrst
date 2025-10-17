@@ -6,11 +6,9 @@ it is built using c99
 furry engine is designed around fast compile times, (relatively) clean code, and not fucking deviating your septum. not fucking deviating from the rules i swear to god if you even TOUCH the rules i WILL rewrite your entire fucking MIND.  
 
 rules i will not tolerate the breakage of:  
-- language: C99
-- memory model: manual
-- no global state
+- language: no c++
 - every module has a state struct
-- no fucking code in the headers, i swear to god
+- no fucking implementations in the headers, i swear to god
 
 paerperrperr (i forgot the word precedence):
 - readability over performance (mostly in the headers, depends on just how bad it is in main source)
