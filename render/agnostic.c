@@ -15,7 +15,9 @@
 
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops) {
     FUR_renderState* state = NEW(FUR_renderState);
-    state->api = ops.api;
+    state->api = FUR_RENDER_API_GL;
+
+    if (ops.api) state->api = ops.api;
 
     switch(state->api) {
         case FUR_RENDER_API_GL:

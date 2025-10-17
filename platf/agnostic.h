@@ -11,19 +11,15 @@
      * title must be set
      */
 typedef struct {
+    u8 dummy;
     char* title;
     s32 width;
     s32 height;
     FUR_targetPlatf plat;
 } OP_fur_platf_constr;
 FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops);
-#define fur_platf_constr(...)                      \
-    IMPL_fur_platf_constr((OP_fur_platf_constr){ \
-            .plat = FUR_PLATF_GLFW,                       \
-            .title = "untitled",                          \
-            .width = 800,                                 \
-            .height = 600,                                \
-            __VA_ARGS__})
+#define fur_platf_constr(...) \
+    IMPL_fur_platf_constr((OP_fur_platf_constr){0 __VA_OPT__(, __VA_ARGS__)})
 
     /* fur_platf_destr func
      * destructs the input platform state

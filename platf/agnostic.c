@@ -15,10 +15,15 @@
 
 FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops) {
     FUR_platfState* state = NEW(FUR_platfState);
-    state->plat = ops.plat;
-    state->title = ops.title;
-    state->width = ops.width;
-    state->height = ops.height;
+    state->plat = FUR_PLATF_GLFW;
+    state->title = "untitled";
+    state->width = 800;
+    state->height = 600;
+
+    if (ops.plat)   state->plat = ops.plat;
+    if (ops.title)  state->title = ops.title;
+    if (ops.width)  state->width = ops.width;
+    if (ops.height) state->height = ops.height;
 
     switch(state->plat) {
         case FUR_PLATF_GLFW:
