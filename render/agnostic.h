@@ -6,7 +6,6 @@
 
 /* ====== DATATYPES ====== */
 typedef struct {
-    u8 _dummy;
     FUR_targetRenderApi api;
 } OP_fur_render_constr;
 
@@ -17,6 +16,6 @@ void fur_render_destr(FUR_renderState* state);
 
 /* ====== MACROS ====== */
 #define fur_render_constr(...) \
-    IMPL_fur_render_constr((OP_fur_render_constr){0 __VA_OPT__(, __VA_ARGS__)})
+    IMPL_fur_render_constr((OP_fur_render_constr){ .api = FUR_RENDER_API_GL, __VA_ARGS__ })
 
 #endif
