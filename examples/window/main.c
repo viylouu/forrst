@@ -11,6 +11,8 @@ int main(void) {
 
         fur_render_clear(render, .2,.4,.3);
 
+        fur_render_flush(render);
+
         fur_platf_present(platf);
     }   
 

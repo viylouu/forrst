@@ -8,4 +8,6 @@
 
 void fur_render_clear(FUR_renderState* render, f32 r, f32 g, f32 b);
 
+void fur_render_flush(FUR_renderState* render);
+
 #endif

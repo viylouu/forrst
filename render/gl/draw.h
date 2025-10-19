@@ -7,4 +7,6 @@
 
 void fur_render_gl_clear(FUR_gl_renderState* render, f32 r, f32 g, f32 b);
 
+void fur_render_gl_flush(FUR_gl_renderState* render);
+
 #endif

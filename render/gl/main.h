@@ -25,7 +25,7 @@ typedef struct {
 
     FUR_gl_instanceData batch[65536];
     FUR_gl_batchType batch_type;
-    u32 batch_elems;
+    u32 batch_amt;
 
     FUR_texture* nil;
 
