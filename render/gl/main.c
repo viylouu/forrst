@@ -3,9 +3,13 @@
 #include <render/gl/loader.h>
 #include <stdlib.h>
 
+#include <core/data/shader.h>
+
 /* ====== FUNCS ====== */
 
 FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
+    const FUR_targetRenderApi api = FUR_RENDER_API_GL;
+
     FUR_gl_renderState* state = NEW(FUR_gl_renderState);
     state->agnostic = agnostic;
 
@@ -19,11 +23,17 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
 
     glGenVertexArrays(1, &state->shitty_vao);
 
+    state->nil = fur_texture_load(api, "data/eng/nil.png");
+
     return state;
 }
 
 void fur_render_gl_destr(FUR_gl_renderState* state) {
+    const FUR_targetRenderApi api = FUR_RENDER_API_GL;
+
     glDeleteVertexArrays(1, &state->shitty_vao);
+
+    fur_texture_unload(api, state->nil);
 
     free(state);
 }
