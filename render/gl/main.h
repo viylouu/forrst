@@ -1,30 +1,36 @@
 #ifndef FUR_RENDER_GL_MAIN_H
 #define FUR_RENDER_GL_MAIN_H
 
+#include <core/matrix.h>
 #include <core/macros.h>
 #include <render/state.h>
+#include <render/gl/structs.h>
 
 #include <core/data/shader.h>
 #include <core/data/texture.h>
 
 /* ====== STRUCTS ====== */
 
-typedef struct { s32 inst_size, insts, proj; }                              FUR_2d_genericLoc;
-typedef struct { FUR_shader* shader; u32 bo, tbo; FUR_2d_genericLoc loc; }  FUR_2d_generic;
-
-typedef struct { FUR_2d_generic generic; }                                  FUR_2d_rect;
-
-typedef struct { s32 tex; }                                                 FUR_2d_texLoc;
-typedef struct { FUR_2d_generic generic; FUR_2d_texLoc loc; }               FUR_2d_tex;
+typedef enum {
+    FUR_GL_BATCH_NONE,
+    FUR_GL_BATCH_RECT,
+    FUR_GL_BATCH_TEX
+} FUR_gl_batchType;
 
 typedef struct {
     FUR_renderState* agnostic;
     u32 shitty_vao;
 
+    mat4 proj;
+
+    FUR_gl_instanceData batch[65536];
+    FUR_gl_batchType batch_type;
+    u32 batch_elems;
+
     FUR_texture* nil;
 
-    FUR_2d_rect rect2d;
-    FUR_2d_tex  tex2d;
+    FUR_gl_2d_rect rect2d;
+    FUR_gl_2d_tex  tex2d;
 } FUR_gl_renderState;
 
 /* ====== FUNCS ====== */

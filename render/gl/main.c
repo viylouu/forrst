@@ -1,6 +1,7 @@
 #include "main.h"
 
 #include <render/gl/loader.h>
+#include <render/gl/structs.h>
 #include <stdlib.h>
 
 #include <core/data/shader.h>
@@ -24,12 +25,18 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
     glGenVertexArrays(1, &state->shitty_vao);
 
     state->nil = fur_texture_load(api, "data/eng/nil.png");
+    
+    mat4_identity(&state->proj);
+
+    fur_render_gl_2d_rect_constr(&state->rect2d);
 
     return state;
 }
 
 void fur_render_gl_destr(FUR_gl_renderState* state) {
     const FUR_targetRenderApi api = FUR_RENDER_API_GL;
+
+    fur_render_gl_2d_rect_destr(&state->rect2d);
 
     glDeleteVertexArrays(1, &state->shitty_vao);
 
