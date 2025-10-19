@@ -6,11 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* ====== MACROS ====== */
-
-#define crit_def_for(func) default: ERROR("selected platform has no support for function \"%s\"!\n", func); break
-#define warn_def_for(func) defualt: WARN("selected platform has no support for function \"%s\"!\n", func); break
-
 /* ====== FUNCS ====== */
 
 FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops) {

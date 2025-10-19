@@ -34,7 +34,7 @@ typedef u64 b64;
 
 #define WARN(...) do { \
         printf("WARNING! [\"%s\" ln:%d]\n", __FILE__, __LINE__); \
-        printf(__VA_ARGS__;; \
+        printf(__VA_ARGS__); \
     } while (0)
 
 #define WARN_IF(cond,...) do { if ((cond)) { WARN(__VA_ARGS__); } } while(0)
@@ -47,5 +47,10 @@ typedef u64 b64;
 
 #define NEW(type) \
     malloc(sizeof(type))
+
+/* ====== API SPECIFIERS ====== */
+
+#define crit_def_for(func) default: ERROR("selected api has no support for function \"%s\"!\n", func); break
+#define warn_def_for(func) default: WARN ("selected api has no support for function \"%s\"!\n", func); break
 
 #endif

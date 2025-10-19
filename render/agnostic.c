@@ -6,11 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-/* ====== MACROS ====== */
-
-#define crit_def_for(func) default: ERROR("selected api has no support for function \"%s\"!\n", func); break
-#define warn_def_for(func) defualt: WARN("selected api has no support for function \"%s\"!\n", func); break
-
 /* ====== FUNCS ====== */
 
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops) {
