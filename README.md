@@ -17,10 +17,6 @@ paerperrperr (i forgot the word precedence):
 ## when designing a feature
 when designing a feature, first define how you want the user to interact and interface with it. this makes it so you can have a clear way of how the user should use it, and if you are lazy, thats really good, please be lazy, because you want the user to not have to type 5 fucking paragraphs when drawing a rectangle.
 
-## documentation
-the documentation is all in the header files  
-if there is a part of the code that does not have documentation, make an issue about it.  
-
 ## license
 this project is licensed under the LGPLv3 copyleft,  
 for more information, see [here](LICENSE.LGPL)

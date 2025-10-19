@@ -4,25 +4,19 @@
 #include <render/state.h>
 #include <core/macros.h>
 
-/* ====== FUNCS ====== */
-
-    /* fur_render_constr func
-     * constructs the input render state
-     */
+/* ====== DATATYPES ====== */
 typedef struct {
     u8 _dummy;
     FUR_targetRenderApi api;
 } OP_fur_render_constr;
+
+/* ====== FUNCS ====== */
+
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops);
+void fur_render_destr(FUR_renderState* state);
+
+/* ====== MACROS ====== */
 #define fur_render_constr(...) \
     IMPL_fur_render_constr((OP_fur_render_constr){0 __VA_OPT__(, __VA_ARGS__)})
-
-    /* fur_render_destr func
-     * destructs the input render state
-     *
-     * params
-     * - FUR_renderState* state -- the input render state
-     */
-void fur_render_destr(FUR_renderState* state);
 
 #endif
