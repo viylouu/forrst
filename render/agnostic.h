@@ -13,6 +13,7 @@ typedef struct {
 
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops);
 void fur_render_destr(FUR_renderState* state);
+void fur_render_resize(FUR_renderState* state, f32 w, f32 h);
 
 /* ====== MACROS ====== */
 #define fur_render_constr(...) \

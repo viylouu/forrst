@@ -30,3 +30,11 @@ void fur_render_destr(FUR_renderState* state) {
 
     free(state);
 }
+
+void fur_render_resize(FUR_renderState* state, f32 w, f32 h) {
+    switch(state->api) {
+        case FUR_RENDER_API_GL:
+            fur_render_gl_resize(state->spec, w,h); break;
+        warn_def_for("fur_render_resize");
+    }
+}

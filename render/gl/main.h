@@ -37,5 +37,6 @@ typedef struct {
 
 FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic);
 void fur_render_gl_destr(FUR_gl_renderState* state);
+void fur_render_gl_resize(FUR_gl_renderState* state, f32 w, f32 h);
 
 #endif

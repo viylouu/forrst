@@ -10,7 +10,7 @@
 
 FUR_platfState* IMPL_fur_platf_constr(OP_fur_platf_constr ops) {
     FUR_platfState* state = NEW(FUR_platfState);
-    state->plat = ops.plat;
+    state->plat = ops.platf;
     state->title = ops.title;
     state->width = ops.dims.x;
     state->height = ops.dims.y;

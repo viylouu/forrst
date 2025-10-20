@@ -5,13 +5,16 @@
 
 int main(void) {
     FUR_platfState* platf = fur_platf_constr();
-    FUR_renderState* render = fur_render_constr(.api = FUR_RENDER_API_GL);
+    FUR_renderState* render = fur_render_constr();
+
+    // todo
+    // fur_platf_setRender(platf, render);
 
     while (!fur_platf_shouldWindowClose(platf)) {
         fur_platf_poll(platf);
 
         fur_render_clear(render, .2,.4,.3);
-        fur_render_rect(render, .size = (v2){64,64});
+        fur_render_rect(render, .size = (v2){64,64}, .col = (v4){1,0,0,1});
 
         fur_render_flush(render);
 
