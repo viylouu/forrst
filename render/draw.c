@@ -23,3 +23,13 @@ void fur_render_flush(FUR_renderState* render) {
         warn_def_for("fur_render_flush");
     }
 }
+
+/* ====== FUNCS ====== */
+
+void IMPL_fur_render_rect(FUR_renderState* render, OP_fur_render_rect op) {
+    switch(render->api) {
+        case FUR_RENDER_API_GL:
+            fur_render_gl_rect(render->spec, op.transf, op.pos, op.size, op.col); break;
+        warn_def_for("fur_render_rect");
+    }
+}

@@ -22,6 +22,11 @@ typedef u16 b16;
 typedef u32 b32;
 typedef u64 b64;
 
+/* --- VECTORS --- */
+typedef struct { f32 x, y; }       v2;
+typedef struct { f32 x, y, z; }    v3;
+typedef struct { f32 x, y, z, w; } v4;
+
 /* ====== ERRORS AND WARNINGS ====== */
 
 #define ERROR(...) do { \

@@ -26,7 +26,7 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
 
     state->nil = fur_texture_load(api, "data/eng/nil.png");
     
-    mat4_identity(&state->proj);
+    mat4_set_identity(&state->proj);
 
     fur_render_gl_2d_rect_constr(&state->rect2d);
 

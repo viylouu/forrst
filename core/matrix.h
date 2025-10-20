@@ -5,6 +5,8 @@
 
 typedef f32 mat4[16];
 
+#define mat4_identity { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 }
+
 void mat4_make(
     mat4* mat,
     f32 m00, f32 m01, f32 m02, f32 m03,
@@ -22,7 +24,7 @@ void mat4_ortho(
     f32 near, f32 far
 );
 
-void mat4_identity(mat4* mat);
+void mat4_set_identity(mat4* mat);
 
 void mat4_translate(mat4* mat, f32 x, f32 y, f32 z);
 void mat4_scale(mat4* mat, f32 x, f32 y, f32 z);

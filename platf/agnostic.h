@@ -7,8 +7,7 @@
 /* ====== DATATYPES ====== */
 typedef struct {
     char* title;
-    s32 width;
-    s32 height;
+    v2 dims;
     FUR_targetPlatf plat;
 } OP_fur_platf_constr;
 
@@ -25,7 +24,7 @@ void fur_platf_present(FUR_platfState* state);
 
 /* ====== MACROS ====== */
 #define fur_platf_constr(...) \
-    IMPL_fur_platf_constr((OP_fur_platf_constr){ .title = "untitled", .width = 800, .height = 600, __VA_ARGS__ })
+    IMPL_fur_platf_constr((OP_fur_platf_constr){ .title = "untitled", .dims = (v2){800,600}, __VA_ARGS__ })
 
 
 #endif

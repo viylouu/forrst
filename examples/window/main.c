@@ -1,6 +1,7 @@
 #include <platf/agnostic.h>
 #include <render/agnostic.h>
 #include <render/draw.h>
+#include <core/macros.h>
 
 int main(void) {
     FUR_platfState* platf = fur_platf_constr();
@@ -10,6 +11,7 @@ int main(void) {
         fur_platf_poll(platf);
 
         fur_render_clear(render, .2,.4,.3);
+        fur_render_rect(render, .size = (v2){64,64});
 
         fur_render_flush(render);
 
