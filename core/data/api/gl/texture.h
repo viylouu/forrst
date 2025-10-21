@@ -8,6 +8,7 @@
 
 typedef struct {
     FUR_texture* agnostic;
+    u32 id;
 } FUR_gl_texture;
 
 /* ====== FUNCS ====== */

@@ -1,6 +1,7 @@
 #ifndef FUR_TEXTURE_H
 #define FUR_TEXTURE_H
 
+#include <core/macros.h>
 #include <render/state.h>
 
 /* ====== DATATYPES ====== */
@@ -9,6 +10,7 @@ typedef void FUR_apiTexture;
 
 typedef struct {
     FUR_apiTexture* spec;
+    s32 width, height;
 } FUR_texture;
 
 /* ====== FUNCS ====== */

@@ -48,6 +48,29 @@ typedef struct { f32 x, y, z, w; } v4;
     WARN(__VA_ARGS__); \
     return val
 
+#define WARN_RETVOID(...) \
+    WARN(__VA_ARGS__); \
+    return
+
+#define WARN_RET_IF(cond, val, ...) do { if ((cond)) { WARN_RET((val), __VA_ARGS__); } } while(0)
+#define WARN_RETVOID_IF(cond, ...) do { if ((cond)) { WARN_RETVOID(__VA_ARGS__); } } while(0)
+
+/* ====== MEMORY ====== */
+
+#define TRY_FREE(val) \
+    if (!(val)) \
+        WARN("cannot free value \"%s\"! (is null)", #val); \
+    else \
+        free(val)
+
+#define FREE_NULLIFY(val) \
+    free(val); \
+    val = NULL
+
+#define TRY_FREE_NULLIFY(val) \
+    TRY_FREE(val); \
+    val = NULL
+
 /* ====== VARIABLE STUFF ====== */
 
 #define NEW(type) \
@@ -57,5 +80,13 @@ typedef struct { f32 x, y, z, w; } v4;
 
 #define crit_def_for(func) default: ERROR("selected api has no support for function \"%s\"!\n", func); break
 #define warn_def_for(func) default: WARN ("selected api has no support for function \"%s\"!\n", func); break
+
+/* ====== GENERIAL ====== */
+
+#define DEREF_CAST(type, val) \
+    (*((type)(val)))
+
+#define CAST(type, val) \
+    ((type)(val))
 
 #endif

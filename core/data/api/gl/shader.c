@@ -22,11 +22,12 @@ u32 fur_gl_sShader_loadFromSource(u32 type, const char** source) {
         char* log = malloc(length);
         glGetShaderInfoLog(shader, length, 0, log);
 
-        printf("shader compile error!\n%s\n", log);
+        WARN("shader compile error!\n%s\n", log);
         free(log);
 
         glDeleteShader(shader);
-        exit(1);
+        
+        return 0;
     }
 
     return shader;
@@ -48,11 +49,12 @@ u32 fur_gl_program_compile(u32* shaders, u32 amount) {
         char* log = malloc(length);
         glGetProgramInfoLog(program, length, 0, log);
 
-        printf("shader program compile error!\n%s\n", log);
+        WARN("shader program compile error!\n%s\n", log);
         free(log);
 
         glDeleteProgram(program);
-        exit(1);
+
+        return 0;
     }
     
     return program;
@@ -78,21 +80,14 @@ FUR_gl_shader* fur_gl_shader_loadFromSource(FUR_shader* agnostic, const char** v
 
 char* fur_gl_shader_loadSource(const char* path) {
     FILE* file = fopen(path, "rb");
-    if (!file) { 
-        printf("failed to open shader at \"%s\"!\n", path); 
-        exit(1); 
-    }
+    WARN_RET_IF(!file, NULL, "failed to open shader at \"%s\"!\n", path);
 
     fseek(file, 0, SEEK_END);
     long size = ftell(file); // why is it long and not long long so i can use s64? idfk
     rewind(file);
 
     char* buffer = malloc(size + 1);
-    if (!buffer) {
-        fclose(file);
-        printf("failed to allocate size for the shader at \"%s\"!\n", path);
-        exit(1);
-    }
+    WARN_RET_IF(!buffer, (fclose(file), NULL), "failed to allocate size for the shader at \"%s\"!\n", path);
 
     fread(buffer, 1, size, file);
     fclose(file);
@@ -106,14 +101,15 @@ FUR_gl_shader* fur_gl_shader_load(FUR_shader* agnostic, const char* vert, const 
     char* vbuf = fur_gl_shader_loadSource(vert);
     char* fbuf = fur_gl_shader_loadSource(frag);
 
-    ERROR_IF(!vbuf, "failed to read shader at \"%s\"!\n", vert);
-    ERROR_IF(!fbuf, "failed to read shader at \"%s\"!\n", frag);
+    WARN_RET_IF(!vbuf, NULL, "failed to read shader at \"%s\"!\n", vert);
+    WARN_RET_IF(!fbuf, NULL, "failed to read shader at \"%s\"!\n", frag);
 
     const char* vsrc = vbuf;
     const char* fsrc = fbuf;
 
     FUR_gl_shader* shader = fur_gl_shader_loadFromSource(agnostic, &vsrc, &fsrc);
 
+    // already know its not null by now
     free(vbuf);
     free(fbuf);
 
@@ -121,5 +117,8 @@ FUR_gl_shader* fur_gl_shader_load(FUR_shader* agnostic, const char* vert, const 
 }
 
 void fur_gl_shader_unload(FUR_gl_shader* shader) {
+    WARN_RETVOID_IF(!shader, "cannot unload null shader!\n");
+
+    glDeleteProgram(shader->program);
     free(shader);
 }
