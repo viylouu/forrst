@@ -4,6 +4,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GLFW/glfw3.h>
+#include <render/agnostic.h>
+
+/* ====== FUNCS ====== */
+
+void fur_platf_glfw_onResize(GLFWwindow* window, s32 width, s32 height) {
+    FUR_renderState* render = glfwGetWindowUserPointer(window);
+    fur_render_resize(render, width, height);
+}
 
 /* ====== FUNCS ====== */
 
@@ -23,6 +31,8 @@ FUR_glfw_platfState* fur_platf_glfw_constr(FUR_platfState* agnostic) {
     state->window = glfwCreateWindow(state->agnostic->width, state->agnostic->height, state->agnostic->title, NULL,NULL);
 
     glfwMakeContextCurrent(state->window);
+
+    glfwSetFramebufferSizeCallback(state->window, fur_platf_glfw_onResize);
 
     return state;
 }
@@ -46,4 +56,8 @@ void fur_platf_glfw_poll(FUR_glfw_platfState* state) {
 
 void fur_platf_glfw_present(FUR_glfw_platfState* state) {
     glfwSwapBuffers(state->window);
+}
+
+void fur_platf_glfw_setRender(FUR_glfw_platfState* state, FUR_renderState* render) {
+    glfwSetWindowUserPointer(state->window, render);
 }

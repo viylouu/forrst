@@ -4,6 +4,7 @@
 #include <core/macros.h>
 #include <GLFW/glfw3.h>
 #include <platf/state.h> // ts pmo
+#include <render/state.h>
 
 /* ====== STRUCTS ====== */
 
@@ -22,5 +23,7 @@ b8 fur_platf_glfw_shouldWindowClose(FUR_glfw_platfState* state);
 void fur_platf_glfw_poll(FUR_glfw_platfState* state);
 
 void fur_platf_glfw_present(FUR_glfw_platfState* state);
+
+void fur_platf_glfw_setRender(FUR_glfw_platfState* state, FUR_renderState* render);
 
 #endif

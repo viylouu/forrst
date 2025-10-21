@@ -3,6 +3,7 @@
 
 #include <core/macros.h>
 #include <platf/state.h>
+#include <render/state.h>
 
 /* ====== DATATYPES ====== */
 typedef struct {
@@ -21,6 +22,8 @@ b8 fur_platf_shouldWindowClose(FUR_platfState* state);
 void fur_platf_poll(FUR_platfState* state);
 
 void fur_platf_present(FUR_platfState* state);
+
+void fur_platf_setRender(FUR_platfState* state, FUR_renderState* render);
 
 /* ====== MACROS ====== */
 #define fur_platf_constr(...) \

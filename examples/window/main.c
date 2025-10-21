@@ -7,8 +7,7 @@ int main(void) {
     FUR_platfState* platf = fur_platf_constr();
     FUR_renderState* render = fur_render_constr();
 
-    // todo
-    // fur_platf_setRender(platf, render);
+    fur_platf_setRender(platf, render);
 
     while (!fur_platf_shouldWindowClose(platf)) {
         fur_platf_poll(platf);
