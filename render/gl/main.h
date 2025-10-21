@@ -23,7 +23,7 @@ typedef struct {
 
     mat4 proj;
 
-    FUR_gl_instanceData batch[65536];
+    FUR_gl_instanceData batch[8192];
     FUR_gl_batchType batch_type;
     u32 batch_amt;
 

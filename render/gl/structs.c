@@ -17,7 +17,7 @@
 \
     glGenBuffers(1, &obj->generic.bo); \
     glBindBuffer(GL_TEXTURE_BUFFER, obj->generic.bo); \
-    glBufferData(GL_TEXTURE_BUFFER, 65536 * sizeof(FUR_gl_instanceData), NULL, GL_DYNAMIC_DRAW); \
+    glBufferData(GL_TEXTURE_BUFFER, 8192 * sizeof(FUR_gl_instanceData), NULL, GL_DYNAMIC_DRAW); \
 \
     glGenTextures(1, &obj->generic.tbo); \
     glBindTexture(GL_TEXTURE_BUFFER, obj->generic.tbo); \
@@ -57,7 +57,7 @@ void fur_render_gl_2d_rect_constr(FUR_gl_2d_rect* rect) {
     FUR_2D_GENERIC_CONSTR(rect, "data/eng/rect.vert", "data/eng/rect.frag");
 } void fur_render_gl_2d_rect_destr(FUR_gl_2d_rect* rect) {
     FUR_2D_GENERIC_DESTR(rect);
-} void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[65536], u32 batch_amt) {
+} void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt) {
     FUR_2D_GENERIC_DRAW(rect, vao, batch, batch_amt, proj2d);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);

@@ -19,6 +19,6 @@ typedef struct { FUR_gl_2d_generic generic; FUR_gl_2d_texLoc loc; }             
 
 void fur_render_gl_2d_rect_constr(FUR_gl_2d_rect* rect);
 void fur_render_gl_2d_rect_destr(FUR_gl_2d_rect* rect);
-void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[65536], u32 batch_amt);
+void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt);
 
 #endif

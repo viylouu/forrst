@@ -32,7 +32,7 @@ void fur_render_gl_flush(FUR_gl_renderState* render) {
 /* ====== FUNCS ====== */
 
 void fur_render_gl_rect(FUR_gl_renderState* render, mat4 transf, v2 pos, v2 size, v4 col) {
-    if (render->batch_amt >= 65536) fur_render_gl_flush(render);
+    if (render->batch_amt >= 8192) fur_render_gl_flush(render);
     if (render->batch_type != FUR_GL_BATCH_RECT) fur_render_gl_flush(render);
 
     render->batch_type = FUR_GL_BATCH_RECT;
