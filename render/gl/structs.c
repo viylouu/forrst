@@ -2,6 +2,7 @@
 
 #include <core/data/shader.h>
 #include <core/data/api/gl/shader.h>
+#include <core/data/api/gl/texture.h>
 #include <render/gl/loader.h>
 #include <stdlib.h>
 
@@ -59,6 +60,22 @@ void fur_render_gl_2d_rect_constr(FUR_gl_2d_rect* rect) {
     FUR_2D_GENERIC_DESTR(rect);
 } void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt) {
     FUR_2D_GENERIC_DRAW(rect, vao, batch, batch_amt, proj2d);
+
+    glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
+}
+
+void fur_render_gl_2d_tex_constr(FUR_gl_2d_tex* tex) {
+    FUR_2D_GENERIC_CONSTR(tex, "data/eng/tex.vert", "data/eng/tex.frag");
+
+    tex->loc.tex = easy_get_uni(tex, "tex");
+} void fur_render_gl_2d_tex_destr(FUR_gl_2d_tex* tex) {
+    FUR_2D_GENERIC_DESTR(tex);
+} void fur_render_gl_2d_tex_draw(FUR_gl_2d_tex* tex, mat4 proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_gl_texture* batch_tex) {
+    FUR_2D_GENERIC_DRAW(tex, vao, batch, batch_amt, proj2d);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, batch_tex->id);
+    glUniform1i(tex->loc.tex, 1);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
 }

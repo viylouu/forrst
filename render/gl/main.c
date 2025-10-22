@@ -1,5 +1,6 @@
 #include "main.h"
 
+#include <render/api.h>
 #include <render/gl/loader.h>
 #include <render/gl/structs.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@
 /* ====== FUNCS ====== */
 
 FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
-    const FUR_targetRenderApi api = FUR_RENDER_API_GL;
+    //const FUR_targetRenderApi api = FUR_RENDER_API_GL;
 
     FUR_gl_renderState* state = NEW(FUR_gl_renderState);
     state->agnostic = agnostic;
@@ -24,8 +25,6 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
 
     glGenVertexArrays(1, &state->shitty_vao);
 
-    state->nil = fur_texture_load(api, "data/eng/nil.png");
-    
     mat4_set_identity(&state->proj);
 
     fur_render_gl_2d_rect_constr(&state->rect2d);

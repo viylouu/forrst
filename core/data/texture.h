@@ -2,7 +2,7 @@
 #define FUR_TEXTURE_H
 
 #include <core/macros.h>
-#include <render/state.h>
+#include <render/api.h>
 
 /* ====== DATATYPES ====== */
 

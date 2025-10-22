@@ -15,9 +15,7 @@ int main(void) {
         fur_render_clear(render, .2,.4,.3);
         fur_render_rect(render, .pos = (v2){64,64}, .size = (v2){64,64}, .col = (v4){1,0,0,1});
 
-        // todo: implement texture rendering
-        // - add the thing i thought of where the default is null and it figures out shit from there
-        // - make sample {0,0,1,1} when texture null
+        fur_render_tex(render, .size = (v2){64,64}, .col = (v4){1,1,1,1});
 
         fur_render_flush(render);
 

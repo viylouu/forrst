@@ -89,4 +89,9 @@ typedef struct { f32 x, y, z, w; } v4;
 #define CAST(type, val) \
     ((type)(val))
 
+/* ====== MATH ====== */
+
+#define IS_NAN(val) \
+    ((val) != (val))
+
 #endif
