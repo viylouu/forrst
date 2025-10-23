@@ -28,6 +28,7 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
     mat4_set_identity(&state->proj);
 
     fur_render_gl_2d_rect_constr(&state->rect2d);
+    fur_render_gl_2d_tex_constr(&state->tex2d);
 
     return state;
 }
@@ -35,6 +36,7 @@ FUR_gl_renderState* fur_render_gl_constr(FUR_renderState* agnostic) {
 void fur_render_gl_destr(FUR_gl_renderState* state) {
     const FUR_targetRenderApi api = FUR_RENDER_API_GL;
 
+    fur_render_gl_2d_tex_destr(&state->tex2d);
     fur_render_gl_2d_rect_destr(&state->rect2d);
 
     glDeleteVertexArrays(1, &state->shitty_vao);
