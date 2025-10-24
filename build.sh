@@ -3,12 +3,9 @@ mkdir -p build
 ./furry/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
 
 COMPILER=("zig" "cc")
-COMPILER_CC=("g++")
 CFLAGS="-std=c99"
-CCFLAGS="-std=c++11"
-FLAGS_COMP="-Wno-narrowing -Wall -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
+FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
 FLAGS_LINK=""
-CFLAGS_COMP=""
 
 BUILD_TEST=false
 EXAMPLE=""
@@ -55,21 +52,16 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
 fi
 
 if $BUILD_TEST; then
-    #COMPILER=("tcc")
-    COMPILER_CC=("g++")
-    FLAGS_COMP+=" -O0 -g"
+    FLAGS_COMP+=" -O0 -g -fno-sanitize=undefined"
     FLAGS_LINK+=" -g -fno-lto"
-    CFLAGS_COMP+=" -fno-sanitize=undefined"
 else
     FLAGS_COMP+=" -O3"
     FLAGS_LINK+=" -flto"
 fi
 
 if $BUILD_WINDOWS; then
-    COMPILER_CC=("x86_64-w64-mingw32-g++")
     FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32 -D_WIN32"
-    CFLAGS_COMP="-target x86_64-windows -fno-sanitize=undefined"
-    FLAGS_COMP+=" -D_WIN32"
+    FLAGS_COMP+=" -target x86_64-windows -fno-sanitize=undefined"
 else
     FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11 -lm"
 fi
@@ -81,13 +73,11 @@ else
 fi
 
 FILES_C=()
-FILES_CC=()
 for dir in "${SRC_DIRS[@]}"; do
     while IFS= read -r file; do
         [[ -f "$file" ]] || continue
         case "${file##*.}" in
             c) FILES_C+=("$file") ;;
-            cpp|cc) FILES_CC+=("$file") ;;
         esac
     done < <(find "$dir" -type f ! -path "*/examples/*")
 done
@@ -100,12 +90,12 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
     if [[ $file == *.c ]]; then
         COMP="gcc" # not really
         STD="-std=c99"
-    else
-        COMP="g++"
-        STD="-std=c++11"
+    #else
+        #COMP="g++"
+        #STD="-std=c++11"
     fi
 
-    CMD="$COMP $STD -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -c \\\"$file\\\""
+    CMD="$COMP $STD -pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -c \\\"$file\\\""
 
     if [ $FIRST -eq 1 ]; then
         FIRST=0
@@ -140,9 +130,11 @@ compile_file() {
     
     #obj="$OBJ_DIR/$(basename "$file" ${file##*.}).o"
     #dep="$OBJ_DIR/$(basename "$file" .${file##*.}).d"
-    filename=$(basename "$file")
-    basename_noext="${filename%.*}"
-    obj="$OBJ_DIR/$basename_noext.o"
+    #filename=$("$file")
+    #basename_noext="${filename%.*}"
+    cleanpath="${file#./}"
+    obj="$OBJ_DIR/${cleanpath%.c}.o"
+    mkdir -p "$(dirname "$obj")"
     #dep="$OBJ_DIR/$basename_noext.d"
     echo "$obj" >> "$OBJ_DIR/objs.tmp"
     #[[ -f "$obj" && "$obj" -nt "$file" ]] && return
@@ -159,22 +151,21 @@ compile_file() {
     if [[ $skip_compile != true ]]; then
         if [[ $file == *.c ]]; then
             #"${COMPILER[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
-            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP $CFLAGS_COMP \
+            "${COMPILER[@]}" $CFLAGS $FLAGS_COMP \
                 -fno-sanitize=undefined -c "$file" -o "$obj"
-        else
+        #else
             #"${COMPILER_CC[@]}" $flags -fno-sanitize=undefined -c "$file" -o "$obj"
-            "${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP \
-                -fno-sanitize=undefined -c "$file" -o "$obj"
+            #"${COMPILER_CC[@]}" $CCFLAGS $FLAGS_COMP \
+            #    -fno-sanitize=undefined -c "$file" -o "$obj"
         fi 
     fi
 }
 
 > "$OBJ_DIR/objs.tmp"  # clear temp file
 
-for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
+for file in "${FILES_C[@]}"; do
     compiler_arr=FILES_C[@]
-    flags="$CFLAGS $FLAGS_COMP $CFLAGS_COMP"
-    [[ $file == *.cc ]] && { compiler_arr=FILES_CC[@]; flags="$CCFLAGS $FLAGS_COMP"; }
+    flags="$FLAGS_COMP"
 
     compile_file "$file" compiler_arr "$flags" &
 
@@ -191,7 +182,7 @@ mapfile -t OBJS < "$OBJ_DIR/objs.tmp"
 rm -f objs.tmp
 
 if $BUILD_WINDOWS; then
-    "${COMPILER_CC[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
+    "${COMPILER[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
 else
-    "${COMPILER_CC[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
+    "${COMPILER[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
 fi

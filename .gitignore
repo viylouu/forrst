@@ -1,9 +1,6 @@
 /.cache/
 /build/
 /compile_commands.json
-*.trace
-/core/auto/*.c
-/core/auto/*.cc
-/core/auto/*.h
-/core/auto/*.hh
-/imgui.ini
+/render/gl/loader.c
+/render/gl/loader.h
+/cloc.sh

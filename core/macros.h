@@ -1,89 +1,97 @@
 #ifndef FUR_MACROS_H
 #define FUR_MACROS_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+/* ====== TYPES ====== */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-
-typedef int8_t s8; 
-typedef int16_t s16; 
-typedef int32_t s32; 
-typedef int64_t s64; 
-
-typedef uint8_t u8; 
-typedef uint16_t u16; 
-typedef uint32_t u32; 
-typedef uint64_t u64; 
-typedef intptr_t sptr; 
-typedef uintptr_t uptr; 
-
-typedef float f32; 
+/* --- INTEGERS --- */
+typedef signed char s8;
+typedef short       s16;
+typedef int         s32;
+typedef long long   s64;
+/* --- UNSIGNED INTEGERS --- */
+typedef unsigned char      u8;
+typedef unsigned short     u16;
+typedef unsigned int       u32;
+typedef unsigned long long u64;
+/* --- FLOATS --- */
+typedef float  f32;
 typedef double f64;
-
-typedef u8 b8;
+/* --- BOOLEANS --- */
+typedef u8  b8;
 typedef u16 b16;
 typedef u32 b32;
 typedef u64 b64;
 
-typedef struct { f32 x; f32 y; } v2;
-typedef struct { f32 x; f32 y; f32 z; } v3;
-typedef struct { f32 x; f32 y; f32 z; f32 w; } v4;
+/* --- VECTORS --- */
+typedef struct { f32 x, y; }       v2;
+typedef struct { f32 x, y, z; }    v3;
+typedef struct { f32 x, y, z, w; } v4;
 
-#define UNUSED(param) \
-    (void)(param)
+/* ====== ERRORS AND WARNINGS ====== */
 
-#define ERROR_IF(check, ...) do {                           \
-    if((check)) {                                           \
-        printf("ERROR! \"%s\" [%d]\n", __FILE__,__LINE__);  \
-        printf(__VA_ARGS__);                                \
-        printf("\n\ni am become death\ndestroyer of terminals\n⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⣿⠟⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢺⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠆⠜⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⠿⠿⠛⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠻⣿⣿⣿⣿⣿\n\
-⣿⣿⡏⠁⠀⠀⠀⠀⠀⣀⣠⣤⣤⣶⣶⣶⣶⣶⣦⣤⡄⠀⠀⠀⠀⢀⣴⣿⣿⣿⣿⣿\n\
-⣿⣿⣷⣄⠀⠀⠀⢠⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⡧⠇⢀⣤⣶⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣾⣮⣭⣿⡻⣽⣒⠀⣤⣜⣭⠐⢐⣒⠢⢰⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⣏⣿⣿⣿⣿⣿⣿⡟⣾⣿⠂⢈⢿⣷⣞⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⣿⣽⣿⣿⣷⣶⣾⡿⠿⣿⠗⠈⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠻⠋⠉⠑⠀⠀⢘⢻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⣿⡿⠟⢹⣿⣿⡇⢀⣶⣶⠴⠶⠀⠀⢽⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⣿⣿⣿⡿⠀⠀⢸⣿⣿⠀⠀⠣⠀⠀⠀⠀⠀⡟⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⣿⣿⣿⡿⠟⠋⠀⠀⠀⠀⠹⣿⣧⣀⠀⠀⠀⠀⡀⣴⠁⢘⡙⢿⣿⣿⣿⣿⣿⣿⣿⣿\n\
-⠉⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⢿⠗⠂⠄⠀⣴⡟⠀⠀⡃⠀⠉⠉⠟⡿⣿⣿⣿⣿\n\
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢷⠾⠛⠂⢹⠀⠀⠀⢡⠀⠀⠀⠀⠀⠙⠛⠿⢿\n");\
-        exit(1);                                            \
-    } \
-} while(0)
+#define ERROR(...) do { \
+        printf("ERROR! [\"%s\" ln:%d]\n", __FILE__, __LINE__); \
+        printf(__VA_ARGS__); \
+        exit(1); \
+    } while (0)
 
-#define RETURN_IF(check, val, ...) do {                     \
-        if((check)) {                                       \
-        printf("ERROR! \"%s\" [%d]\n", __FILE__,__LINE__);  \
-        printf(__VA_ARGS__);                                \
-        return val;                                         \
-    } \
-} while(0)
+#define ERROR_IF(cond,...) do { if ((cond)) { ERROR(__VA_ARGS__); } } while(0)
 
+#define WARN(...) do { \
+        printf("WARNING! [\"%s\" ln:%d]\n", __FILE__, __LINE__); \
+        printf(__VA_ARGS__); \
+    } while (0)
 
-#define MAYBE_CALL(func, ...) \
-    if ((func)) func(__VA_ARGS__)
+#define WARN_IF(cond,...) do { if ((cond)) { WARN(__VA_ARGS__); } } while(0)
 
-#define FUR_OPS1(a) ops a
-#define FUR_OPS2(a,b) ops a; ops b
-#define FUR_OPS3(a,b,c) ops a; ops b; ops c
-#define FUR_OPS4(a,b,c,d) ops a; ops b; ops c; ops d
-#define FUR_OPS5(a,b,c,d,e) ops a; ops b; ops c; ops d; ops e
+#define WARN_RET(val, ...) \
+    WARN(__VA_ARGS__); \
+    return val
 
-#define FUR_OPS_GET(_1,_2,_3,_4,_5,NAME,...) NAME
-#define FUR_OPS_HELPER(...) \
-    FUR_OPS_GET(__VA_ARGS__, FUR_OPS5,FUR_OPS4,FUR_OPS3,FUR_OPS2,FUR_OPS1)(__VA_ARGS__)
+#define WARN_RETVOID(...) \
+    WARN(__VA_ARGS__); \
+    return
 
-#ifdef __cplusplus
-}
-#endif
+#define WARN_RET_IF(cond, val, ...) do { if ((cond)) { WARN_RET((val), __VA_ARGS__); } } while(0)
+#define WARN_RETVOID_IF(cond, ...) do { if ((cond)) { WARN_RETVOID(__VA_ARGS__); } } while(0)
+
+/* ====== MEMORY ====== */
+
+#define TRY_FREE(val) \
+    if (!(val)) \
+        WARN("cannot free value \"%s\"! (is null)", #val); \
+    else \
+        free(val)
+
+#define FREE_NULLIFY(val) \
+    free(val); \
+    val = NULL
+
+#define TRY_FREE_NULLIFY(val) \
+    TRY_FREE(val); \
+    val = NULL
+
+/* ====== VARIABLE STUFF ====== */
+
+#define NEW(type) \
+    malloc(sizeof(type))
+
+/* ====== API SPECIFIERS ====== */
+
+#define crit_def_for(func) default: ERROR("selected api has no support for function \"%s\"!\n", func); break
+#define warn_def_for(func) default: WARN ("selected api has no support for function \"%s\"!\n", func); break
+
+/* ====== GENERIAL ====== */
+
+#define DEREF_CAST(type, val) \
+    (*((type)(val)))
+
+#define CAST(type, val) \
+    ((type)(val))
+
+/* ====== MATH ====== */
+
+#define IS_NAN(val) \
+    ((val) != (val))
 
 #endif

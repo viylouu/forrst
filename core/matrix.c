@@ -1,4 +1,4 @@
-#include "mat4.h"
+#include "matrix.h"
 
 #include <string.h>
 #include <math.h>
@@ -10,7 +10,7 @@ void mat4_make(
     f32 m20, f32 m21, f32 m22, f32 m23,
     f32 m30, f32 m31, f32 m32, f32 m33
 ) {
-    float tmp[16] = {
+    f32 tmp[16] = {
         m00, m01, m02, m03,
         m10, m11, m12, m13,
         m20, m21, m22, m23,
@@ -51,7 +51,7 @@ void mat4_ortho(
         );
 }
 
-void mat4_identity(mat4* mat) {
+void mat4_set_identity(mat4* mat) {
      mat4_make(mat, 
         1, 0, 0, 0,
         0, 1, 0, 0,
