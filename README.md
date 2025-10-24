@@ -23,3 +23,5 @@ for more information, see [here](LICENSE.LGPL)
 
 ## todo
 - reimplement render targets
+- add timer system
+- implement input system
