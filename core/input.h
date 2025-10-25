@@ -60,7 +60,7 @@ typedef enum {
     FUR_KEY_LAST
 } FUR_key;
 
-static FUR_keyState fur_input_keys[FUR_KEY_LAST];
+extern FUR_keyState fur_input_keys[FUR_KEY_LAST];
 
 void fur_input_poll(FUR_platfState* platf);
 

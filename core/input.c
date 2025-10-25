@@ -5,6 +5,8 @@
 
 #include <core/platf/glfw/input.h>
 
+FUR_keyState fur_input_keys[FUR_KEY_LAST];
+
 void fur_input_poll(FUR_platfState* platf) {
     switch (platf->plat) {
         case FUR_PLATF_GLFW:
