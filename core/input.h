@@ -2,6 +2,7 @@
 #define FUR_INPUT_H
 
 #include <core/macros.h>
+#include <platf/state.h>
 
 typedef enum {
     FUR_RELEASED,
@@ -55,12 +56,16 @@ typedef enum {
     FUR_KEY_F10, FUR_KEY_F11, FUR_KEY_F12,
 
 // todo: add symbols and other stuff
+
+    FUR_KEY_LAST
 } FUR_key;
 
-extern FUR_keyState fur_input_kbKeys[];
+static FUR_keyState fur_input_keys[FUR_KEY_LAST];
 
-static inline b8 fur_input_isKeyPressed(FUR_key key)  { return fur_input_kbKeys[key] == FUR_PRESSED; }
-static inline b8 fur_input_isKeyHeld(FUR_key key)     { return fur_input_kbKeys[key] == FUR_PRESSED || fur_input_kbKeys[key] == FUR_HELD; }
-static inline b8 fur_input_isKeyReleased(FUR_key key) { return fur_input_kbKeys[key] == FUR_RELEASED; }
+void fur_input_poll(FUR_platfState* platf);
+
+static inline b8 fur_input_isKeyPressed(FUR_key key)  { return fur_input_keys[key] == FUR_PRESSED; }
+static inline b8 fur_input_isKeyHeld(FUR_key key)     { return fur_input_keys[key] == FUR_PRESSED || fur_input_keys[key] == FUR_HELD; }
+static inline b8 fur_input_isKeyReleased(FUR_key key) { return fur_input_keys[key] == FUR_RELEASED; }
 
 #endif
