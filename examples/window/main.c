@@ -3,6 +3,7 @@
 #include <render/draw.h>
 #include <core/macros.h>
 #include <core/input.h>
+#include <core/time.h>
 
 int main(void) {
     FUR_platfState* platf = fur_platf_constr();
@@ -10,12 +11,23 @@ int main(void) {
 
     fur_platf_setRender(platf, render);
 
+    FUR_timer* time = fur_makeTimer(FUR_PLATF_GLFW, 0);
+
+    f32 x = 64;
+
     while (!fur_platf_shouldWindowClose(platf)) {
         fur_platf_poll(platf);
         fur_input_poll(platf);
 
+        fur_updateTimers(&time, 1);
+
         fur_render_clear(render, .2,.4,.3);
-        fur_render_rect(render, .pos = (v2){64,64}, .size = (v2){64,64}, .col = (v4){1,0,0,1});
+        fur_render_rect(render, .pos = (v2){x,64}, .size = (v2){64,64}, .col = (v4){1,0,0,1});
+
+        if (fur_input_isKeyHeld(FUR_KEY_D))
+            x += 64 * time->delta;
+        if (fur_input_isKeyHeld(FUR_KEY_A))
+            x -= 64 * time->delta;
 
         if (fur_input_isKeyHeld(FUR_KEY_T))
             fur_render_tex(render, .size = (v2){64,64}, .col = (v4){1,1,1,1});
