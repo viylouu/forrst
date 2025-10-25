@@ -23,3 +23,5 @@ for more information, see [here](LICENSE.LGPL)
 
 ## todo
 - reimplement render targets
+- fix formatting
+- use more opsses (optional parameters)
