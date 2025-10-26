@@ -49,12 +49,8 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
     exit 1
 fi
 
-if [[ "$BUILD_WINDOWS" == "true" ]] && [[ "$OSTYPE" != "linux-gnu" ]]; then
-    COMPILER=("zig" "cc")
-    if ! command -v zig &> /dev/null; then
-        echo "sorry bucko, you need zig to do windows cross comp builds"
-    fi
-fi
+# hacky
+[[ ! "$OSTYPE" == "linux-gnu" ]] && COMPILER=("gcc")
 
 if $BUILD_TEST; then
     FLAGS_COMP+=" -O0 -g -fno-sanitize=undefined"
@@ -66,7 +62,10 @@ fi
 
 if $BUILD_WINDOWS; then
     FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32 -D_WIN32"
-    FLAGS_COMP+=" -target x86_64-windows -fno-sanitize=undefined"
+    FLAGS_COMP+=" -fno-sanitize=undefined"
+    if [[ "${COMPILER[0]}" == "zig" ]]; then
+        FLAGS_COMP+=" -target x86_64-windows"
+    fi
 else
     FLAGS_LINK+=" -lGL -lglfw -lEGL -lX11 -lm"
 fi
