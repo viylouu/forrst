@@ -51,6 +51,13 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
     exit 1
 fi
 
+if $BUILD_WINDOWS; then
+    COMPILER=("zig" "cc")
+    if ! zig cc --version &> /dev/null; then
+        echo "sorry bucko, you need zig to do windows builds"
+    fi
+fi
+
 if $BUILD_TEST; then
     FLAGS_COMP+=" -O0 -g -fno-sanitize=undefined"
     FLAGS_LINK+=" -g -fno-lto"
