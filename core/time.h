@@ -4,6 +4,8 @@
 #include <core/macros.h>
 #include <platf/state.h>
 
+/* ====== DATATYPES ====== */
+
 typedef struct {
     FUR_targetPlatf plat;
     f64 time;
@@ -11,7 +13,21 @@ typedef struct {
     f64 scale;
 } FUR_timer;
 
-FUR_timer* fur_makeTimer(FUR_targetPlatf plat, f64 off);
+/* ====== DATATYPES ====== */
+
+typedef struct {
+    FUR_targetPlatf plat;
+    f64 off;
+} OP_fur_makeTimer;
+
+/* ====== FUNCS ====== */
+
+FUR_timer* IMPL_fur_makeTimer(OP_fur_makeTimer op);
 void fur_updateTimers(FUR_timer** timers, u32 amt);
+
+/* ====== MACROS ====== */
+
+#define fur_makeTimer(...) \
+    IMPL_fur_makeTimer((OP_fur_makeTimer){ .plat = FUR_PLATF_GLFW, .off = 0, __VA_ARGS__ })
 
 #endif

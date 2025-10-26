@@ -4,6 +4,8 @@
 #include <core/macros.h>
 #include <platf/state.h>
 
+/* ====== DATATYPES ====== */
+
 typedef enum {
     FUR_RELEASED,
     FUR_PRESSED,
@@ -60,7 +62,11 @@ typedef enum {
     FUR_KEY_LAST
 } FUR_key;
 
+/* ====== VARS (BAD, REMOVE LATER) ====== */
+
 extern FUR_keyState fur_input_keys[FUR_KEY_LAST];
+
+/* ====== FUNCS ====== */
 
 void fur_input_poll(FUR_platfState* platf);
 

@@ -41,7 +41,7 @@ void fur_render_gl_destr(FUR_gl_renderState* state) {
 
     glDeleteVertexArrays(1, &state->shitty_vao);
 
-    fur_texture_unload(api, state->nil);
+    fur_texture_unload(state->nil, .api = api);
 
     free(state);
 }

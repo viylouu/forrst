@@ -9,10 +9,10 @@
 
 /* ====== FUNCS ====== */
 
-FUR_shader* fur_shader_load(FUR_targetRenderApi api, const char* vert, const char* frag) {
+FUR_shader* IMPL_fur_shader_load(const char* vert, const char* frag, OP_fur_shader_GENERIC op) {
     FUR_shader* shader = NEW(FUR_shader);
 
-    switch (api) {
+    switch (op.api) {
         case FUR_RENDER_API_GL:
             shader->spec = fur_gl_shader_load(shader, vert, frag); break;
         warn_def_for("fur_shader_load");
@@ -21,8 +21,8 @@ FUR_shader* fur_shader_load(FUR_targetRenderApi api, const char* vert, const cha
     return shader;
 }
 
-void fur_shader_unload(FUR_targetRenderApi api, FUR_shader* shader) {
-    switch (api) {
+void IMPL_fur_shader_unload(FUR_shader* shader, OP_fur_shader_GENERIC op) {
+    switch (op.api) {
         case FUR_RENDER_API_GL:
             fur_gl_shader_unload(shader->spec); break;
         warn_def_for("fur_shader_unload");

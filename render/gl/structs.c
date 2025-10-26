@@ -14,7 +14,7 @@
     glGetUniformLocation(easy_shader_prog(obj), name)
 
 #define FUR_2D_GENERIC_CONSTR(obj, vert,frag) do { \
-    obj->generic.shader = fur_shader_load(FUR_RENDER_API_GL, (vert),(frag)); \
+    obj->generic.shader = fur_shader_load((vert),(frag), .api = FUR_RENDER_API_GL); \
 \
     glGenBuffers(1, &obj->generic.bo); \
     glBindBuffer(GL_TEXTURE_BUFFER, obj->generic.bo); \
@@ -30,7 +30,7 @@
 } while(0)
 
 #define FUR_2D_GENERIC_DESTR(obj) do { \
-    fur_shader_unload(FUR_RENDER_API_GL, obj->generic.shader); \
+    fur_shader_unload(obj->generic.shader, .api = FUR_RENDER_API_GL); \
 \
     glDeleteTextures(1, &obj->generic.tbo); \
     glDeleteBuffers(1, &obj->generic.bo); \

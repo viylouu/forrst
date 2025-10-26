@@ -12,7 +12,7 @@ FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops) {
     FUR_renderState* state = NEW(FUR_renderState);
     state->api = ops.api;
 
-    state->nil = fur_texture_load(ops.api, "data/eng/nil.png");
+    state->nil = fur_texture_load("data/eng/nil.png", .api = ops.api);
 
     switch(state->api) {
         case FUR_RENDER_API_GL:

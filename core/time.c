@@ -6,11 +6,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-FUR_timer* fur_makeTimer(FUR_targetPlatf plat, f64 off) {
+FUR_timer* IMPL_fur_makeTimer(OP_fur_makeTimer op) {
     FUR_timer* timer = NEW(FUR_timer);
 
-    timer->plat = plat;
-    timer->time = off;
+    timer->plat = op.plat;
+    timer->time = op.off;
     timer->scale = 1;
     timer->delta = 1;
 

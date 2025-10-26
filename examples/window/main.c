@@ -11,7 +11,7 @@ int main(void) {
 
     fur_platf_setRender(platf, render);
 
-    FUR_timer* time = fur_makeTimer(FUR_PLATF_GLFW, 0);
+    FUR_timer* time = fur_makeTimer();
 
     f32 x = 64;
 
