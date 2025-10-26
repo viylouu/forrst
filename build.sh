@@ -20,7 +20,7 @@ for arg in "$@"; do
     fi
 done
 
-if ! $BUILD_TEST && ! zig cc --version &> /dev/null; then
+if ! $BUILD_TEST && ! zig --version &> /dev/null; then
     COMPILER=("gcc")
     if ! gcc --version &> /dev/null; then
         COMPILER=("clang")
@@ -34,7 +34,7 @@ if ! $BUILD_TEST && ! zig cc --version &> /dev/null; then
     exit 1
 elif $BUILD_TEST && ! tcc --version &> /dev/null; then
     COMPILER=("zig" "cc")
-    if ! zig cc --version &> /dev/null; then
+    if ! zig --version &> /dev/null; then
         COMPILER=("gcc")
         if ! gcc --version &> /dev/null; then
             COMPILER=("clang")
