@@ -23,3 +23,4 @@ for more information, see [here](LICENSE.LGPL)
 
 ## todo
 - reimplement render targets
+- more consistent indenting/spacing
