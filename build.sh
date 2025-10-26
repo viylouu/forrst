@@ -185,8 +185,17 @@ mapfile -t OBJS < "$OBJ_DIR/objs.tmp"
 
 rm -f objs.tmp
 
-if $BUILD_WINDOWS; then
-    "${COMPILER[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
+if command -v lld &> /dev/null; then
+    LINKER="lld"
+elif command -v ld &> /dev/null; then
+    LINKER="ld"
 else
-    "${COMPILER[@]}" -fuse-ld=lld "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
+    echo "failed to find a linker!"
+    exit 1
+fi
+
+if $BUILD_WINDOWS; then
+    "${COMPILER[@]}" -fuse-ld="$LINKER" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
+else
+    "${COMPILER[@]}" -fuse-ld="$LINKER" "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
 fi
