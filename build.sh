@@ -1,7 +1,5 @@
 mkdir -p build
 
-./furry/code_gen.sh 2>/dev/null || ./code_gen.sh 2>/dev/null
-
 COMPILER=("zig" "cc")
 CFLAGS="-std=c99"
 FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
