@@ -2,7 +2,7 @@ mkdir -p build
 
 COMPILER=("zig" "cc")
 CFLAGS="-std=c99"
-FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Wno-override-init -Wno-override-init-side-effects -Wno-cast-function-type -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
+FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Wno-override-init -Wno-cast-function-type -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
 FLAGS_LINK=""
 
 BUILD_TEST=false
