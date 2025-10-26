@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/* ====== FUNCS ====== */
+
 FUR_timer* IMPL_fur_makeTimer(OP_fur_makeTimer op) {
     FUR_timer* timer = NEW(FUR_timer);
 

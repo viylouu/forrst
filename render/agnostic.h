@@ -8,8 +8,6 @@
 /* ====== DATATYPES ====== */
 typedef struct {
     FUR_targetRenderApi api;
-
-   
 } OP_fur_render_constr;
 
 /* ====== FUNCS ====== */

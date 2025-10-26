@@ -3,6 +3,8 @@
 #include <string.h>
 #include <math.h>
 
+/* ====== FUNCS ====== */
+
 void mat4_make(
     mat4* mat,
     f32 m00, f32 m01, f32 m02, f32 m03,

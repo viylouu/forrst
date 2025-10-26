@@ -3,9 +3,15 @@
 
 #include <core/macros.h>
 
+/* ====== DATATYPES ====== */
+
 typedef f32 mat4[16];
 
+/* ====== MACROS ====== */
+
 #define mat4_identity { 1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1 }
+
+/* ====== FUNCS ====== */
 
 void mat4_make(
     mat4* mat,

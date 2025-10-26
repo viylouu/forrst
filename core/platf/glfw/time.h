@@ -3,6 +3,8 @@
 
 #include <core/time.h>
 
+/* ====== FUNCS ====== */
+
 void fur_glfw_updateTime(void);
 void fur_glfw_updateTimer(FUR_timer* timer);
 

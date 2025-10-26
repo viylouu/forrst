@@ -3,7 +3,11 @@
 #include <core/macros.h>
 #include <GLFW/glfw3.h>
 
+/* ====== VARS (BAD, REMOVE LATER) ====== */
+
 f64 curTime, lastTime, delta;
+
+/* ====== FUNCS ====== */
 
 void fur_glfw_updateTime(void) {
     lastTime = curTime;

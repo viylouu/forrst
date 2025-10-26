@@ -3,6 +3,8 @@
 
 #include <platf/glfw/main.h>
 
+/* ====== FUNCS ====== */
+
 void fur_input_glfw_poll(FUR_glfw_platfState* platf);
 
 #endif

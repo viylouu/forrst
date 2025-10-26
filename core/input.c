@@ -5,6 +5,8 @@
 
 #include <core/platf/glfw/input.h>
 
+/* ====== VARS (BAD, REMOVE LATER) ====== */
+
 FUR_keyState fur_input_keys[FUR_KEY_LAST];
 
 void fur_input_poll(FUR_platfState* platf) {

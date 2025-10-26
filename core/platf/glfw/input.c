@@ -3,6 +3,8 @@
 #include <platf/glfw/main.h>
 #include <core/input.h>
 
+/* ====== FUNCS ====== */
+
 void fur_input_glfw_updateAt(FUR_glfw_platfState* platf, s32 glfwPos, s32 i_asFur) {
     FUR_keyState prev = fur_input_keys[i_asFur];
     FUR_keyState cur = fur_input_keys[i_asFur] = glfwGetKey(platf->window, glfwPos);
