@@ -31,5 +31,5 @@ void IMPL_fur_texture_unload(FUR_texture* texture, OP_fur_texture_GENERIC op) {
         warn_def_for("fur_texture_unload");
     }
 
-    TRY_FREE(texture);
+    free(texture);
 }
