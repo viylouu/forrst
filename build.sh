@@ -51,7 +51,7 @@ elif $BUILD_TEST && ! tcc --version &> /dev/null; then
     exit 1
 fi
 
-if $BUILD_WINDOWS; then
+if $BUILD_WINDOWS && [[ "$OSTYPE" != "linux-gnu" ]]; then
     COMPILER=("zig" "cc")
     if ! zig cc --version &> /dev/null; then
         echo "sorry bucko, you need zig to do windows builds"
