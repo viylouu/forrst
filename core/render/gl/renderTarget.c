@@ -30,13 +30,17 @@ FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 
 
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gltex->id, 0);
 
+    GLenum drawbuf;
+    glDrawBuffers(1, &drawbuf);
+
     u32 depth;
     glGenRenderbuffers(1, &depth);
     glBindRenderbuffer(GL_RENDERBUFFER, depth);
     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth);
 
-    WARN_RET_IF(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE, NULL, "framebuffer is not complete!\n");
+    GLenum fbostatus = glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    WARN_RET_IF(fbostatus != GL_FRAMEBUFFER_COMPLETE, NULL, "framebuffer is not complete! status: 0x%x\n", fbostatus);
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

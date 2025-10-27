@@ -11,7 +11,7 @@
 
 #define easy_set_target(proj2d, targ, w,h) do { \
     if (targ) { \
-        mat4_ortho(proj2d, 0,targ->texture->width,targ->texture->height,0, -1,1); \
+        mat4_ortho(proj2d, 0,targ->texture->width,0,targ->texture->height, -1,1); \
         glViewport(0,0,targ->texture->width,targ->texture->height); \
         glBindFramebuffer(GL_FRAMEBUFFER, CAST(FUR_gl_renderTarget*, targ->spec)->fbo); \
     } else { \
