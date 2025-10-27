@@ -32,3 +32,14 @@ void fur_renderTarget_destr(FUR_renderTarget* targ) {
 
     free(targ);
 }
+
+void fur_renderTarget_resize(FUR_renderTarget* targ, s32 width, s32 height) {
+    targ->width = width;
+    targ->height = height;
+
+    switch (targ->api) {
+        case FUR_RENDER_API_GL:
+            fur_renderTarget_gl_resize(targ->spec, width, height); break;
+        warn_def_for("fur_renderTarget_resize");
+    }
+}

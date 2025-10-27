@@ -56,3 +56,15 @@ void fur_renderTarget_gl_destr(FUR_gl_renderTarget* targ) {
 
     free(targ);
 }
+
+void fur_renderTarget_gl_resize(FUR_gl_renderTarget* targ, s32 width, s32 height) {
+    WARN_RETVOID_IF(!targ, "cannot resize null gl render target!\n");
+
+    glBindTexture(GL_TEXTURE_2D, targ->tex);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    
+    glBindRenderbuffer(GL_RENDERBUFFER, targ->depth);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+}

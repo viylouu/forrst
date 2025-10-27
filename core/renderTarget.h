@@ -26,6 +26,8 @@ typedef struct {
 FUR_renderTarget* IMPL_fur_renderTarget_constr(s32 width, s32 height, OP_fur_renderTarget_constr op); 
 void fur_renderTarget_destr(FUR_renderTarget* targ);
 
+void fur_renderTarget_resize(FUR_renderTarget* targ, s32 width, s32 height);
+
 /* ====== MACROS ====== */
 
 #define fur_renderTarget_constr(width, height, ...) \

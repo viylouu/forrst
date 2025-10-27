@@ -17,4 +17,6 @@ typedef struct {
 FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 width, s32 height);
 void fur_renderTarget_gl_destr(FUR_gl_renderTarget* targ);
 
+void fur_renderTarget_gl_resize(FUR_gl_renderTarget* targ, s32 width, s32 height);
+
 #endif
