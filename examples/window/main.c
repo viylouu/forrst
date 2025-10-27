@@ -37,7 +37,9 @@ int main(void) {
 
         // spacing
         
-        fur_render_renderTarget(render, .in_target = targ);
+        fur_render_clear(render, .col = (v3){1,1,1});
+
+        fur_render_renderTarget(render, .in_target = targ, .out_target = NULL, .pos = (v2){0,0}, .size = (v2){render->width,render->height}, .col = (v4){1,1,1,1}, .sample = (v4){0,0,targ->texture->width,targ->texture->height});
 
         fur_render_flush(render);
 
