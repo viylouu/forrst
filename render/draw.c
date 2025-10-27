@@ -8,10 +8,10 @@
 
 /* ====== FUNCS ====== */
 
-void fur_render_clear(FUR_renderState* render, f32 r, f32 g, f32 b) {
+void IMPL_fur_render_clear(FUR_renderState* render, OP_fur_render_clear op) {
     switch(render->api) {
         case FUR_RENDER_API_GL:
-            fur_render_gl_clear(render->spec, r,g,b); break;
+            fur_render_gl_clear(render->spec, op.target, op.col.x,op.col.y,op.col.z); break;
         warn_def_for("fur_render_clear");
     }
 }

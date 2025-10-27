@@ -9,18 +9,6 @@
 
 /* ====== MACROS ====== */
 
-#define easy_set_target(proj2d, targ, width, height) do { \
-    if (targ) { \
-        mat4_ortho(proj2d, 0,targ->width,targ->height,0, -1,1); \
-        glViewport(0,0,targ->width,targ->height); \
-        glBindFramebuffer(GL_FRAMEBUFFER, CAST(FUR_gl_renderTarget*, targ->spec)->fbo); \
-    } else { \
-        mat4_ortho(proj2d, 0,width,height,0, -1,1); \
-        glViewport(0,0,width,height); \
-        glBindFramebuffer(GL_FRAMEBUFFER, 0); \
-    } \
-} while(0)
-
 #define easy_shader_prog(obj) \
     ((FUR_gl_shader*)obj->generic.shader->spec)->program
 #define easy_get_uni(obj, name) \

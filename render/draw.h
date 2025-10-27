@@ -9,11 +9,23 @@
 #include <stdlib.h>
 #include <math.h>
 
+/* ====== DATATYPES ====== */
+
+typedef struct {
+    FUR_renderTarget* target;
+    v3 col;
+} OP_fur_render_clear;
+
 /* ====== FUNCS ====== */
 
-void fur_render_clear(FUR_renderState* render, f32 r, f32 g, f32 b);
+void IMPL_fur_render_clear(FUR_renderState* render, OP_fur_render_clear op);
 
 void fur_render_flush(FUR_renderState* render);
+
+/* ====== MACROS ====== */
+
+#define fur_render_clear(render, ...) \
+    IMPL_fur_render_clear((render), (OP_fur_render_clear){ .target = NULL, .col = (v3){0,0,0}, __VA_ARGS__ })
 
 /* ====== STRUCTS ====== */
 

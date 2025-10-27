@@ -6,11 +6,12 @@
 #include <render/gl/loader.h>
 #include <render/gl/main.h>
 #include <render/gl/structs.h>
+#include <core/render/gl/renderTarget.h>
 
 /* ====== FUNCS ====== */
 
-void fur_render_gl_clear(FUR_gl_renderState* render, f32 r, f32 g, f32 b) {
-    (void)render;
+void fur_render_gl_clear(FUR_gl_renderState* render, FUR_renderTarget* target, f32 r, f32 g, f32 b) {
+    easy_set_target(&render->proj, target, render->width, render->height);
 
     glClearColor(r,g,b, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
