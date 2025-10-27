@@ -29,7 +29,7 @@ void fur_render_flush(FUR_renderState* render) {
 void IMPL_fur_render_rect(FUR_renderState* render, OP_fur_render_rect op) {
     switch(render->api) {
         case FUR_RENDER_API_GL:
-            fur_render_gl_rect(render->spec, op.transf, op.pos, op.size, op.col); break;
+            fur_render_gl_rect(render->spec, op.target, op.transf, op.pos, op.size, op.col); break;
         warn_def_for("fur_render_rect");
     }
 }
@@ -50,7 +50,7 @@ void IMPL_fur_render_tex(FUR_renderState* render, OP_fur_render_tex op) {
 
     switch (render->api) {
         case FUR_RENDER_API_GL:
-            fur_render_gl_tex(render->spec, op.texture, op.transf, op.pos, op.size, op.sample, op.col); break;
+            fur_render_gl_tex(render->spec, op.target, op.texture, op.transf, op.pos, op.size, op.sample, op.col); break;
         warn_def_for("fur_render_tex");
     }
 }

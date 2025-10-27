@@ -8,6 +8,7 @@
 
 #include <core/data/shader.h>
 #include <core/data/texture.h>
+#include <core/renderTarget.h>
 
 /* ====== STRUCTS ====== */
 
@@ -22,11 +23,14 @@ typedef struct {
     u32 shitty_vao;
 
     mat4 proj;
+    s32 width;
+    s32 height;
 
     FUR_gl_instanceData batch[8192];
     FUR_gl_batchType batch_type;
     u32 batch_amt;
     FUR_texture* batch_tex;
+    FUR_renderTarget* batch_target;
 
     FUR_texture* nil;
 

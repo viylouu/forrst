@@ -47,6 +47,8 @@ void fur_render_gl_destr(FUR_gl_renderState* state) {
 }
 
 void fur_render_gl_resize(FUR_gl_renderState* state, f32 w, f32 h) {
-    mat4_ortho(&state->proj, 0,w,h,0, -1,1);
-    glViewport(0,0,w,h);
+    //mat4_ortho(&state->proj, 0,w,h,0, -1,1);
+    //glViewport(0,0,w,h);
+    state->width = w;
+    state->height = h;
 }
