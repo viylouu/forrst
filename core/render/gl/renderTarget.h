@@ -9,7 +9,7 @@
 typedef struct {
     FUR_renderTarget* agnostic;
 
-    u32 fbo, tex, depth;
+    u32 fbo, depth;
 } FUR_gl_renderTarget;
 
 /* ====== FUNCS ====== */

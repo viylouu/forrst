@@ -54,3 +54,26 @@ void IMPL_fur_render_tex(FUR_renderState* render, OP_fur_render_tex op) {
         warn_def_for("fur_render_tex");
     }
 }
+
+void IMPL_fur_render_renderTarget(FUR_renderState* render, OP_fur_render_renderTarget op) {
+    WARN_RETVOID_IF(!op.in_target, "cannot render a null rendertarget!\n");
+
+    if (!IS_NAN(op.sample.x)) op.sample.x /= op.in_target->texture->width;     else op.sample.x = 0;
+    if (!IS_NAN(op.sample.y)) op.sample.y /= op.in_target->texture->height;    else op.sample.y = 0;
+    if (!IS_NAN(op.sample.z)) op.sample.z /= op.in_target->texture->width;     else op.sample.z = 1;
+    if (!IS_NAN(op.sample.w)) op.sample.w /= op.in_target->texture->height;    else op.sample.w = 1;
+
+    if (op.out_target) {
+        if (IS_NAN(op.size.x)) op.size.x = op.out_target->texture->width;
+        if (IS_NAN(op.size.y)) op.size.y = op.out_target->texture->height;
+    } else {
+        if (IS_NAN(op.size.x)) op.size.x = render->width;
+        if (IS_NAN(op.size.y)) op.size.y = render->height;
+    }
+
+    switch (render->api) {
+        case FUR_RENDER_API_GL:
+            fur_render_gl_renderTarget(render->spec, op.out_target, op.in_target, op.transf, op.pos, op.size, op.sample, op.col); break;
+        warn_def_for("fur_render_renderTarget");
+    }
+}

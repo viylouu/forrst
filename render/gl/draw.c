@@ -25,6 +25,8 @@ void fur_render_gl_flush(FUR_gl_renderState* render) {
             fur_render_gl_2d_rect_draw(&render->rect2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, render->batch_target, render->width, render->height); break;
         case FUR_GL_BATCH_TEX:
             fur_render_gl_2d_tex_draw(&render->tex2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, render->batch_tex->spec, render->batch_target, render->width, render->height); break;
+        case FUR_GL_BATCH_RENDER_TARGET:
+            fur_render_gl_2d_renderTarget_draw(&render->targ2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, (FUR_renderTarget*)render->batch_tex, render->batch_target, render->width, render->height); break;
         default:
             WARN("type (%d) has no draw function!\n", render->batch_type);
     }
@@ -63,6 +65,30 @@ void fur_render_gl_tex(FUR_gl_renderState* render, FUR_renderTarget* target, FUR
 
     render->batch_type = FUR_GL_BATCH_TEX;
     render->batch_tex = texture;
+
+    FUR_gl_instanceData data = {0};
+
+    data.x = pos.x; data.y = pos.y;
+    data.w = size.x; data.h = size.y;
+    data.r = col.x; data.g = col.y;
+    data.b = col.z; data.a = col.w;
+    data.sx = sample.x; data.sy = sample.y;
+    data.sw = sample.z; data.sh = sample.w;
+
+    memcpy(&data.transform, transf, sizeof(mat4));
+
+    render->batch[render->batch_amt] = data;
+    ++render->batch_amt;
+}
+
+void fur_render_gl_renderTarget(FUR_gl_renderState* render, FUR_renderTarget* out_target, FUR_renderTarget* in_target, mat4 transf, v2 pos, v2 size, v4 sample, v4 col) {
+    if (render->batch_amt >= 8192) fur_render_gl_flush(render);
+    if (render->batch_type != FUR_GL_BATCH_RENDER_TARGET) fur_render_gl_flush(render);
+    if (render->batch_tex != (FUR_texture*)in_target) fur_render_gl_flush(render);
+    if (render->batch_target != out_target) fur_render_gl_flush(render);
+
+    render->batch_type = FUR_GL_BATCH_RENDER_TARGET;
+    render->batch_tex = (FUR_texture*)in_target;
 
     FUR_gl_instanceData data = {0};
 

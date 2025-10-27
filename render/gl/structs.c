@@ -82,3 +82,19 @@ void fur_render_gl_2d_tex_constr(FUR_gl_2d_tex* tex) {
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
 }
+
+void fur_render_gl_2d_renderTarget_constr(FUR_gl_2d_renderTarget* targ) {
+    FUR_2D_GENERIC_CONSTR(targ, "data/eng/tex.vert", "data/eng/tex.frag");
+
+    targ->loc.tex = easy_get_uni(targ, "tex");
+} void fur_render_gl_2d_renderTarget_destr(FUR_gl_2d_renderTarget* targ) {
+    FUR_2D_GENERIC_DESTR(targ);
+} void fur_render_gl_2d_renderTarget_draw(FUR_gl_2d_renderTarget* targ, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_in_target, FUR_renderTarget* batch_out_target, s32 width, s32 height) {
+    FUR_2D_GENERIC_DRAW(targ, vao, batch, batch_amt, proj2d, batch_out_target, width, height);
+
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D, CAST(FUR_gl_texture*, batch_in_target->texture->spec)->id);
+    glUniform1i(targ->loc.tex, 1);
+
+    glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
+}

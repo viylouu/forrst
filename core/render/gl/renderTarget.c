@@ -1,6 +1,7 @@
 #include "renderTarget.h"
 
 #include <render/gl/loader.h>
+#include <core/data/api/gl/texture.h>
 
 #include <core/macros.h>
 #include <stdio.h>
@@ -13,9 +14,10 @@ FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 
     glGenFramebuffers(1, &fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-    u32 tex;
-    glGenTextures(1, &tex);
-    glBindTexture(GL_TEXTURE_2D, tex);
+    FUR_gl_texture* gltex = NEW(FUR_gl_texture);
+
+    glGenTextures(1, &gltex->id);
+    glBindTexture(GL_TEXTURE_2D, gltex->id);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width,height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 
@@ -26,7 +28,7 @@ FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 
 
     glBindTexture(GL_TEXTURE_2D, 0);
 
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex, 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, gltex->id, 0);
 
     u32 depth;
     glGenRenderbuffers(1, &depth);
@@ -41,8 +43,9 @@ FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 
     FUR_gl_renderTarget* targ = NEW(FUR_gl_renderTarget);
     targ->agnostic = agnostic;
     targ->fbo = fbo;
-    targ->tex = tex;
     targ->depth = depth;
+
+    agnostic->texture->spec = gltex;
 
     return targ;
 }
@@ -50,8 +53,11 @@ FUR_gl_renderTarget* fur_renderTarget_gl_constr(FUR_renderTarget* agnostic, s32 
 void fur_renderTarget_gl_destr(FUR_gl_renderTarget* targ) {
     WARN_RETVOID_IF(!targ, "cannot destruct null gl render target!\n");
 
+    FUR_renderTarget* agnost = CAST(FUR_renderTarget*, targ->agnostic);
+    FUR_gl_texture* agltex = CAST(FUR_gl_texture*, agnost->texture->spec);
+
     glDeleteRenderbuffers(1, &targ->depth);
-    glDeleteTextures(1, &targ->tex);
+    glDeleteTextures(1, &agltex->id);
     glDeleteFramebuffers(1, &targ->fbo);
 
     free(targ);
@@ -60,7 +66,13 @@ void fur_renderTarget_gl_destr(FUR_gl_renderTarget* targ) {
 void fur_renderTarget_gl_resize(FUR_gl_renderTarget* targ, s32 width, s32 height) {
     WARN_RETVOID_IF(!targ, "cannot resize null gl render target!\n");
 
-    glBindTexture(GL_TEXTURE_2D, targ->tex);
+    FUR_renderTarget* agnost = CAST(FUR_renderTarget*, targ->agnostic);
+    FUR_gl_texture* agltex = CAST(FUR_gl_texture*, agnost->texture->spec);
+
+    agnost->texture->width = width;
+    agnost->texture->height = height;
+
+    glBindTexture(GL_TEXTURE_2D, agltex->id);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
     glBindTexture(GL_TEXTURE_2D, 0);
     

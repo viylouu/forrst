@@ -2,6 +2,7 @@
 #define FUR_RENDER_RENDER_TARGET_H
 
 #include <core/macros.h>
+#include <core/data/texture.h>
 #include <render/api.h>
 
 /* ====== DATATYPES ====== */
@@ -12,7 +13,7 @@ typedef struct {
     FUR_targetRenderTarget* spec;
     FUR_targetRenderApi api;
 
-    s32 width, height;
+    FUR_texture* texture;
 } FUR_renderTarget;
 
 /* ====== DATATYPES ====== */

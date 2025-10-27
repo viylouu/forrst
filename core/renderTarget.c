@@ -10,9 +10,14 @@
 
 FUR_renderTarget* IMPL_fur_renderTarget_constr(s32 width, s32 height, OP_fur_renderTarget_constr op) {
     FUR_renderTarget* targ = NEW(FUR_renderTarget);
-    targ->width = width;
-    targ->height = height;
     targ->api = op.api;
+
+    FUR_texture* tex = NEW(FUR_texture);
+    tex->width = width;
+    tex->height = height;
+    tex->spec = NULL;
+
+    targ->texture = tex;
 
     switch (op.api) {
         case FUR_RENDER_API_GL:
@@ -34,8 +39,8 @@ void fur_renderTarget_destr(FUR_renderTarget* targ) {
 }
 
 void fur_renderTarget_resize(FUR_renderTarget* targ, s32 width, s32 height) {
-    targ->width = width;
-    targ->height = height;
+    targ->texture->width = width;
+    targ->texture->height = height;
 
     switch (targ->api) {
         case FUR_RENDER_API_GL:

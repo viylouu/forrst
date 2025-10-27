@@ -47,10 +47,21 @@ typedef struct {
     mat4 transf;
 } OP_fur_render_tex;
 
+typedef struct {
+    FUR_renderTarget* out_target;
+    FUR_renderTarget* in_target;
+    v2 pos;
+    v2 size;
+    v4 sample;
+    v4 col;
+    mat4 transf;
+} OP_fur_render_renderTarget;
+
 /* ====== FUNCS ====== */
 
 void IMPL_fur_render_rect(FUR_renderState* render, OP_fur_render_rect op);
 void IMPL_fur_render_tex(FUR_renderState* render, OP_fur_render_tex op);
+void IMPL_fur_render_renderTarget(FUR_renderState* render, OP_fur_render_renderTarget op);
 
 /* ====== MACROS ====== */
 
@@ -59,5 +70,8 @@ void IMPL_fur_render_tex(FUR_renderState* render, OP_fur_render_tex op);
 
 #define fur_render_tex(render, ...) \
     IMPL_fur_render_tex((render), (OP_fur_render_tex){ .target = NULL, .texture = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){0,0,0,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
+
+#define fur_render_renderTarget(render, ...) \
+    IMPL_fur_render_renderTarget((render), (OP_fur_render_renderTarget){ .out_target = NULL, .in_target = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){1,1,1,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
 
 #endif

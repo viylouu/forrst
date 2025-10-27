@@ -24,8 +24,8 @@ int main(void) {
 
         fur_updateTimers(&time, 1);
 
-        fur_render_clear(render, .col = (v3){.2,.4,.3});
-        fur_render_rect(render, .pos = (v2){x,64}, .size = (v2){64,64}, .col = (v4){1,0,0,1});
+        fur_render_clear(render, .target = targ, .col = (v3){.2,.4,.3});
+        fur_render_rect(render, .target = targ, .pos = (v2){x,64}, .size = (v2){64,64}, .col = (v4){1,0,0,1});
 
         if (fur_input_isKeyHeld(FUR_KEY_D))
             x += 64 * time->delta;
@@ -33,11 +33,11 @@ int main(void) {
             x -= 64 * time->delta;
 
         if (fur_input_isKeyHeld(FUR_KEY_T))
-            fur_render_tex(render, .size = (v2){64,64}, .col = (v4){1,1,1,1});
+            fur_render_tex(render, .target = targ, .size = (v2){64,64}, .col = (v4){1,1,1,1});
 
         // spacing
         
-        // todo: draw render target and hope it works properly
+        fur_render_renderTarget(render, .in_target = targ);
 
         fur_render_flush(render);
 

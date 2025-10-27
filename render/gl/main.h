@@ -15,7 +15,8 @@
 typedef enum {
     FUR_GL_BATCH_NONE,
     FUR_GL_BATCH_RECT,
-    FUR_GL_BATCH_TEX
+    FUR_GL_BATCH_TEX,
+    FUR_GL_BATCH_RENDER_TARGET
 } FUR_gl_batchType;
 
 typedef struct {
@@ -36,6 +37,7 @@ typedef struct {
 
     FUR_gl_2d_rect rect2d;
     FUR_gl_2d_tex  tex2d;
+    FUR_gl_2d_renderTarget targ2d;
 } FUR_gl_renderState;
 
 /* ====== FUNCS ====== */
