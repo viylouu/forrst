@@ -58,11 +58,9 @@
 
 /* ====== FUNCS ====== */
 
-void fur_render_gl_2d_rect_constr(FUR_gl_2d_rect* rect) {
-    FUR_2D_GENERIC_CONSTR(rect, "data/eng/rect.vert", "data/eng/rect.frag");
-} void fur_render_gl_2d_rect_destr(FUR_gl_2d_rect* rect) {
-    FUR_2D_GENERIC_DESTR(rect);
-} void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_target, s32 width, s32 height) {
+void fur_render_gl_2d_rect_constr(FUR_gl_2d_rect* rect) { FUR_2D_GENERIC_CONSTR(rect, "data/eng/rect.vert", "data/eng/rect.frag"); } 
+void fur_render_gl_2d_rect_destr(FUR_gl_2d_rect* rect) { FUR_2D_GENERIC_DESTR(rect); } 
+void fur_render_gl_2d_rect_draw(FUR_gl_2d_rect* rect, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_target, s32 width, s32 height) {
     FUR_2D_GENERIC_DRAW(rect, vao, batch, batch_amt, proj2d, batch_target, width, height);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
@@ -72,9 +70,9 @@ void fur_render_gl_2d_tex_constr(FUR_gl_2d_tex* tex) {
     FUR_2D_GENERIC_CONSTR(tex, "data/eng/tex.vert", "data/eng/tex.frag");
 
     tex->loc.tex = easy_get_uni(tex, "tex");
-} void fur_render_gl_2d_tex_destr(FUR_gl_2d_tex* tex) {
-    FUR_2D_GENERIC_DESTR(tex);
-} void fur_render_gl_2d_tex_draw(FUR_gl_2d_tex* tex, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_gl_texture* batch_tex, FUR_renderTarget* batch_target, s32 width, s32 height) {
+} 
+void fur_render_gl_2d_tex_destr(FUR_gl_2d_tex* tex) { FUR_2D_GENERIC_DESTR(tex); } 
+void fur_render_gl_2d_tex_draw(FUR_gl_2d_tex* tex, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_gl_texture* batch_tex, FUR_renderTarget* batch_target, s32 width, s32 height) {
     FUR_2D_GENERIC_DRAW(tex, vao, batch, batch_amt, proj2d, batch_target, width, height);
 
     glActiveTexture(GL_TEXTURE1);
@@ -88,9 +86,9 @@ void fur_render_gl_2d_renderTarget_constr(FUR_gl_2d_renderTarget* targ) {
     FUR_2D_GENERIC_CONSTR(targ, "data/eng/tex.vert", "data/eng/tex.frag");
 
     targ->loc.tex = easy_get_uni(targ, "tex");
-} void fur_render_gl_2d_renderTarget_destr(FUR_gl_2d_renderTarget* targ) {
-    FUR_2D_GENERIC_DESTR(targ);
-} void fur_render_gl_2d_renderTarget_draw(FUR_gl_2d_renderTarget* targ, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_in_target, FUR_renderTarget* batch_out_target, s32 width, s32 height) {
+} 
+void fur_render_gl_2d_renderTarget_destr(FUR_gl_2d_renderTarget* targ) { FUR_2D_GENERIC_DESTR(targ); } 
+void fur_render_gl_2d_renderTarget_draw(FUR_gl_2d_renderTarget* targ, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_in_target, FUR_renderTarget* batch_out_target, s32 width, s32 height) {
     FUR_2D_GENERIC_DRAW(targ, vao, batch, batch_amt, proj2d, batch_out_target, width, height);
 
     FUR_gl_texture* gltex = batch_in_target->texture->spec;
@@ -101,3 +99,4 @@ void fur_render_gl_2d_renderTarget_constr(FUR_gl_2d_renderTarget* targ) {
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
 }
+
