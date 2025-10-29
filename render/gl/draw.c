@@ -24,9 +24,9 @@ void fur_render_gl_flush(FUR_gl_renderState* render) {
         case FUR_GL_BATCH_RECT:
             fur_render_gl_2d_rect_draw(&render->rect2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, render->batch_target, render->width, render->height); break;
         case FUR_GL_BATCH_TEX:
-            fur_render_gl_2d_tex_draw(&render->tex2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, render->batch_tex->spec, render->batch_target, render->width, render->height); break;
+            fur_render_gl_2d_tex_draw(&render->tex2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, CAST(FUR_texture*, render->batch_other)->spec, render->batch_target, render->width, render->height); break;
         case FUR_GL_BATCH_RENDER_TARGET:
-            fur_render_gl_2d_renderTarget_draw(&render->targ2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, (FUR_renderTarget*)render->batch_tex, render->batch_target, render->width, render->height); break;
+            fur_render_gl_2d_renderTarget_draw(&render->targ2d, &render->proj, render->shitty_vao, &render->batch, render->batch_amt, (FUR_renderTarget*)render->batch_other, render->batch_target, render->width, render->height); break;
         default:
             WARN("type (%d) has no draw function!\n", render->batch_type);
     }
@@ -60,11 +60,11 @@ void fur_render_gl_rect(FUR_gl_renderState* render, FUR_renderTarget* target, ma
 void fur_render_gl_tex(FUR_gl_renderState* render, FUR_renderTarget* target, FUR_texture* texture, mat4 transf, v2 pos, v2 size, v4 sample, v4 col) {
     if (render->batch_amt >= 8192) fur_render_gl_flush(render);
     if (render->batch_type != FUR_GL_BATCH_TEX) fur_render_gl_flush(render);
-    if (render->batch_tex != texture) fur_render_gl_flush(render);
+    if (render->batch_other != texture) fur_render_gl_flush(render);
     if (render->batch_target != target) fur_render_gl_flush(render);
 
     render->batch_type = FUR_GL_BATCH_TEX;
-    render->batch_tex = texture;
+    render->batch_other = texture;
 
     FUR_gl_instanceData data = {0};
 
@@ -84,11 +84,11 @@ void fur_render_gl_tex(FUR_gl_renderState* render, FUR_renderTarget* target, FUR
 void fur_render_gl_renderTarget(FUR_gl_renderState* render, FUR_renderTarget* out_target, FUR_renderTarget* in_target, mat4 transf, v2 pos, v2 size, v4 sample, v4 col) {
     if (render->batch_amt >= 8192) fur_render_gl_flush(render);
     if (render->batch_type != FUR_GL_BATCH_RENDER_TARGET) fur_render_gl_flush(render);
-    if (render->batch_tex != (FUR_texture*)in_target) fur_render_gl_flush(render);
+    if (render->batch_other != in_target) fur_render_gl_flush(render);
     if (render->batch_target != out_target) fur_render_gl_flush(render);
 
     render->batch_type = FUR_GL_BATCH_RENDER_TARGET;
-    render->batch_tex = (FUR_texture*)in_target;
+    render->batch_other = in_target;
 
     FUR_gl_instanceData data = {0};
 

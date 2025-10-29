@@ -30,7 +30,7 @@ typedef struct {
     FUR_gl_instanceData batch[8192];
     FUR_gl_batchType batch_type;
     u32 batch_amt;
-    FUR_texture* batch_tex;
+    void* batch_other;
     FUR_renderTarget* batch_target;
 
     FUR_texture* nil;

@@ -6,6 +6,7 @@
 #include <core/data/api/gl/texture.h>
 #include <render/gl/loader.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 /* ====== MACROS ====== */
 
@@ -92,8 +93,10 @@ void fur_render_gl_2d_renderTarget_constr(FUR_gl_2d_renderTarget* targ) {
 } void fur_render_gl_2d_renderTarget_draw(FUR_gl_2d_renderTarget* targ, mat4* proj2d, u32 vao, FUR_gl_instanceData (*batch)[8192], u32 batch_amt, FUR_renderTarget* batch_in_target, FUR_renderTarget* batch_out_target, s32 width, s32 height) {
     FUR_2D_GENERIC_DRAW(targ, vao, batch, batch_amt, proj2d, batch_out_target, width, height);
 
+    FUR_gl_texture* gltex = batch_in_target->texture->spec;
+
     glActiveTexture(GL_TEXTURE1);
-    glBindTexture(GL_TEXTURE_2D, CAST(FUR_gl_texture*, batch_in_target->texture->spec)->id);
+    glBindTexture(GL_TEXTURE_2D, gltex->id);
     glUniform1i(targ->loc.tex, 1);
 
     glDrawArraysInstanced(GL_TRIANGLES, 0,6, batch_amt);
