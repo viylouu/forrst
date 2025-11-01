@@ -60,9 +60,20 @@ else
     FLAGS_LINK+=" -flto"
 fi
 
+if command -v lld &> /dev/null; then
+    LINKER="-fuse-ld=lld"
+elif command -v ld &> /dev/null; then
+    LINKER=""
+else
+    echo "failed to find a linker!"
+    exit 1
+fi
+
 if $BUILD_WINDOWS; then
-    FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -lglfw3 -lgdi32 -D_WIN32"
-    FLAGS_COMP+=" -fno-sanitize=undefined"
+    COMPILER=("x86_64-w64-mingw32-gcc")
+    FLAGS_LINK+=" -lopengl32 -Ldeps/GLFW -Lfurry/deps/GLFW -lglfw3 -lgdi32 -D_WIN32"
+    FLAGS_COMP+=" -fno-sanitize=undefined -Wno-override-init-side-effects"
+    LINKER=""
     if [[ "${COMPILER[0]}" == "zig" ]]; then
         FLAGS_COMP+=" -target x86_64-windows"
     fi
@@ -185,17 +196,8 @@ mapfile -t OBJS < "$OBJ_DIR/objs.tmp"
 
 rm -f objs.tmp
 
-if command -v lld &> /dev/null; then
-    LINKER="-fuse-ld=lld"
-elif command -v ld &> /dev/null; then
-    LINKER=""
-else
-    echo "failed to find a linker!"
-    exit 1
-fi
-
 if $BUILD_WINDOWS; then
-    "${COMPILER[@]}" "$LINKER" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
+    "${COMPILER[@]}" "${OBJS[@]}" $FLAGS_LINK -o build/out.exe -static && ( [[ "$OSTYPE" == "linux-gnu" ]] && wine ./build/out.exe || ./build/out.exe )
 else
     "${COMPILER[@]}" "$LINKER" "${OBJS[@]}" $FLAGS_LINK -fno-sanitize=undefined -o build/out.game && ./build/out.game
 fi
