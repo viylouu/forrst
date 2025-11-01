@@ -33,7 +33,7 @@ int main(void) {
             x -= 64 * time->delta;
 
         if (fur_input_isKeyHeld(FUR_KEY_T))
-            fur_render_tex(render, /*.target = targ,*/ .size = (v2){64,64}, .col = (v4){1,1,1,1});
+            fur_render_tex(render, .target = targ, .size = (v2){64,64}, .col = (v4){1,1,1,1});
 
         // spacing
 
