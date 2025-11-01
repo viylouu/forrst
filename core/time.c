@@ -30,3 +30,7 @@ void fur_updateTimers(FUR_timer** timers, u32 amt) {
         }
     }
 }
+
+void fur_destroyTimer(FUR_timer* timer) {
+    free(timer);
+}

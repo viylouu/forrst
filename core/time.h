@@ -24,6 +24,7 @@ typedef struct {
 
 FUR_timer* IMPL_fur_makeTimer(OP_fur_makeTimer op);
 void fur_updateTimers(FUR_timer** timers, u32 amt);
+void fur_destroyTimer(FUR_timer* timer);
 
 /* ====== MACROS ====== */
 
