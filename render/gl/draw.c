@@ -67,6 +67,7 @@ void fur_render_gl_tex(FUR_gl_renderState* render, FUR_renderTarget* target, FUR
 
     render->batch_type = FUR_GL_BATCH_TEX;
     render->batch_other = texture;
+    render->batch_target = target;
 
     FUR_gl_instanceData data = {0};
 
@@ -91,6 +92,7 @@ void fur_render_gl_renderTarget(FUR_gl_renderState* render, FUR_renderTarget* ou
 
     render->batch_type = FUR_GL_BATCH_RENDER_TARGET;
     render->batch_other = in_target;
+    render->batch_target = out_target;
 
     FUR_gl_instanceData data = {0};
 
