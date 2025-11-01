@@ -3,6 +3,7 @@
 
 #include <render/api.h>
 #include <core/data/texture.h>
+#include <core/renderTarget.h>
 
 /* ====== DATATYPES ====== */
 
@@ -14,6 +15,7 @@ typedef struct {
     FUR_texture* nil;
     s32 width;
     s32 height;
+    FUR_renderTarget* defTarget;
 } FUR_renderState;
 
 #endif

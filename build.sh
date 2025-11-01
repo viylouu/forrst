@@ -133,7 +133,7 @@ OBJ_DIR="build/obj"
 OBJS=()
 
 #[[ $BUILD_TEST == false ]] && rm -rf build/obj/
-#rm -rf build/obj/
+rm -rf build/obj/
 mkdir -p build/obj
 
 max_jobs=$(nproc) 

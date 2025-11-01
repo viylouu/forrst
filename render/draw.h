@@ -25,7 +25,7 @@ void fur_render_flush(FUR_renderState* render);
 /* ====== MACROS ====== */
 
 #define fur_render_clear(render, ...) \
-    IMPL_fur_render_clear((render), (OP_fur_render_clear){ .target = NULL, .col = (v3){0,0,0}, __VA_ARGS__ })
+    IMPL_fur_render_clear((render), (OP_fur_render_clear){ .target = render->defTarget, .col = (v3){0,0,0}, __VA_ARGS__ })
 
 /* ====== STRUCTS ====== */
 
@@ -66,12 +66,12 @@ void IMPL_fur_render_renderTarget(FUR_renderState* render, OP_fur_render_renderT
 /* ====== MACROS ====== */
 
 #define fur_render_rect(render, ...) \
-    IMPL_fur_render_rect((render), (OP_fur_render_rect){ .target = NULL, .pos = (v2){0,0}, .size = (v2){0,0}, .col = (v4){0,0,0,1}, .transf = mat4_identity, __VA_ARGS__ })
+    IMPL_fur_render_rect((render), (OP_fur_render_rect){ .target = render->defTarget, .pos = (v2){0,0}, .size = (v2){0,0}, .col = (v4){0,0,0,1}, .transf = mat4_identity, __VA_ARGS__ })
 
 #define fur_render_tex(render, ...) \
-    IMPL_fur_render_tex((render), (OP_fur_render_tex){ .target = NULL, .texture = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){0,0,0,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
+    IMPL_fur_render_tex((render), (OP_fur_render_tex){ .target = render->defTarget, .texture = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){0,0,0,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
 
 #define fur_render_renderTarget(render, ...) \
-    IMPL_fur_render_renderTarget((render), (OP_fur_render_renderTarget){ .out_target = NULL, .in_target = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){1,1,1,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
+    IMPL_fur_render_renderTarget((render), (OP_fur_render_renderTarget){ .out_target = render->defTarget, .in_target = NULL, .pos = (v2){0,0}, .size = (v2){NAN,NAN}, .col = (v4){1,1,1,1}, .transf = mat4_identity, .sample = (v4){NAN,NAN,NAN,NAN}, __VA_ARGS__ })
 
 #endif

@@ -11,6 +11,7 @@
 FUR_renderState* IMPL_fur_render_constr(OP_fur_render_constr ops) {
     FUR_renderState* state = NEW(FUR_renderState);
     state->api = ops.api;
+    state->defTarget = NULL;
 
     state->nil = fur_texture_load("data/eng/nil.png", .api = ops.api);
 
