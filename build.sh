@@ -2,7 +2,7 @@ mkdir -p build
 
 COMPILER=("zig" "cc")
 CFLAGS="-std=c99"
-FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Wno-override-init -Wno-cast-function-type -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -isystem"
+FLAGS_COMP="-pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Wno-override-init -Wno-cast-function-type -Ifurry -I. -Ideps -Ifurry/deps -isystem"
 FLAGS_LINK=""
 
 BUILD_TEST=false
@@ -84,7 +84,7 @@ fi
 if [ -n "$EXAMPLE" ]; then
     SRC_DIRS=("." "examples/$EXAMPLE")
 else
-    SRC_DIRS=("forrst" "src")
+    SRC_DIRS=("furry" "src")
 fi
 
 FILES_C=()
@@ -110,7 +110,7 @@ for file in "${FILES_C[@]}" "${FILES_CC[@]}"; do
         #STD="-std=c++11"
     fi
 
-    CMD="$COMP $STD -pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Ifurry -I. -Ideps -Ideps/imgui -Ifurry/deps/imgui -Ifurry/deps -c \\\"$file\\\""
+    CMD="$COMP $STD -pedantic -Wall -Wextra -Werror -Wno-initializer-overrides -Ifurry -I. -Ideps -Ifurry/deps -c \\\"$file\\\""
 
     if [ $FIRST -eq 1 ]; then
         FIRST=0
